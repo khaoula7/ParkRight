@@ -6,6 +6,9 @@
     <color name="white">#FFFFFF</color>
     <color name="green">#55B56D</color>
     <color name="orange">#FF6600</color>
-    <color name="othergreen">#08AE9E</color>
+    <color name="otherGreen">#08AE9E</color>
+    <color name="lighterPrimary">#45508D</color>
+    <color name="lightBlue">#A9DFFA</color>
+
 
 </resources>

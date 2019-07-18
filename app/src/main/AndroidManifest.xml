@@ -19,11 +19,19 @@
         </activity>
         <!--How To  Screen Activity-->
         <activity
-            android:name=".HowTo"
+            android:name=".HowActivity"
             android:parentActivityName=".MainActivity"> <!--Add the Up button-->
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
+        </activity>
+        <!--TypeActivity Screen -->
+        <activity
+            android:name=".TypeActivity"
+            android:parentActivityName=".HowActivity"> <!--Add the Up button-->
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".HowActivity"/>
         </activity>
 
         <meta-data
