@@ -3,13 +3,16 @@ package com.example.parkright;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class TypeActivity extends AppCompatActivity {
     // Member variables.
@@ -37,6 +40,37 @@ public class TypeActivity extends AppCompatActivity {
 
         // Get the data.
         initializeData();
+        /*Use ItemTouchHelper to define what happens to RecyclerView list items when the user performs
+         * various touch actions, such as swipe, or drag and drop.
+         * ItemTouchHelper.SimpleCallback lets you define which directions are supported for swiping
+         * and moving list items, and implement the swiping and moving behavior
+         * Here, only moving behaviour is implemented
+         */
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                //Get the original and target index from the second and third argument passed in
+                int from = viewHolder.getAdapterPosition();
+                int to = target.getAdapterPosition();
+                //Swap the items in the dataset by calling Collections.swap()
+                // and pass in the dataset, and the initial and final indexes
+                Collections.swap(mViolationData, from, to);
+                //Notify the adapter that the item was moved, passing in the old and new indexes
+                mAdapter.notifyItemMoved(from, to);
+                return true;
+
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+            }
+        });
+        // Attach the helper object to the RecyclerView
+        helper.attachToRecyclerView(mRecyclerView);
     }
 
     /**

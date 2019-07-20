@@ -2,6 +2,7 @@ package com.example.parkright;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +44,7 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
     @Override
     public ViolationAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(mContext).
-                inflate(R.layout.violation_item, parent, false));
+                inflate(R.layout.violation_item_1, parent, false));
     }
 
     /**
@@ -75,7 +76,7 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
     /**
      * ViewHolder class that represents each row of data in the RecyclerView.
      */
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // Member Variables for the TextView and ImageView
         private TextView mViolationType;
@@ -83,7 +84,6 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
 
         /**
          * Constructor for the ViewHolder, used in onCreateViewHolder().
-         *
          * @param itemView The rootview of the violation_item.xml layout file.
          */
         ViewHolder(View itemView) {
@@ -91,6 +91,9 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
             // Initialize the views.
             mViolationType = itemView.findViewById(R.id.violation_txt);
             mViolationImage = itemView.findViewById(R.id.violation_img);
+
+            // Set the OnClickListener to the entire view.
+            itemView.setOnClickListener(this);
         }
 
         void bindTo(Violation currentViolation){
@@ -98,6 +101,20 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
             mViolationType.setText(currentViolation.getViolationType());
             //Get the image resource from the Violation object and load it into the ImageView using Glide
             Glide.with(mContext).load(currentViolation.getImageResourceId()).into(mViolationImage);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            //get the Violation object for the item that was clicked using getAdapterPosition()
+            Violation currentViolation = mViolationsData.get(getAdapterPosition());
+            // Launch DetailActivity using an explicit in tent
+            Intent photoIntent = new Intent(mContext, PhotoActivity.class);
+            //Put title and image resource id as extras in the intent
+            photoIntent.putExtra("title", currentViolation.getViolationType());
+            photoIntent.putExtra("image_resource",
+                    currentViolation.getImageResourceId());
+            mContext.startActivity(photoIntent);
 
         }
     }

@@ -22,34 +22,32 @@
     <string name="three"> 3 </string>
     <string name="four"> 4 </string>
     <string name="five"> 5 </string>
-    <string name="violation_type_Phrase_1"> Choose Parking Violation Type </string>
+    <string name="violation_type_Phrase_1"> Select Parking Violation  </string>
 
     <string-array name="violation_types">
-        <item>Parking in front of Fire Hydrant</item>
-        <item>Parking in Disabled Spot</item>
-        <item>Parking behind vehicles</item>
-        <item>Parking over Two Spaces</item>
-        <item>Parking against Traffic Direction</item>
-        <item>Parking on a Sidewalk</item>
-        <item>Parking in a Bus Stop</item>
+        <item>Parking in front of Fire Hydrant!</item>
+        <item>Parking in Disabled Spot!</item>
+        <item>Parking behind vehicles!</item>
+        <item>Parking over Two Spaces!</item>
+        <item>Parking against Traffic Direction!</item>
+        <item>Parking on a Sidewalk!</item>
+        <item>Parking in a Bus Stop!</item>
     </string-array>
 
     <array name="violation_images">
-        <item>@drawable/img_firehydrant</item>
-        <item>@drawable/img_disabledspot_225x225</item>
-        <item>@drawable/img_doubleparking_225x225</item>
-        <item>@drawable/img_twospaces_225x225</item>
-        <item>@drawable/img_againsttraffic_225x225</item>
-        <item>@drawable/img_sidewalk_225x225</item>
-        <item>@drawable/img_busstop_225x225</item>
+        <item>@drawable/img_badminton</item>
+        <item>@drawable/img_baseball</item>
+        <item>@drawable/img_basketball</item>
+        <item>@drawable/img_bowling</item>
+        <item>@drawable/img_cycling</item>
+        <item>@drawable/img_golf</item>
+        <item>@drawable/img_running</item>
     </array>
 
     <!-- Violation item Screen Strings -->
     <string name="card_image_desc"> Parking Violation image </string>
     <string name="violation_type"> Violation Type </string>
     <string name="choose_button"> choose </string>
-
-
 
 
 </resources>

@@ -9,30 +9,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--Home Screen Activity-->
-        <activity
-            android:name=".MainActivity">
+        <!-- Home Screen Activity -->
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--How To  Screen Activity-->
+        <!-- How To  Screen Activity -->
         <activity
             android:name=".HowActivity"
-            android:parentActivityName=".MainActivity"> <!--Add the Up button-->
+            android:parentActivityName=".MainActivity"> <!-- Add the Up button -->
             <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
-        <!--TypeActivity Screen -->
+        <!-- TypeActivity Screen -->
         <activity
             android:name=".TypeActivity"
-            android:parentActivityName=".HowActivity"> <!--Add the Up button-->
+            android:parentActivityName=".HowActivity"> <!-- Add the Up button -->
             <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HowActivity"/>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".HowActivity" />
         </activity>
+        <!-- PhotoActivity -->
+        <activity android:name=".PhotoActivity"></activity>
 
         <meta-data
             android:name="preloaded_fonts"
