@@ -9,7 +9,7 @@
     <string name="home_share_desc">Share vector icon</string>
     <string name="home_image_desc">Home image</string>
 
-    <!-- How Screen Strings -->
+    <!-- activity_how Screen Strings -->
     <string name="how_back_arrow_desc"> Back arrow image </string>
     <string name="how_phrase_1"> First Time User? </string>
     <string name="how_phrase_2"> We highly recommend you watch this short video </string>
@@ -48,6 +48,35 @@
     <string name="card_image_desc"> Parking Violation image </string>
     <string name="violation_type"> Violation Type </string>
     <string name="choose_button"> choose </string>
+
+    <!-- activity_photo Strings -->
+    <string name="step_2"> Photos </string>
+    <string name="activity_photo_phrase_1"> Snap 3 photos of the violating car </string>
+    <string name="activity_photo_phrase_2"> How Should I take photos ? </string>
+    <string name="show_button"> Show Tips </string>
+    <string name="camera_button_1"> Front </string>
+    <string name="camera_button_2"> Rear </string>
+    <string name="camera_button_3"> Evidence </string>
+    <string name="camera_button_desc"> Click on this button to take photo of violating car </string>
+    <string name="plate_check_box"> I clearly snapped Licence Plate </string>
+    <string name="context_check_box"> I clearly snapped Car in Violation Context </string>
+    <string name="photo_continue_button"> Great Job! Continue </string>
+    <string name="photos_warning"> All Photos must be taken</string>
+    <string name="checkboxes_warning"> All Boxes must be checked</string>
+
+
+    <string name="close"> X </string>
+    <string name="tip_1"> Tip 1 </string>
+    <string name="tip_2"> Tip 2 </string>
+    <string name="tip_3"> Tip 3 </string>
+    <string name="tip_1_text"> Lorem ipsum dolor sit amet. </string>
+    <string name="tip_2_text"> Consectetur adipiscing elit. </string>
+    <string name="tip_3_text"> Sed do eiusmod tempor incididut.  </string>
+
+    <!-- activity_map Strings -->
+    <string name="step_3"> Map </string>
+    <string name="activity_map_phrase_1"> Tap Map to identify Location </string>
+    <string name="map_continue_button"> Almost There! Continue </string>
 
 
 </resources>

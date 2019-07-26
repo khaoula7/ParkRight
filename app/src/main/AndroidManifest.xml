@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.parkright">
+    <!-- Restrict visibility of the app on Google Play to devices that have a camera -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -9,15 +13,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!-- Home Screen Activity -->
+        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".MapActivity" /> <!-- Home Screen Activity -->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- How To  Screen Activity -->
+        </activity> <!-- How To  Screen Activity -->
         <activity
             android:name=".HowActivity"
             android:parentActivityName=".MainActivity"> <!-- Add the Up button -->
@@ -25,8 +29,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-        </activity>
-        <!-- TypeActivity Screen -->
+        </activity> <!-- TypeActivity Screen -->
         <activity
             android:name=".TypeActivity"
             android:parentActivityName=".HowActivity"> <!-- Add the Up button -->
@@ -34,9 +37,8 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HowActivity" />
-        </activity>
-        <!-- PhotoActivity -->
-        <activity android:name=".PhotoActivity"></activity>
+        </activity> <!-- PhotoActivity -->
+        <activity android:name=".PhotoActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

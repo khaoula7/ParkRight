@@ -10,13 +10,13 @@ public class HowActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.how);
+        setContentView(R.layout.activity_how);
         //Click on Report Violation button
         Button skipBtn = findViewById(R.id.skip_btn);
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Open HowActivity screen (Tips and instructions on how to use the app)
+                //Open HowActivity screen (Tips and instructions on activity_how to use the app)
                 Intent intent = new Intent(HowActivity.this, TypeActivity.class);
                 startActivity(intent);
             }

@@ -111,7 +111,7 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
             // Launch DetailActivity using an explicit in tent
             Intent photoIntent = new Intent(mContext, PhotoActivity.class);
             //Put title and image resource id as extras in the intent
-            photoIntent.putExtra("title", currentViolation.getViolationType());
+            photoIntent.putExtra("violation_type", currentViolation.getViolationType());
             photoIntent.putExtra("image_resource",
                     currentViolation.getImageResourceId());
             mContext.startActivity(photoIntent);
