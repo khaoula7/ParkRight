@@ -1,4 +1,4 @@
-package com.example.parkright;
+package com.charikati.parkright;
 
 public class Violation {
     /** the violation type */

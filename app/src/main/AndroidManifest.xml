@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.parkright">
+    package="com.charikati.parkright">
     <!-- Restrict visibility of the app on Google Play to devices that have a camera -->
     <uses-feature
         android:name="android.hardware.camera"

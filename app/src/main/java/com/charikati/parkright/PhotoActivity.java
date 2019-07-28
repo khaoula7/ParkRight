@@ -1,4 +1,4 @@
-package com.example.parkright;
+package com.charikati.parkright;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
