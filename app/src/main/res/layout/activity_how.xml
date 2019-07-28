@@ -17,6 +17,7 @@
         android:contentDescription="@string/how_back_arrow_desc"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:onClick="goBack"
         app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
 
     <TextView

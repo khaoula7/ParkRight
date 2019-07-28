@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ParkRight</string>
 
-    <!-- Home Screen Strings -->
+    <!-- activity_main Strings -->
     <string name="home_phrase_1"> Got Sick of Bad Parking?</string>
     <string name="home_phrase_2"> Help your community solve parking issues by reporting violations</string>
     <string name="home_button">Report Violation</string>
@@ -9,13 +9,13 @@
     <string name="home_share_desc">Share vector icon</string>
     <string name="home_image_desc">Home image</string>
 
-    <!-- activity_how Screen Strings -->
+    <!-- activity_how Strings -->
     <string name="how_back_arrow_desc"> Back arrow image </string>
     <string name="how_phrase_1"> First Time User? </string>
     <string name="how_phrase_2"> We highly recommend you watch this short video </string>
     <string name="how_button"> SKIP VIDEO </string>
 
-    <!-- Violation Type Screen Strings -->
+    <!-- activity_type Strings -->
     <string name="step_1"> Violation Type</string>
     <string name="one"> 1 </string>
     <string name="two"> 2 </string>
@@ -44,7 +44,7 @@
         <item>@drawable/img_running</item>
     </array>
 
-    <!-- Violation item Screen Strings -->
+    <!-- violation_item Strings -->
     <string name="card_image_desc"> Parking Violation image </string>
     <string name="violation_type"> Violation Type </string>
     <string name="choose_button"> choose </string>
@@ -64,7 +64,7 @@
     <string name="photos_warning"> All Photos must be taken</string>
     <string name="checkboxes_warning"> All Boxes must be checked</string>
 
-
+    <!-- tips_dialog Strings -->
     <string name="close"> X </string>
     <string name="tip_1"> Tip 1 </string>
     <string name="tip_2"> Tip 2 </string>
@@ -77,6 +77,12 @@
     <string name="step_3"> Map </string>
     <string name="activity_map_phrase_1"> Tap Map to identify Location </string>
     <string name="map_continue_button"> Almost There! Continue </string>
+
+    <!-- activity_login Strings -->
+    <string name="step_4"> Login </string>
+    <string name="activity_login_phrase_1"> Please Login to your Account </string>
+    <string name="facebook"> Facebook </string>
+    <string name="Google"> Google </string>
 
 
 </resources>

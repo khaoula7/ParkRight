@@ -26,7 +26,7 @@ public class MapActivity extends AppCompatActivity {
     }
 
     /**
-     * Go back to previous screen: violation_type
+     * Go back to previous screen: activity_type
      * @param v View
      */
     public void goBack(View v){

@@ -18,7 +18,6 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- How To  Screen Activity -->
@@ -39,7 +38,6 @@
                 android:value=".HowActivity" />
         </activity> <!-- PhotoActivity -->
         <activity android:name=".PhotoActivity" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

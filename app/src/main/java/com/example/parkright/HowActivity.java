@@ -22,4 +22,13 @@ public class HowActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Go back to previous screen: Home Screen
+     * @param v
+     */
+    public void goBack(View v){
+        Intent intent = new Intent(HowActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
 }

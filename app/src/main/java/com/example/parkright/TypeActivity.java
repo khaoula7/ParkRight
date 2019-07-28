@@ -26,7 +26,7 @@ public class TypeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.violation_type);
+        setContentView(R.layout.activity_type);
         //Initialize the RecyclerView.
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         // Set the Layout Manager.

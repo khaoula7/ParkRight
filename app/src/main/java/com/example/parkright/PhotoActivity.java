@@ -162,7 +162,7 @@ public class PhotoActivity extends AppCompatActivity {
         final AlertDialog tipDialog = builder.create();
         //Get the violation type from the incoming Intent and set it to the TextView
         TextView violationTxt = inflator.findViewById(R.id.violation_txt);
-        violationTxt.setText(getIntent().getStringExtra("violation_type"));
+        violationTxt.setText(getIntent().getStringExtra("activity_type"));
         //Close tip dialog
         TextView closeTxt = inflator.findViewById(R.id.close_txt);
         closeTxt.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +178,7 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     /**
-     * Go back to previous screen: violation_type
+     * Go back to previous screen: activity_type
      * @param v View
      */
     public void goBack(View v){
