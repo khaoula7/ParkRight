@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">ParkRight</string>
+    <!-- For Facebook Login-->
+    <string name="facebook_app_id">660416774437195</string>
+    <string name="fb_login_protocol_scheme">fb660416774437195</string>
+
 
     <!-- activity_main Strings -->
     <string name="home_phrase_1"> Got Sick of Bad Parking?</string>
@@ -81,8 +85,10 @@
     <!-- activity_login Strings -->
     <string name="step_4"> Login </string>
     <string name="activity_login_phrase_1"> Please Login to your Account </string>
-    <string name="facebook"> Facebook </string>
+    <string name="facebook"> LOGIN WITH FACEBOOK </string>
+    <string name="log_out"> ACCOUNT LOG OUT</string>
     <string name="Google"> Google </string>
+    <string name="client_id">843254302439-ireeq2d7ecnbrfisbn79o8v2qp6dei5b.apps.googleusercontent.com</string>
 
 
 </resources>
