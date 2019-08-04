@@ -93,7 +93,7 @@ public class PhotoActivity extends AppCompatActivity {
                     startActivity(intent);
                 }*/
                 //Open MapActivity screen (Locate the violating Car)
-                Intent intent = new Intent(PhotoActivity.this, MapActivity.class);
+                Intent intent = new Intent(PhotoActivity.this, MapsActivity.class);
                 startActivity(intent);
             }
         });

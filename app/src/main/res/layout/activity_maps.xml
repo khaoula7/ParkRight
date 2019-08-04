@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".MapActivity">
+    tools:context=".MapsActivity">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -195,15 +195,16 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <fragment
-        android:id="@+id/location_fab"
+        android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3"
-        tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <Button
@@ -227,5 +228,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/location_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@color/Grey"
+        android:clickable="true"
+        app:backgroundTint="@color/Grey"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_action_geolocate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
