@@ -9,6 +9,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +36,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -46,8 +48,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     private static final String TAG = "LoginActivity";
+    //Variables for Google Sign In
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
     private FirebaseAuth mAuth;
@@ -56,6 +59,11 @@ public class LoginActivity extends AppCompatActivity {
     private CallbackManager mCallbackManager;
     private Button mFacebookBtn;
     private GoogleApiClient mGoogleApiClient;
+    //Variables for Email/password Sign In
+    private TextInputEditText mEmailField;
+    private TextInputEditText mPasswordField;
+    private Button mLoginButton;
+
 
 
     @Override
@@ -114,6 +122,17 @@ public class LoginActivity extends AppCompatActivity {
                         // ...
                     }
                 });
+            }
+        });
+
+        /************************* Email/Password Login******************************************************************************/
+        mEmailField = findViewById(R.id.email_edit);
+        mPasswordField = findViewById(R.id.password_edit);
+        mLoginButton = findViewById(R.id.login_btn);
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emailPasswordSignIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
             }
         });
 
@@ -203,6 +222,64 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    /*******************************Email/Password Sign In methods************************************************************************/
+    private void emailPasswordSignIn(String email, String password) {
+        Log.d(TAG, "signIn:" + email);
+        if (!validateForm()) {
+            return;
+        }
+        showProgressDialog();
+
+        // [START sign_in_with_email]
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        hideProgressDialog();
+                    }
+                });
+    }
+
+    /**
+     * checks if a form is valid or not before sending user account information
+     * @return valid
+     */
+    private boolean validateForm() {
+        boolean validForm = true;
+
+        String email = mEmailField.getText().toString();
+        if (TextUtils.isEmpty(email)) {
+            mEmailField.setError("Required.");
+            validForm = false;
+        } else {
+            mEmailField.setError(null);
+        }
+
+        String password = mPasswordField.getText().toString();
+        if (TextUtils.isEmpty(password)) {
+            mPasswordField.setError("Required.");
+            validForm = false;
+        } else {
+            mPasswordField.setError(null);
+        }
+
+        return validForm;
+    }
+
+    /*******************************Common methods*************************************************/
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -225,7 +302,16 @@ public class LoginActivity extends AppCompatActivity {
      * @param v View
      */
     public void goBack(View v){
-        Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Go to Register screen: RegisterActivity
+     * @param v View
+     */
+    public void register(View v){
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
     }
 }

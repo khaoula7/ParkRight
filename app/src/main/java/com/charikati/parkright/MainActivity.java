@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Click on Report Violation button
-        Button reportBtn = findViewById(R.id.map_continue_btn);
+        Button reportBtn = findViewById(R.id.login_btn);
         reportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
