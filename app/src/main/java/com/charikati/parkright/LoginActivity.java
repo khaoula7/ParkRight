@@ -1,16 +1,15 @@
 package com.charikati.parkright;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,19 +22,15 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -44,8 +39,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class LoginActivity extends BaseActivity {
@@ -126,7 +119,7 @@ public class LoginActivity extends BaseActivity {
         });
 
         /************************* Email/Password Login******************************************************************************/
-        mEmailField = findViewById(R.id.email_edit);
+        mEmailField = findViewById(R.id.email_edittext);
         mPasswordField = findViewById(R.id.password_edit);
         mLoginButton = findViewById(R.id.login_btn);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -136,8 +129,70 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+        //Click on Forget Password will open an AlertDialog
+        findViewById(R.id.forgot_pswd_txt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forgot_password_dialog();
+
+            }
+        });
+
 
     }
+
+    /**
+     * Shows an AlertDialog to reset forgotten password
+     */
+    private void forgot_password_dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        View inflator = getLayoutInflater().inflate(R.layout.forgot_password_dialog, null);
+        //set the layout for the AlertDialog
+        builder.setView(inflator);
+        final AlertDialog passwordDialog = builder.create();
+        //Set transparent background to the window
+        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //Show the tip dialog
+        passwordDialog.show();
+        TextInputEditText emailField = inflator.findViewById(R.id.email_edittext);
+        TextView resetButton = inflator.findViewById(R.id.reset_txt_btn);
+        TextView cancelButton = inflator.findViewById(R.id.cancel_txt_btn);
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showProgressDialog();
+                // User clicked reset, so send reset password email
+                String email = emailField.getText().toString();
+                mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            hideProgressDialog();
+                            Log.d(TAG, "Email sent.");
+                            Toast.makeText(LoginActivity.this, R.string.password_sent, Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(LoginActivity.this, (CharSequence) task.getException(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Close dialog
+                passwordDialog.dismiss();
+            }
+        });
+
+
+
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -239,7 +294,13 @@ public class LoginActivity extends BaseActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI();
+                            if((user != null) && (user.isEmailVerified())) {
+                                updateUI();
+                            }else {
+                                Toast.makeText(LoginActivity.this,
+                                        "Your Email is not verified yet. \n Please verify it then proceed",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -285,7 +346,7 @@ public class LoginActivity extends BaseActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
+        if(currentUser != null && currentUser.isEmailVerified()){
             updateUI();
         }
     }
@@ -294,7 +355,6 @@ public class LoginActivity extends BaseActivity {
         Toast.makeText(LoginActivity.this, "You are Logged In", Toast.LENGTH_SHORT).show();
         Intent summaryIntent = new Intent(LoginActivity.this, SummaryActivity.class);
         startActivity(summaryIntent);
-        finish();
     }
 
     /**

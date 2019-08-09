@@ -24,7 +24,7 @@ public class SummaryActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        mLogOutButton = findViewById(R.id.logout_btn);
+        /*mLogOutButton = findViewById(R.id.logout_btn);
         mLogOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,7 +34,7 @@ public class SummaryActivity extends AppCompatActivity {
                 LoginManager.getInstance().logOut();
                 updateUI();
             }
-        });
+        });*/
     }
 
     @Override
@@ -59,4 +59,6 @@ public class SummaryActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+
 }

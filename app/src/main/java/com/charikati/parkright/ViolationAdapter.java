@@ -89,7 +89,7 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
         ViewHolder(View itemView) {
             super(itemView);
             // Initialize the views.
-            mViolationType = itemView.findViewById(R.id.violation_txt);
+            mViolationType = itemView.findViewById(R.id.message_txt);
             mViolationImage = itemView.findViewById(R.id.violation_img);
 
             // Set the OnClickListener to the entire view.

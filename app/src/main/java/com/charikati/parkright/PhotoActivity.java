@@ -115,20 +115,19 @@ public class PhotoActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE_1 && resultCode == RESULT_OK) {
             displayThumbnail(data, firstCameraButton);
             //User has captured the first photo
             firstPhotoCaptured = true;
-        }
-        else if (requestCode == REQUEST_IMAGE_CAPTURE_2 && resultCode == RESULT_OK) {
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE_2 && resultCode == RESULT_OK) {
             displayThumbnail(data, secondCameraButton);
             //User has captured the second photo
             secondPhotoCaptured = true;
-        }
-        else if (requestCode == REQUEST_IMAGE_CAPTURE_3 && resultCode == RESULT_OK){
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE_3 && resultCode == RESULT_OK) {
             displayThumbnail(data, thirdCameraButton);
             //User has captured the third photo
-            thirdPhotoCaptured=true;
+            thirdPhotoCaptured = true;
         }
     }
 
@@ -161,7 +160,7 @@ public class PhotoActivity extends AppCompatActivity {
         //Create the Tip Dialog
         final AlertDialog tipDialog = builder.create();
         //Get the violation type from the incoming Intent and set it to the TextView
-        TextView violationTxt = inflator.findViewById(R.id.violation_txt);
+        TextView violationTxt = inflator.findViewById(R.id.message_txt);
         violationTxt.setText(getIntent().getStringExtra("activity_type"));
         //Close tip dialog
         TextView closeTxt = inflator.findViewById(R.id.close_txt);

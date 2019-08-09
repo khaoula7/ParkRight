@@ -113,6 +113,13 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
 
+    <!--forgot_password_dialog-->
+    <string name="enter_email">Enter your email here </string>
+    <string name="dialog_title">Reset Password </string>
+    <string name="reset">RESET </string>
+    <string name="cancel">CANCEL </string>
+    <string name="password_sent">Password sent to your email </string>
+
     <!-- activity_register Strings -->
     <string name="step_4_1"> Register </string>
     <string name="activity_register_phrase_1"> Please Register to create an Account </string>
@@ -122,6 +129,20 @@
     <string name="register_button"> Register </string>
     <string name="activity_register_phrase_2"> Already have an Account?</string>
     <string name="login"> Please Login </string>
+    <string name="register_success">  Registration Succeeded </string>
+    <string name="register_failure">  Registration Failed </string>
+
+    <!--email_verif_dialog strings-->
+    <string name="verif_phrase_1">An Email has been sent to your address:  </string>
+    <string name="verif_phrase_2">Click on the provided link to verify your email address</string>
+
+    <!-- activity_summary Strings -->
+    <string name="step_4_2"> Summary </string>
+    <string name="summary_phrase_1"> Violation Report Summary </string>
+    <string name="type"> Type </string>
+    <string name="spinner_title"> Violation Type </string>
+
+
 
 
 </resources>
