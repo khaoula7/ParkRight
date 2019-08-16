@@ -315,7 +315,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:buttonTint="@color/colorAccent"
         android:text="@string/plate_check_box"
         android:textColor="@color/lightBlue"

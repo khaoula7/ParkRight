@@ -141,6 +141,9 @@
     <string name="summary_phrase_1"> Violation Report Summary </string>
     <string name="type"> Type </string>
     <string name="spinner_title"> Violation Type </string>
+    <string name="photos"> Photos </string>
+    <string name="location"> Location </string>
+    <string name="send_button"> Send Report </string>
 
 
 
