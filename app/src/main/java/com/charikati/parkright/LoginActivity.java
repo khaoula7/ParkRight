@@ -57,12 +57,16 @@ public class LoginActivity extends BaseActivity {
     private TextInputEditText mPasswordField;
     private Button mLoginButton;
 
+    private Bundle mExtras;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mExtras = getIntent().getExtras();
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -352,8 +356,10 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void updateUI() {
-        Toast.makeText(LoginActivity.this, "You are Logged In", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(LoginActivity.this, "You are Logged In", Toast.LENGTH_SHORT).show();
         Intent summaryIntent = new Intent(LoginActivity.this, SummaryActivity.class);
+        //attach the bundle to the Intent object
+        summaryIntent.putExtras(mExtras);
         startActivity(summaryIntent);
     }
 
@@ -363,6 +369,7 @@ public class LoginActivity extends BaseActivity {
      */
     public void goBack(View v){
         Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+        intent.putExtras(mExtras);
         startActivity(intent);
     }
 

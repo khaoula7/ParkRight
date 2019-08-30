@@ -1,5 +1,6 @@
 package com.charikati.parkright;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -15,6 +16,8 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.io.FileOutputStream;
+
 public class PhotoActivity extends AppCompatActivity {
     // Constants for camera intent
     static final int REQUEST_IMAGE_CAPTURE_1 = 1;
@@ -29,12 +32,22 @@ public class PhotoActivity extends AppCompatActivity {
     private boolean secondPhotoCaptured = false;
     private boolean thirdPhotoCaptured = false;
 
+    private Bundle mExtras;
+    private String violationType;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+
+        mExtras = getIntent().getExtras();
+
+        //Get the violation type from the incoming Intent
+        violationType = mExtras.getString("VIOLATION_TYPE");
+
 
         //Click on show button will open tips dialog
         Button showBtn = (Button)findViewById(R.id.show_btn);
@@ -92,8 +105,11 @@ public class PhotoActivity extends AppCompatActivity {
                     Intent intent = new Intent(PhotoActivity.this, MapActivity.class);
                     startActivity(intent);
                 }*/
-                //Open MapActivity screen (Locate the violating Car)
+                //Open MapActivity screen (to locate the violating Car)
                 Intent intent = new Intent(PhotoActivity.this, MapsActivity.class);
+                //attach the bundle to the Intent object
+                intent.putExtras(mExtras);
+                //finally start the activity
                 startActivity(intent);
             }
         });
@@ -116,29 +132,50 @@ public class PhotoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //Get Bitmap image from photo intent
+        Bundle extras = data.getExtras();
+        Bitmap imageBitmap = (Bitmap) extras.get("data");
+
         if (requestCode == REQUEST_IMAGE_CAPTURE_1 && resultCode == RESULT_OK) {
-            displayThumbnail(data, firstCameraButton);
             //User has captured the first photo
             firstPhotoCaptured = true;
+            //Display photo thumbnail
+            displayThumbnail(imageBitmap, firstCameraButton);
+            //Save photo on disk in private mode
+            savePhoto("photo1.png", imageBitmap);
+            //Add photo filename to intent bundle
+            mExtras.putString("FILE_NAME_1", "photo1.png");
+
         } else if (requestCode == REQUEST_IMAGE_CAPTURE_2 && resultCode == RESULT_OK) {
-            displayThumbnail(data, secondCameraButton);
             //User has captured the second photo
             secondPhotoCaptured = true;
+            //Display photo thumbnail
+            displayThumbnail(imageBitmap, secondCameraButton);
+            //Save photo on disk in private mode
+            savePhoto("photo2.png", imageBitmap);
+            //Add photo filename to intent bundle
+            mExtras.putString("FILE_NAME_2", "photo2.png");
+
         } else if (requestCode == REQUEST_IMAGE_CAPTURE_3 && resultCode == RESULT_OK) {
-            displayThumbnail(data, thirdCameraButton);
             //User has captured the third photo
             thirdPhotoCaptured = true;
+            //Display photo thumbnail
+            displayThumbnail(imageBitmap, thirdCameraButton);
+            //Save photo on disk in private mode
+            savePhoto("photo3.png", imageBitmap);
+            //Add photo filename to intent bundle
+            mExtras.putString("FILE_NAME_3", "photo3.png");
+
         }
     }
 
     /**
      * Display the thumbnail in its appropriate ImageButton.
-     * @param data the intent
+     * @param imageBitmap the Bitmap
      * @param cameraButton the ImageButton to display the thumbnail
      */
-    private void displayThumbnail(Intent data, ImageButton cameraButton) {
-        Bundle extras = data.getExtras();
-        Bitmap imageBitmap = (Bitmap) extras.get("data");
+    private void displayThumbnail(Bitmap imageBitmap, ImageButton cameraButton) {
+
         //Get the width and height in px of the ImageButton
         int targetWidth = cameraButton.getWidth();
         int targetHeight = cameraButton.getHeight();
@@ -146,6 +183,23 @@ public class PhotoActivity extends AppCompatActivity {
         Bitmap resizedBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, targetWidth, targetHeight);
         //Set the resized thumbnail to the ImageButton
         cameraButton.setImageBitmap(resizedBitmap);
+    }
+
+    private void savePhoto(String filename, Bitmap bitmap){
+        try {
+            //Write file
+            FileOutputStream stream = this.openFileOutput(filename, Context.MODE_PRIVATE);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+            //Cleanup
+            stream.close();
+            bitmap.recycle();
+
+            //Add File name to intent bundle
+            mExtras.putString("FILE_NAME", filename);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     /**
      * Builds the tips_dialog to show tips on how to take photos
@@ -161,7 +215,7 @@ public class PhotoActivity extends AppCompatActivity {
         final AlertDialog tipDialog = builder.create();
         //Get the violation type from the incoming Intent and set it to the TextView
         TextView violationTxt = inflator.findViewById(R.id.message_txt);
-        violationTxt.setText(getIntent().getStringExtra("activity_type"));
+        violationTxt.setText(violationType);
         //Close tip dialog
         TextView closeTxt = inflator.findViewById(R.id.close_txt);
         closeTxt.setOnClickListener(new View.OnClickListener() {
@@ -182,6 +236,7 @@ public class PhotoActivity extends AppCompatActivity {
      */
     public void goBack(View v){
         Intent intent = new Intent(PhotoActivity.this, TypeActivity.class);
+        intent.putExtras(mExtras);
         startActivity(intent);
     }
 

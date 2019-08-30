@@ -16,11 +16,12 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
-        android:focusable="true"
         android:contentDescription="@string/home_menu_desc"
+        android:focusable="true"
+        android:onClick="goBack"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_menu_black_24dp" />
+        app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
 
     <TextView
         android:id="@+id/textView"
@@ -89,7 +90,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="20dp"
-        app:layout_constraintGuide_percent="0.58" />
+        app:layout_constraintGuide_percent="0.56" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
@@ -287,7 +288,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <ImageView
@@ -311,7 +312,7 @@
             <ImageView
                 android:id="@+id/image_3"
                 android:layout_width="0dp"
-                android:layout_height="138dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:contentDescription="@string/camera_button_desc"
                 app:srcCompat="@mipmap/ic_launcher" />

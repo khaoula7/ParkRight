@@ -41,7 +41,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
 
-    // A default location (Sydney, Australia) and default zoom to use when location permission is
+    // A default location (Frankfurt, Germany) and default zoom to use when location permission is
     // not granted.
     private final LatLng mDefaultLocation = new LatLng(50.1109, 8.6821);
     private static final int DEFAULT_ZOOM = 15;
@@ -56,10 +56,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LatLng[] mLikelyPlaceLatLngs;
     private FloatingActionButton mLocationFAB;
 
+    private Bundle mExtras;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        //Get Bundle from PhotosActivity
+        mExtras = getIntent().getExtras();
+        mExtras.putDouble("LATITUDE", mDefaultLocation.latitude);
+        mExtras.putDouble("LONGITUDE", mDefaultLocation.longitude);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -87,8 +96,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //
+
                 //Open LoginActivity screen
                 Intent intent = new Intent(MapsActivity.this, LoginActivity.class);
+                //attach the bundle to the Intent object
+                intent.putExtras(mExtras);
+                //finally start the activity
                 startActivity(intent);
             }
         });
@@ -185,16 +199,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             double longitude = mLastKnownLocation.getLongitude();
                             Log.d(TAG, "Latitude: " + latitude);
                             Log.d(TAG, "Longitude: " + longitude);
-                            Toast.makeText(MapsActivity.this, "Latitude "+latitude+"Longitude "+longitude, Toast.LENGTH_LONG).show();
+                            //Toast.makeText(MapsActivity.this, "Latitude "+latitude+"Longitude "+longitude, Toast.LENGTH_LONG).show();
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(latitude, longitude), DEFAULT_ZOOM));
+                            //Add latitude and longitude to the bundle to be sent to SummaryActivity
+                            mExtras.putDouble("LATITUDE", latitude);
+                            mExtras.putDouble("LONGITUDE", longitude);
                             //Add a marker
                             LatLng myLocation = new LatLng( latitude, longitude);
+
                             mMap.addMarker(new MarkerOptions().position(myLocation).title("Car Location"));
 
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
+
                             mMap.moveCamera(CameraUpdateFactory
                                     .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                         }
@@ -244,6 +263,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     public void goBack(View v){
         Intent intent = new Intent(MapsActivity.this, PhotoActivity.class);
+        intent.putExtras(mExtras);
         startActivity(intent);
     }
 }

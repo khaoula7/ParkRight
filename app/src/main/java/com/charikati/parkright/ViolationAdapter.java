@@ -4,11 +4,14 @@ package com.charikati.parkright;
 import android.content.Context;
 import android.content.Intent;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -107,13 +110,15 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
         @Override
         public void onClick(View v) {
             //get the Violation object for the item that was clicked using getAdapterPosition()
+            //Toast.makeText(mContext, "violation position =  "+getAdapterPosition(), Toast.LENGTH_SHORT).show();
             Violation currentViolation = mViolationsData.get(getAdapterPosition());
             // Launch DetailActivity using an explicit in tent
             Intent photoIntent = new Intent(mContext, PhotoActivity.class);
-            //Put title and image resource id as extras in the intent
-            photoIntent.putExtra("activity_type", currentViolation.getViolationType());
-            photoIntent.putExtra("image_resource",
-                    currentViolation.getImageResourceId());
+            //Create a bundle and add violation index and type
+            Bundle extras = new Bundle();
+            extras.putInt("VIOLATION_INDEX", getAdapterPosition());
+            extras.putString("VIOLATION_TYPE", currentViolation.getViolationType());
+            photoIntent.putExtras(extras);
             mContext.startActivity(photoIntent);
 
         }
