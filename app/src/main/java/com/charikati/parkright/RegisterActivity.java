@@ -32,6 +32,7 @@ public class RegisterActivity extends BaseActivity {
     private String lastName;
     private String email;
     private String password;
+    private Bundle mExtras;
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -49,6 +50,8 @@ public class RegisterActivity extends BaseActivity {
         mPasswordField = findViewById(R.id.password_edit_text);
         mTermsCheck = findViewById(R.id.terms_chk_box);
         mRegisterBtn = findViewById(R.id.send_btn);
+
+        mExtras = getIntent().getExtras();
 
 
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
@@ -167,9 +170,12 @@ public class RegisterActivity extends BaseActivity {
                                                 //Send Email Verification
                                                 sendEmailVerification();
                                                 //Go back to LoginActivity
-                                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                                intent.putExtras(mExtras);
+                                                startActivity(intent);
+
                                             }else{
-                                                Log.w(TAG, "Writing in database Succeeded");
+                                                Log.w(TAG, "Writing in database failed");
 
                                             }
                                         }
@@ -240,13 +246,13 @@ public class RegisterActivity extends BaseActivity {
 
 
 
-
     /**
      * Go to Login screen: LoginActivity
      * @param v View
      */
     public void login(View v){
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        intent.putExtras(mExtras);
         startActivity(intent);
     }
 }

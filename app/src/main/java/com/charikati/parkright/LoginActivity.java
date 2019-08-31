@@ -31,6 +31,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -75,7 +76,7 @@ public class LoginActivity extends BaseActivity {
         /************************* Google Sign In******************************************************************************/
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.client_id))
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -150,18 +151,19 @@ public class LoginActivity extends BaseActivity {
      */
     private void forgot_password_dialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-        View inflator = getLayoutInflater().inflate(R.layout.forgot_password_dialog, null);
+        View inflater = getLayoutInflater().inflate(R.layout.forgot_password_dialog, null);
         //set the layout for the AlertDialog
-        builder.setView(inflator);
+        builder.setView(inflater);
         final AlertDialog passwordDialog = builder.create();
         //Set transparent background to the window
         passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         //Show the tip dialog
         passwordDialog.show();
-        TextInputEditText emailField = inflator.findViewById(R.id.email_edittext);
-        TextView resetButton = inflator.findViewById(R.id.reset_txt_btn);
-        TextView cancelButton = inflator.findViewById(R.id.cancel_txt_btn);
+        TextInputEditText emailField = inflater.findViewById(R.id.email_edittext);
+        TextView resetButton = inflater.findViewById(R.id.reset_txt_btn);
+        TextView cancelButton = inflater.findViewById(R.id.cancel_txt_btn);
 
+        //Reset button
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,6 +186,7 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+        //Cancel Button
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,10 +194,6 @@ public class LoginActivity extends BaseActivity {
                 passwordDialog.dismiss();
             }
         });
-
-
-
-
     }
 
     @Override
@@ -230,6 +229,9 @@ public class LoginActivity extends BaseActivity {
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+
+        showProgressDialog();
+
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -238,15 +240,15 @@ public class LoginActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            //FirebaseUser user = mAuth.getCurrentUser();
+                            //Snackbar.make(findViewById(R.id.login_layout), "Authentication Succeeded.", Snackbar.LENGTH_SHORT).show();
                             updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
                             //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-
                         }
+                        hideProgressDialog();
                     }
                 });
 
@@ -255,6 +257,7 @@ public class LoginActivity extends BaseActivity {
     /*******************************Facebook Sign In methods************************************************************************/
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
+        showProgressDialog();
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
@@ -276,6 +279,7 @@ public class LoginActivity extends BaseActivity {
                             mFacebookBtn.setEnabled(true);
                             updateUI();
                         }
+                        hideProgressDialog();
                     }
                 });
     }
@@ -339,7 +343,6 @@ public class LoginActivity extends BaseActivity {
         } else {
             mPasswordField.setError(null);
         }
-
         return validForm;
     }
 
@@ -356,6 +359,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void updateUI() {
+        hideProgressDialog();
         //Toast.makeText(LoginActivity.this, "You are Logged In", Toast.LENGTH_SHORT).show();
         Intent summaryIntent = new Intent(LoginActivity.this, SummaryActivity.class);
         //attach the bundle to the Intent object
@@ -379,6 +383,7 @@ public class LoginActivity extends BaseActivity {
      */
     public void register(View v){
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        intent.putExtras(mExtras);
         startActivity(intent);
     }
 }
