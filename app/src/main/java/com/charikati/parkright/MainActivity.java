@@ -20,6 +20,7 @@ import com.google.android.material.navigation.NavigationView;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+    //In Branch Thumbnails_branch
     public static final String TAG = "MainActivity";
     private DrawerLayout drawer;
 
