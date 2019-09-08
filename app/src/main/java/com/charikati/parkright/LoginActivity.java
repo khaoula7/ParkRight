@@ -5,12 +5,14 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -41,6 +43,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class LoginActivity extends BaseActivity {
     private static final String TAG = "LoginActivity";
@@ -57,6 +60,7 @@ public class LoginActivity extends BaseActivity {
     private TextInputEditText mEmailField;
     private TextInputEditText mPasswordField;
     private Button mLoginButton;
+    private TextView mRegister;
 
     private Bundle mExtras;
 
@@ -68,6 +72,19 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
 
         mExtras = getIntent().getExtras();
+
+        //Use toolbar as the ActionBar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // Display Up button
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        // Remove default title text
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
+        toolbarTitle.setText(R.string.step_4);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -142,6 +159,20 @@ public class LoginActivity extends BaseActivity {
 
             }
         });
+        //Go to RegisterActivity to create an Email/Password account
+        mRegister = findViewById(R.id.register_txt);
+        mRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+
+
 
 
     }
@@ -367,23 +398,26 @@ public class LoginActivity extends BaseActivity {
         startActivity(summaryIntent);
     }
 
+
+
+
     /**
      * Go back to previous screen: activity_map
-     * @param v View
      */
-    public void goBack(View v){
+    public void goBack(){
         Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
-        intent.putExtras(mExtras);
+        //intent.putExtras(mExtras);
         startActivity(intent);
     }
 
     /**
-     * Go to Register screen: RegisterActivity
-     * @param v View
+     * Up button: Go back to previous screen: activity_type
      */
-    public void register(View v){
-        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-        intent.putExtras(mExtras);
-        startActivity(intent);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home ) {
+            goBack();
+        }
+        return true;
     }
 }

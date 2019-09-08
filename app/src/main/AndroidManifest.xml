@@ -11,7 +11,13 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
+    <!-- For Glide -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--
+   Allows Glide to monitor connectivity status and restart failed requests if users go from a
+   a disconnected to a connected network state.
+   -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -20,8 +26,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RegisterActivity" />
 
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".HowActivity"/>
+
+        <activity android:name=".TypeActivity"/>
+
+        <activity android:name=".PhotoActivity" />
+
+        <activity android:name=".MapsActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -33,48 +53,16 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/step_3" /> <!-- Google maps metadata -->
+        <!-- Google maps metadata -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".LoginActivity" />
-        <activity android:name=".SummaryActivity" /> <!-- Home Screen Activity -->
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity> <!-- How To  Screen Activity -->
-        <activity
-            android:name=".HowActivity"
-            android:parentActivityName=".MainActivity"> <!-- Add the Up button -->
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity> <!-- TypeActivity Screen -->
-        <activity
-            android:name=".TypeActivity"
-            android:parentActivityName=".HowActivity"> <!-- Add the Up button -->
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HowActivity" />
-        </activity> <!-- PhotoActivity -->
-        <activity android:name=".PhotoActivity" />
-
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" /> <!-- Facebook Activity launched after click on facebook button -->
+        <!-- Facebook Activity launched after click on facebook button -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -84,13 +72,43 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".RegisterActivity"/>
+
+        <activity android:name=".SummaryActivity"/>
+
+        <!-- File Provider -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.charikati.parkright.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </application>
 
 </manifest>

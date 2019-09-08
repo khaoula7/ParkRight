@@ -13,6 +13,18 @@
     <string name="home_share_desc">Share vector icon</string>
     <string name="home_image_desc">Home image</string>
 
+    <!-- draw_menu strings -->
+    <string name="nav_new">New Violation</string>
+    <string name="nav_report">How to Report Violation</string>
+    <string name="nav_login">Login</string>
+    <string name="nav_account">My Account</string>
+    <string name="nav_reports">My Reports</string>
+    <string name="nav_status">My Status</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_share">Share</string>
+
+
+
     <!-- activity_how Strings -->
     <string name="how_back_arrow_desc"> Back arrow image </string>
     <string name="how_phrase_1"> First Time User? </string>
@@ -93,7 +105,6 @@
     <string name="step_4"> Login </string>
     <string name="activity_login_phrase_1"> Please Login to your Account </string>
     <string name="facebook"> LOGIN WITH FACEBOOK </string>
-    <string name="log_out"> ACCOUNT LOG OUT</string>
     <string name="Google"> Google </string>
     <string name="client_id">843254302439-ireeq2d7ecnbrfisbn79o8v2qp6dei5b.apps.googleusercontent.com</string>
     <string name="or"> OR </string>
@@ -151,13 +162,8 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="log_out">Log out</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
 
 
 </resources>

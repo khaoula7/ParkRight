@@ -1,14 +1,17 @@
 package com.charikati.parkright;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,6 +21,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
 
 public class RegisterActivity extends BaseActivity {
     private static final String TAG = "RegisterActivity";
@@ -33,6 +38,7 @@ public class RegisterActivity extends BaseActivity {
     private String email;
     private String password;
     private Bundle mExtras;
+    private TextView mLogin;
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -43,6 +49,20 @@ public class RegisterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //Use toolbar as the ActionBar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // Display Up button
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        // Remove default title text
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
+        toolbarTitle.setText(R.string.step_4_1);
+
+
         //Views
         mNameField = findViewById(R.id.name_edit_txt);
         mLastNameField = findViewById(R.id.last_name_edit_txt);
@@ -51,6 +71,7 @@ public class RegisterActivity extends BaseActivity {
         mTermsCheck = findViewById(R.id.terms_chk_box);
         mRegisterBtn = findViewById(R.id.send_btn);
 
+        //Intent Bundle
         mExtras = getIntent().getExtras();
 
 
@@ -69,6 +90,16 @@ public class RegisterActivity extends BaseActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+
+        //Go to RegisterActivity to create an Email/Password account
+        mLogin = findViewById(R.id.login_txt);
+        mLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     // [START on_start_check_user]
@@ -247,12 +278,22 @@ public class RegisterActivity extends BaseActivity {
 
 
     /**
-     * Go to Login screen: LoginActivity
-     * @param v View
+     * Go back to previous screen: activity_map
      */
-    public void login(View v){
+    public void goBack(){
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        intent.putExtras(mExtras);
+        //intent.putExtras(mExtras);
         startActivity(intent);
+    }
+
+    /**
+     * Up button: Go back to previous screen: activity_type
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home ) {
+            goBack();
+        }
+        return true;
     }
 }
