@@ -60,6 +60,9 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
     private FirebaseAuth mAuth;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mPhotosStorageReference;
+    private String mFirstFileName;
+    private String mSecondFileName;
+    private String mThirdFileName;
 
 
 
@@ -67,11 +70,18 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
+        mExtras = getIntent().getExtras();
+
         /*Initialize Firebase components  */
         mAuth = FirebaseAuth.getInstance();
         mFirebaseStorage = FirebaseStorage.getInstance();
         //Set Reference  to the violation_photos folder location
         mPhotosStorageReference = mFirebaseStorage.getReference().child("violation_photos");
+
+        mFirstFileName = mExtras.getString("FILE_NAME_1");
+        mSecondFileName = mExtras.getString("FILE_NAME_2");
+        mThirdFileName = mExtras.getString("FILE_NAME_3");
+
 
 
 
@@ -107,9 +117,9 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
         mSpinner.setSelection(spinnerPosition);
 
         //Get images filename from bundle and display it
-        displayImages(mFirstImage, mExtras.getString("FILE_NAME_1"));
-        displayImages(mSecondImage, mExtras.getString("FILE_NAME_2"));
-        displayImages(mThirdImage, mExtras.getString("FILE_NAME_3"));
+        displayImages(mFirstImage, mFirstFileName);
+        displayImages(mSecondImage, mSecondFileName);
+        displayImages(mThirdImage, mThirdFileName);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -121,28 +131,35 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Uri file = Uri.fromFile(new File("/data/user/0/com.charikati.parkright/files/photo1.jpg"));
-                StorageReference photoRef = mPhotosStorageReference.child("photo1.jpg");
-                UploadTask uploadTask = photoRef.putFile(file);
-                // Register observers to listen for when the download is done or if it fails
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        Toast.makeText(SummaryActivity.this, "Upload failed", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                        // ...
-                        Toast.makeText(SummaryActivity.this, "Upload Succeeded", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
+                upload_photos(mFirstFileName);
+                upload_photos(mSecondFileName);
+                upload_photos(mThirdFileName);
             }
         });
+    }
+
+    private void upload_photos(String filename){
+        String path = String.format("/data/user/0/com.charikati.parkright/files/%s", filename);
+        Uri file = Uri.fromFile(new File(path));
+        StorageReference photoRef = mPhotosStorageReference.child(filename);
+        UploadTask uploadTask = photoRef.putFile(file);
+        // Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Toast.makeText(SummaryActivity.this, "Upload failed", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                Toast.makeText(SummaryActivity.this, "Upload Succeeded", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
     /**

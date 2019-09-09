@@ -57,13 +57,8 @@ public class PhotoActivity extends AppCompatActivity {
     private Bundle mExtras;
     private String violationType;
 
-    private String currentPhotoPath;
 
 
-    /* Firebase instance variables */
-    private FirebaseAuth mAuth;
-    private FirebaseStorage mFirebaseStorage;
-    private StorageReference mPhotosStorageReference;
 
 
 
@@ -73,13 +68,6 @@ public class PhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-
-        /*Initialize Firebase components  */
-        mAuth = FirebaseAuth.getInstance();
-        mFirebaseStorage = FirebaseStorage.getInstance();
-        //Set Reference  to the violation_photos folder location
-        mPhotosStorageReference = mFirebaseStorage.getReference().child("violation_photos");
-
 
         //Use toolbar as the ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -114,7 +102,7 @@ public class PhotoActivity extends AppCompatActivity {
         firstCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_1);
+                invokeCamera(REQUEST_IMAGE_CAPTURE_1);
             }
         });
 
@@ -123,7 +111,7 @@ public class PhotoActivity extends AppCompatActivity {
         secondCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_2);
+                invokeCamera(REQUEST_IMAGE_CAPTURE_2);
             }
         });
 
@@ -131,8 +119,7 @@ public class PhotoActivity extends AppCompatActivity {
         thirdCameraButton = (ImageButton) findViewById(R.id.camera_3_btn);
         thirdCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_3);
+            public void onClick(View v) { invokeCamera(REQUEST_IMAGE_CAPTURE_3);
             }
         });
 
@@ -170,36 +157,14 @@ public class PhotoActivity extends AppCompatActivity {
     /**
      * Sends a camera intent to take a picture of violating car
      */
-    /*private void invokeCamera(int requestCode) {
+    private void invokeCamera(int requestCode) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, requestCode);
         }
-    }*/
-
-    private void dispatchTakePictureIntent(int requestCode) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                ex.printStackTrace();
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.charikati.parkright.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, requestCode);
-            }
-        }
     }
+
 
     /**
      * Gets the result of the camera Intent: a thumbnail and displays it.
@@ -220,28 +185,6 @@ public class PhotoActivity extends AppCompatActivity {
             savePhoto("photo1.jpg", imageBitmap);
             //Add photo filename to intent bundle
             mExtras.putString("FILE_NAME_1", "photo1.jpg");
-
-            /*Uri file = Uri.fromFile(new File(currentPhotoPath));
-            StorageReference photoRef = mPhotosStorageReference.child("photo1.jpg");
-            UploadTask uploadTask = photoRef.putFile(file);
-
-            // Register observers to listen for when the download is done or if it fails
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle unsuccessful uploads
-                    Toast.makeText(PhotoActivity.this, "upload failed", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                    // ...
-                    Toast.makeText(PhotoActivity.this, "Upload Succeeded", Toast.LENGTH_SHORT).show();
-                }
-            });*/
-
-
 
         } else if (requestCode == REQUEST_IMAGE_CAPTURE_2 && resultCode == RESULT_OK) {
             //User has captured the second photo
@@ -264,8 +207,6 @@ public class PhotoActivity extends AppCompatActivity {
             mExtras.putString("FILE_NAME_3", "photo3.jpg");
 
         }
-
-        //Test Send to Firebase Storage
 
     }
 
@@ -339,21 +280,6 @@ public class PhotoActivity extends AppCompatActivity {
         return true;
     }
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imageFile = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = imageFile.getAbsolutePath();
-        return imageFile;
-    }
 
 
 }

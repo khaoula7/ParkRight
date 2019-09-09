@@ -122,6 +122,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //Open LoginActivity screen
                 Intent intent = new Intent(MapsActivity.this, LoginActivity.class);
                 //attach the bundle to the Intent object
+                String photopath1 = mExtras.getString("FILE_NAME_1");
                 intent.putExtras(mExtras);
                 //finally start the activity
                 startActivity(intent);
