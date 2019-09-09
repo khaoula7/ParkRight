@@ -3,6 +3,7 @@ package com.charikati.parkright;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.ThumbnailUtils;
@@ -22,10 +23,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -46,39 +51,24 @@ public class PhotoActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE_2 = 2;
     static final int REQUEST_IMAGE_CAPTURE_3 = 3;
 
-    private ImageButton firstCameraButton;
-    private ImageButton secondCameraButton;
-    private ImageButton thirdCameraButton;
+    private ImageButton mFirstCameraButton;
+    private ImageButton mSecondCameraButton;
+    private ImageButton mThirdCameraButton;
 
-    private boolean firstPhotoCaptured = false;
-    private boolean secondPhotoCaptured = false;
-    private boolean thirdPhotoCaptured = false;
+    private boolean mFirstPhotoCaptured = false;
+    private boolean mSecondPhotoCaptured = false;
+    private boolean mThirdPhotoCaptured = false;
 
     private Bundle mExtras;
-    private String violationType;
+    private String mViolationType;
 
-    private String currentPhotoPath;
-
-
-    /* Firebase instance variables */
-    private FirebaseAuth mAuth;
-    private FirebaseStorage mFirebaseStorage;
-    private StorageReference mPhotosStorageReference;
-
-
-
+    private String mCurrentPhotoPath;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-
-        /*Initialize Firebase components  */
-        mAuth = FirebaseAuth.getInstance();
-        mFirebaseStorage = FirebaseStorage.getInstance();
-        //Set Reference  to the violation_photos folder location
-        mPhotosStorageReference = mFirebaseStorage.getReference().child("violation_photos");
 
 
         //Use toolbar as the ActionBar
@@ -97,7 +87,7 @@ public class PhotoActivity extends AppCompatActivity {
         mExtras = getIntent().getExtras();
 
         //Get the violation type from the incoming Intent
-        violationType = mExtras.getString("VIOLATION_TYPE");
+        mViolationType = mExtras.getString("VIOLATION_TYPE");
 
 
         //Click on show button will open tips dialog
@@ -110,8 +100,8 @@ public class PhotoActivity extends AppCompatActivity {
         });
 
         //Click on first camera button will send a camera intent
-        firstCameraButton = (ImageButton) findViewById(R.id.camera_1_btn);
-        firstCameraButton.setOnClickListener(new View.OnClickListener() {
+        mFirstCameraButton = (ImageButton) findViewById(R.id.camera_1_btn);
+        mFirstCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_1);
@@ -119,17 +109,17 @@ public class PhotoActivity extends AppCompatActivity {
         });
 
         //Click on second camera button will send a camera intent
-       secondCameraButton = (ImageButton) findViewById(R.id.camera_2_btn);
-        secondCameraButton.setOnClickListener(new View.OnClickListener() {
+       mSecondCameraButton = (ImageButton) findViewById(R.id.camera_2_btn);
+       mSecondCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_2);
             }
-        });
+       });
 
         //Click on third camera button will send a camera intent
-        thirdCameraButton = (ImageButton) findViewById(R.id.camera_3_btn);
-        thirdCameraButton.setOnClickListener(new View.OnClickListener() {
+        mThirdCameraButton = (ImageButton) findViewById(R.id.camera_3_btn);
+        mThirdCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_3);
@@ -164,20 +154,34 @@ public class PhotoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
-    /**
-     * Sends a camera intent to take a picture of violating car
-     */
-    /*private void invokeCamera(int requestCode) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, requestCode);
-        }
-    }*/
 
+    /**
+     * Create a File to store the taken image in app private folder
+     * @return imageFile
+     * @throws IOException
+     */
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File imageFile = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = imageFile.getAbsolutePath();
+        return imageFile;
+    }
+
+
+    /**
+     *Take a picture and provide file for saving it
+     * @param requestCode
+     */
     private void dispatchTakePictureIntent(int requestCode) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -202,103 +206,53 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     /**
-     * Gets the result of the camera Intent: a thumbnail and displays it.
+     * Gets the result of the photo Intent.
+     * Display image in its appropriate ImageView
+     * Add the path to intent bundle
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //Get Bitmap image from photo intent
-        Bundle extras = data.getExtras();
-        Bitmap imageBitmap = (Bitmap) extras.get("data");
 
         if (requestCode == REQUEST_IMAGE_CAPTURE_1 && resultCode == RESULT_OK) {
             //User has captured the first photo
-            firstPhotoCaptured = true;
-            //Display photo thumbnail
-            displayThumbnail(imageBitmap, firstCameraButton);
-            //Save photo on disk in private mode
-            savePhoto("photo1.jpg", imageBitmap);
-            //Add photo filename to intent bundle
-            mExtras.putString("FILE_NAME_1", "photo1.jpg");
-
-            /*Uri file = Uri.fromFile(new File(currentPhotoPath));
-            StorageReference photoRef = mPhotosStorageReference.child("photo1.jpg");
-            UploadTask uploadTask = photoRef.putFile(file);
-
-            // Register observers to listen for when the download is done or if it fails
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle unsuccessful uploads
-                    Toast.makeText(PhotoActivity.this, "upload failed", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                    // ...
-                    Toast.makeText(PhotoActivity.this, "Upload Succeeded", Toast.LENGTH_SHORT).show();
-                }
-            });*/
-
-
+            mFirstPhotoCaptured = true;
+            //Display image in its appropriate ImageView
+            displayImages(mFirstCameraButton, mCurrentPhotoPath);
+            //setPic(mFirstCameraButton);
+            //Add photo path to intent bundle
+            mExtras.putString("FILE_NAME_1", mCurrentPhotoPath);
 
         } else if (requestCode == REQUEST_IMAGE_CAPTURE_2 && resultCode == RESULT_OK) {
-            //User has captured the second photo
-            secondPhotoCaptured = true;
-            //Display photo thumbnail
-            displayThumbnail(imageBitmap, secondCameraButton);
-            //Save photo on disk in private mode
-            savePhoto("photo2.jpg", imageBitmap);
-            //Add photo filename to intent bundle
-            mExtras.putString("FILE_NAME_2", "photo2.jpg");
+            //User has captured the first photo
+            mSecondPhotoCaptured = true;
+            //Display image in its appropriate ImageView
+            displayImages(mSecondCameraButton, mCurrentPhotoPath);
+            //Add photo path to intent bundle
+            mExtras.putString("FILE_NAME_2", mCurrentPhotoPath);
 
         } else if (requestCode == REQUEST_IMAGE_CAPTURE_3 && resultCode == RESULT_OK) {
-            //User has captured the third photo
-            thirdPhotoCaptured = true;
-            //Display photo thumbnail
-            displayThumbnail(imageBitmap, thirdCameraButton);
-            //Save photo on disk in private mode
-            savePhoto("photo3.jpg", imageBitmap);
-            //Add photo filename to intent bundle
-            mExtras.putString("FILE_NAME_3", "photo3.jpg");
+            //User has captured the first photo
+            mThirdPhotoCaptured = true;
+            //Display image in its appropriate ImageView
+            displayImages(mThirdCameraButton, mCurrentPhotoPath);
+            //Add photo path to intent bundle
+            mExtras.putString("FILE_NAME_3", mCurrentPhotoPath);
 
         }
-
-        //Test Send to Firebase Storage
-
     }
 
     /**
-     * Display the thumbnail in its appropriate ImageButton.
-     * @param imageBitmap the Bitmap
-     * @param cameraButton the ImageButton to display the thumbnail
+     * Display image in ImageView using Glide image library
+     * @param imageView where to display the image in layout
+     * @param fileName of the image stored privately on disk
      */
-    private void displayThumbnail(Bitmap imageBitmap, ImageButton cameraButton) {
+    private void displayImages(ImageView imageView, String fileName) {
+        Glide.with(this)
+                    .load(fileName).centerCrop().into(imageView);
 
-        //Get the width and height in px of the ImageButton
-        int targetWidth = cameraButton.getWidth();
-        int targetHeight = cameraButton.getHeight();
-        //Resize the thumbnail to the ImageButton dimensions
-        Bitmap resizedBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, targetWidth, targetHeight);
-        //Set the resized thumbnail to the ImageButton
-        Glide.with(this).load(resizedBitmap).into(cameraButton);
-        //cameraButton.setImageBitmap(resizedBitmap);
     }
 
-    private void savePhoto(String filename, Bitmap bitmap){
-        try {
-            //Write file
-            FileOutputStream stream = this.openFileOutput(filename, Context.MODE_PRIVATE);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-
-            //Cleanup
-            stream.close();
-            bitmap.recycle();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     /**
      * Builds the tips_dialog to show tips on how to take photos
      */
@@ -313,10 +267,10 @@ public class PhotoActivity extends AppCompatActivity {
         final AlertDialog tipDialog = builder.create();
         //Get the violation type from the incoming Intent and set it to the TextView
         TextView violationTxt = inflater.findViewById(R.id.message_txt);
-        violationTxt.setText(violationType);
+        violationTxt.setText(mViolationType);
         //Close tip dialog
-        TextView closeTxt = inflater.findViewById(R.id.close_txt);
-        closeTxt.setOnClickListener(new View.OnClickListener() {
+        ImageView closeImg = inflater.findViewById(R.id.close_img);
+        closeImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tipDialog.dismiss();
@@ -339,21 +293,12 @@ public class PhotoActivity extends AppCompatActivity {
         return true;
     }
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imageFile = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
 
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = imageFile.getAbsolutePath();
-        return imageFile;
-    }
+
+
+
+
+
 
 
 }

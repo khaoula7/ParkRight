@@ -61,7 +61,9 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mPhotosStorageReference;
 
-
+    private String mFirstFileName;
+    private String mSecondFileName;
+    private String mThirdFileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +75,11 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
         //Set Reference  to the violation_photos folder location
         mPhotosStorageReference = mFirebaseStorage.getReference().child("violation_photos");
 
-
-
+        //Retrieve data from intent
+        mExtras = getIntent().getExtras();
+        mFirstFileName = mExtras.getString("FILE_NAME_1");
+        mSecondFileName = mExtras.getString("FILE_NAME_2");
+        mThirdFileName = mExtras.getString("FILE_NAME_3");
 
         //Use toolbar as the ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -93,9 +98,6 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
         mSecondImage = findViewById(R.id.image_2);
         mThirdImage = findViewById(R.id.image_3);
 
-        //Get the bundle from the intent
-        mExtras = getIntent().getExtras();
-
         //Fill the Spinner with values from string-array resource
         mSpinner = findViewById(R.id.spinner);
         String[] violations = getResources().getStringArray(R.array.violation_types);
@@ -107,9 +109,10 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
         mSpinner.setSelection(spinnerPosition);
 
         //Get images filename from bundle and display it
-        displayImages(mFirstImage, mExtras.getString("FILE_NAME_1"));
-        displayImages(mSecondImage, mExtras.getString("FILE_NAME_2"));
-        displayImages(mThirdImage, mExtras.getString("FILE_NAME_3"));
+        //Get images filename from bundle and display it
+        displayImages(mFirstImage, mFirstFileName);
+        displayImages(mSecondImage, mSecondFileName);
+        displayImages(mThirdImage, mThirdFileName);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -121,49 +124,23 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                uploadImagetoFirebase(mFirstFileName);
+                uploadImagetoFirebase(mSecondFileName);
 
-                Uri file = Uri.fromFile(new File("/data/user/0/com.charikati.parkright/files/photo1.jpg"));
-                StorageReference photoRef = mPhotosStorageReference.child("photo1.jpg");
-                UploadTask uploadTask = photoRef.putFile(file);
-                // Register observers to listen for when the download is done or if it fails
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        Toast.makeText(SummaryActivity.this, "Upload failed", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                        // ...
-                        Toast.makeText(SummaryActivity.this, "Upload Succeeded", Toast.LENGTH_SHORT).show();
-                    }
-                });
+
 
             }
         });
     }
 
     /**
-     * Decode bitmap image from file stream and display it in its ImageView
+     * Display image in ImageView using Glide image library
      * @param imageView where to display the image in layout
      * @param fileName of the image stored privately on disk
      */
     private void displayImages(ImageView imageView, String fileName) {
-        Bitmap bmp = null;
-        try {
-
-            FileInputStream is = this.openFileInput(fileName);
-            bmp = BitmapFactory.decodeStream(is);
-            Glide.with(this).load(bmp).into(imageView);
-            //imageView.setImageBitmap(bmp);
-            is.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Glide.with(this).load(fileName).centerCrop().into(imageView);
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -171,7 +148,7 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
         //Get location latitude and longitude
         double latitude = mExtras.getDouble("LATITUDE");
         double longitude = mExtras.getDouble("LONGITUDE");
-        Toast.makeText(this, "Latitude= "+latitude + " Longitude= "+ longitude, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Latitude= "+latitude + " Longitude= "+ longitude, Toast.LENGTH_LONG).show();
 
         // Add a marker in Frankfurt and move the camera
         LatLng location = new LatLng(latitude, longitude);
@@ -180,7 +157,6 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
 
         // Enable the zoom controls for the map
         googleMap.getUiSettings().setZoomControlsEnabled(true);
-
     }
 
     /**
@@ -189,7 +165,7 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
     public void goBack(){
         Intent intent = new Intent(SummaryActivity.this, MapsActivity.class);
         intent.putExtras(mExtras);
-        Toast.makeText(this, "Latitude = "+ mExtras.getDouble("Latitude"), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Latitude = "+ mExtras.getDouble("Latitude"), Toast.LENGTH_SHORT).show();
         startActivity(intent);
     }
 
@@ -226,6 +202,29 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+     private void uploadImagetoFirebase(String photoPath){
+         Uri fileUri = Uri.fromFile(new File(photoPath));
+         StorageReference photoRef = mPhotosStorageReference.child(fileUri.getLastPathSegment());
+         UploadTask uploadTask = photoRef.putFile(fileUri);
+
+         // Register observers to listen for when the download is done or if it fails
+         uploadTask.addOnFailureListener(new OnFailureListener() {
+             @Override
+             public void onFailure(@NonNull Exception exception) {
+                 // Handle unsuccessful uploads
+                 Toast.makeText(SummaryActivity.this, "upload failed", Toast.LENGTH_SHORT).show();
+             }
+         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+             @Override
+             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                    // ...
+                    Toast.makeText(SummaryActivity.this, "Upload Succeeded", Toast.LENGTH_SHORT).show();
+                }
+            });
+
     }
 
 }

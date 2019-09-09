@@ -286,7 +286,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:contentDescription="@string/camera_button_desc"
-                app:srcCompat="@mipmap/ic_launcher" />
+                app:srcCompat="@mipmap/ic_launcher_round" />
 
         </LinearLayout>
     </LinearLayout>

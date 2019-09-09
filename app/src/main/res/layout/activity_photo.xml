@@ -204,7 +204,7 @@
     <ImageButton
         android:id="@+id/camera_2_btn"
         android:layout_width="134dp"
-        android:layout_height="138dp"
+        android:layout_height="134dp"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="24dp"
@@ -217,7 +217,7 @@
     <ImageButton
         android:id="@+id/camera_1_btn"
         android:layout_width="134dp"
-        android:layout_height="138dp"
+        android:layout_height="134dp"
         android:layout_marginTop="24dp"
         android:background="@color/orange"
         android:contentDescription="@string/camera_button_desc"
@@ -228,7 +228,7 @@
     <ImageButton
         android:id="@+id/camera_3_btn"
         android:layout_width="134dp"
-        android:layout_height="138dp"
+        android:layout_height="134dp"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="24dp"
