@@ -34,6 +34,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -60,6 +62,9 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
     private FirebaseAuth mAuth;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mPhotosStorageReference;
+    private FirebaseDatabase mFirebaseDtabase;
+    private DatabaseReference mMessagesDatabaseReference;
+
 
     private String mFirstFileName;
     private String mSecondFileName;
@@ -196,6 +201,11 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
                 startActivity(intent);
             case R.id.sign_out_menu:
                 mAuth.signOut();
+                //Sign out from google
+                //mGoogleSignInClient.signOut();
+                //Sign out from Facebook
+                //LoginManager.getInstance().logout()
+
                 intent = new Intent(SummaryActivity.this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

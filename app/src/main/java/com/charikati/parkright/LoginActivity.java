@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,6 +23,8 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -41,6 +44,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -55,16 +63,15 @@ public class LoginActivity extends BaseActivity {
     //Variables for Facebook Login
     private CallbackManager mCallbackManager;
     private Button mFacebookBtn;
-    private GoogleApiClient mGoogleApiClient;
     //Variables for Email/password Sign In
     private TextInputEditText mEmailField;
     private TextInputEditText mPasswordField;
     private Button mLoginButton;
     private TextView mRegister;
-
+    /*Firebase realtime database*/
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mUsersDatabaseReference;
     private Bundle mExtras;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +79,7 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
 
         mExtras = getIntent().getExtras();
+
 
         //Use toolbar as the ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -88,6 +96,9 @@ public class LoginActivity extends BaseActivity {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        //Initialize firebase database
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mUsersDatabaseReference = mFirebaseDatabase.getReference().child("Users");
 
 
         /************************* Google Sign In******************************************************************************/
@@ -165,6 +176,8 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                intent.putExtras(mExtras);
+
                 startActivity(intent);
             }
         });
@@ -271,18 +284,36 @@ public class LoginActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            //Snackbar.make(findViewById(R.id.login_layout), "Authentication Succeeded.", Snackbar.LENGTH_SHORT).show();
+                            writeUserInDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail());
+                            //Go to SummaryActivity
                             updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-                            //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                         }
                         hideProgressDialog();
                     }
                 });
+    }
 
+    /**
+     * Adds a new user to Firebase realtime database
+     */
+    private void writeUserInDatabase(String first_name, String last_name, String email){
+        User user = new User(first_name, last_name, email);
+        //Connect to realtime database and write in Users segment
+        mUsersDatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Log.d(TAG, "Writing in database Succeeded");
+                }else{
+                    Log.w(TAG, "Writing in database failed");
+                }
+            }
+        });
     }
 
     /*******************************Facebook Sign In methods************************************************************************/
@@ -300,8 +331,9 @@ public class LoginActivity extends BaseActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             mFacebookBtn.setEnabled(true);
+                            FirebaseUser fbUser = mAuth.getCurrentUser();
+                            useLoginInformation(token);
                             updateUI();
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -318,13 +350,12 @@ public class LoginActivity extends BaseActivity {
 
     /*******************************Email/Password Sign In methods************************************************************************/
     private void emailPasswordSignIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
+        Log.d(TAG, "EmailPassword signIn:" + email);
         if (!validateForm()) {
             return;
         }
         showProgressDialog();
 
-        // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -346,7 +377,6 @@ public class LoginActivity extends BaseActivity {
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-
                         hideProgressDialog();
                     }
                 });
@@ -390,11 +420,11 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void updateUI() {
-        hideProgressDialog();
         //Toast.makeText(LoginActivity.this, "You are Logged In", Toast.LENGTH_SHORT).show();
         Intent summaryIntent = new Intent(LoginActivity.this, SummaryActivity.class);
         //attach the bundle to the Intent object
         summaryIntent.putExtras(mExtras);
+        Log.d(TAG, String.valueOf(mExtras.getDouble("LATITUDE")));
         startActivity(summaryIntent);
     }
 
@@ -419,5 +449,35 @@ public class LoginActivity extends BaseActivity {
             goBack();
         }
         return true;
+    }
+
+    private void useLoginInformation(AccessToken accessToken) {
+        /**
+         Creating the GraphRequest to fetch user details
+         1st Param - AccessToken
+         2nd Param - Callback (which will be invoked once the request is successful)
+         **/
+        GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+            //OnCompleted is invoked once the GraphRequest is successful
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                try {
+                    String first_name = object.getString("first_name");
+                    String last_name = object.getString("last_name");
+                    String email = object.getString("email");
+                    Log.d(TAG, "name = "+first_name + " lastname = "+ last_name + " email = "+ email);
+                    writeUserInDatabase(first_name, last_name, email);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d(TAG, e.getMessage());
+                }
+            }
+        });
+        // We set parameters to the GraphRequest using a Bundle.
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "first_name, last_name, email");
+        request.setParameters(parameters);
+        // Initiate the GraphRequest
+        request.executeAsync();
     }
 }

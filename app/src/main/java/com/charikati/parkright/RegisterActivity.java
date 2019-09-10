@@ -33,8 +33,8 @@ public class RegisterActivity extends BaseActivity {
     private TextInputEditText mPasswordField;
     private CheckBox mTermsCheck;
     private Button mRegisterBtn;
-    private String name;
-    private String lastName;
+    private String first_name;
+    private String last_name;
     private String email;
     private String password;
     private Bundle mExtras;
@@ -75,56 +75,33 @@ public class RegisterActivity extends BaseActivity {
         mExtras = getIntent().getExtras();
 
 
+
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                name = mNameField.getText().toString();
-                lastName = mLastNameField.getText().toString();
+                first_name = mNameField.getText().toString();
+                last_name = mLastNameField.getText().toString();
                 email = mEmailField.getText().toString();
                 password = mPasswordField.getText().toString();
                 createAccount();
             }
         });
 
-        // [START initialize_auth]
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
 
-        //Go to RegisterActivity to create an Email/Password account
+        //Go to RegisterActivity to login with created Email/Password account
         mLogin = findViewById(R.id.login_txt);
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                intent.putExtras(mExtras);
+                Log.d(TAG, String.valueOf(mExtras.getDouble("LATITUDE")));
                 startActivity(intent);
+                finish();
             }
         });
-    }
-
-    // [START on_start_check_user]
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        //FirebaseUser currentUser = mAuth.getCurrentUser();
-        //updateUI();
-    }
-    // [END on_start_check_user]
-
-    private void updateUI() {
-        //hideProgressDialog();
-        FirebaseUser currentUser= mAuth.getCurrentUser();
-        if (currentUser != null && currentUser.isEmailVerified()) {
-            Intent summaryIntent = new Intent(RegisterActivity.this, SummaryActivity.class);
-            startActivity(summaryIntent);
-            finish();
-        }
-        else{
-            Toast.makeText(this, "In updateUI", Toast.LENGTH_SHORT).show();
-        }
-
-
     }
 
     /**
@@ -134,14 +111,14 @@ public class RegisterActivity extends BaseActivity {
     private boolean validateForm() {
         boolean validForm = true;
 
-        if (TextUtils.isEmpty(name)) {
+        if (TextUtils.isEmpty(first_name)) {
             mNameField.setError("Required.");
             validForm = false;
         } else {
             mNameField.setError(null);
         }
 
-        if (TextUtils.isEmpty(lastName)) {
+        if (TextUtils.isEmpty(last_name)) {
             mLastNameField.setError("Required.");
             validForm = false;
         } else {
@@ -188,7 +165,7 @@ public class RegisterActivity extends BaseActivity {
                             Toast.makeText(RegisterActivity.this, "createUserWithEmail:success\"", Toast.LENGTH_LONG).show();
 
                             //Save additional data about user in realtime database
-                            User user = new User(name, lastName, email);
+                            User user = new User(first_name, last_name, email);
                             //Connect to realtime database and write in it
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -211,20 +188,14 @@ public class RegisterActivity extends BaseActivity {
                                             }
                                         }
                                     });
-                            //FirebaseUser currentUser = mAuth.getCurrentUser();
-                            //updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(RegisterActivity.this, "createUserWithEmail:failure", Toast.LENGTH_SHORT).show();
                         }
-
-                        // [START_EXCLUDE]
                         hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
-        // [END create_user_with_email]
     }
 
     /*private void show_verif_email_dialog(String email) {

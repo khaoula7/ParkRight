@@ -123,6 +123,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Intent intent = new Intent(MapsActivity.this, LoginActivity.class);
                 //attach the bundle to the Intent object
                 intent.putExtras(mExtras);
+                Log.d(TAG, mExtras.toString());
                 //finally start the activity
                 startActivity(intent);
             }
