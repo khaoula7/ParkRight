@@ -30,8 +30,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +47,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Objects;
 
 public class SummaryActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -62,8 +67,8 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
     private FirebaseAuth mAuth;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mPhotosStorageReference;
-    private FirebaseDatabase mFirebaseDtabase;
-    private DatabaseReference mMessagesDatabaseReference;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mDatesDatabaseReference;
 
 
     private String mFirstFileName;
@@ -79,6 +84,8 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
         mFirebaseStorage = FirebaseStorage.getInstance();
         //Set Reference  to the violation_photos folder location
         mPhotosStorageReference = mFirebaseStorage.getReference().child("violation_photos");
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatesDatabaseReference = mFirebaseDatabase.getReference().child("Dates");
 
         //Retrieve data from intent
         mExtras = getIntent().getExtras();
@@ -214,7 +221,8 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
         return super.onOptionsItemSelected(item);
     }
 
-     private void uploadImagetoFirebase(String photoPath){
+     private String uploadImagetoFirebase(String photoPath){
+        String downloadUrl = "";
          Uri fileUri = Uri.fromFile(new File(photoPath));
          StorageReference photoRef = mPhotosStorageReference.child(fileUri.getLastPathSegment());
          UploadTask uploadTask = photoRef.putFile(fileUri);
@@ -222,18 +230,77 @@ public class SummaryActivity extends AppCompatActivity implements OnMapReadyCall
          // Register observers to listen for when the download is done or if it fails
          uploadTask.addOnFailureListener(new OnFailureListener() {
              @Override
-             public void onFailure(@NonNull Exception exception) {
+             public void onFailure(@NonNull Exception e) {
                  // Handle unsuccessful uploads
-                 Toast.makeText(SummaryActivity.this, "upload failed", Toast.LENGTH_SHORT).show();
+                 Toast.makeText(SummaryActivity.this, "upload failed "+ e.toString(), Toast.LENGTH_SHORT).show();
              }
          }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
              @Override
              public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                    // ...
-                    Toast.makeText(SummaryActivity.this, "Upload Succeeded", Toast.LENGTH_SHORT).show();
-                }
-            });
+                 Toast.makeText(SummaryActivity.this, "Upload Succeeded", Toast.LENGTH_SHORT).show();
+                 //Get downloadUrl
+                 Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                     @Override
+                     public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                         if (!task.isSuccessful()) {
+                             throw task.getException();
+                         }
+                         // Continue with the task to get the download URL
+                         return photoRef.getDownloadUrl();
+                     }
+                 }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                     @Override
+                     public void onComplete(@NonNull Task<Uri> task) {
+                         if (task.isSuccessful()) {
+                             //Get the download URL of the uploaded image
+                             String downloadUrl = task.getResult().toString();
+                             Log.d(TAG, downloadUrl);
+
+                         } else {
+                             Log.d(TAG, "No download URI");
+                         }
+                     }
+                 });
+             }
+         });
+
+         //Get Download URL
+         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+             @Override
+             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                 if (!task.isSuccessful()) {
+                     throw task.getException();
+                 }
+
+                 // Continue with the task to get the download URL
+                 return photoRef.getDownloadUrl();
+             }
+         }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+             @Override
+             public void onComplete(@NonNull Task<Uri> task) {
+                 if (task.isSuccessful()) {
+                     //Get the download URL of the uploaded image
+                     String downloadUrl = task.getResult().toString();
+                     Log.d(TAG, downloadUrl);
+
+                 } else {
+                     Log.d(TAG, "No download URI");
+                 }
+             }
+         });
+         return null;
+    }
+
+    private void storeViolation(){
+        Calendar calendar = Calendar.getInstance();
+        //Get current Date
+        SimpleDateFormat currentDateFormat = new SimpleDateFormat("YYYY-MM-DD");
+        String currentDate = currentDateFormat.format(calendar.getTime());
+
+        //Get current Time
+        SimpleDateFormat currentTimeFormat = new SimpleDateFormat("HH:mm:ss");
+        String currentTime = currentTimeFormat.format(calendar.getTime());
+
 
     }
 
