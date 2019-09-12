@@ -24,7 +24,6 @@
     <string name="nav_share">Share</string>
 
 
-
     <!-- activity_how Strings -->
     <string name="how_back_arrow_desc"> Back arrow image </string>
     <string name="how_phrase_1"> First Time User? </string>
@@ -163,7 +162,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="log_out">Log out</string>
-
+    <string name="checkbox_warning">Please check \'I agree to Terms and conditions\'</string>
 
 
 </resources>

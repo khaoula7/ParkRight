@@ -3,7 +3,7 @@ package com.charikati.parkright;
 public class ViolationReport {
     //Type of violation
     private String type;
-    //Status of violation - pending, accepted or rejected
+    //Status of violation - pending, accepted or rejected -- initialized to pending
     private String status;
     //Images download Url
     private String firstImageUrl;

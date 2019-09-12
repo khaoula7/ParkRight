@@ -152,7 +152,7 @@ public class RegisterActivity extends BaseActivity {
         if (!validateForm()) {
             return;
         }
-        showProgressDialog();
+        showProgressDialog("Creating new user account");
 
         // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)

@@ -177,16 +177,9 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 intent.putExtras(mExtras);
-
                 startActivity(intent);
             }
         });
-
-
-
-
-
-
 
     }
 
@@ -211,7 +204,7 @@ public class LoginActivity extends BaseActivity {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog();
+                showProgressDialog("Resetting Password");
                 // User clicked reset, so send reset password email
                 String email = emailField.getText().toString();
                 mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -274,7 +267,7 @@ public class LoginActivity extends BaseActivity {
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
 
-        showProgressDialog();
+        showProgressDialog("Loading");
 
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -319,7 +312,7 @@ public class LoginActivity extends BaseActivity {
     /*******************************Facebook Sign In methods************************************************************************/
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
-        showProgressDialog();
+        showProgressDialog("Loading");
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
@@ -354,7 +347,7 @@ public class LoginActivity extends BaseActivity {
         if (!validateForm()) {
             return;
         }
-        showProgressDialog();
+        showProgressDialog("Loading");
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
