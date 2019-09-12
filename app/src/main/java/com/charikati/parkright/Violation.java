@@ -1,10 +1,13 @@
 package com.charikati.parkright;
 
 public class Violation {
-    /** the violation type */
+    //Violation type
     private String mViolationType;
-    /** Image resource ID for the violation */
+    // Image resource ID for the violation
     private final int mImageResourceId;
+    //
+
+
 
     /**
      * Create a new Violation object.

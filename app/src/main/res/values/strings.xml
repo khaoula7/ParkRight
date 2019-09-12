@@ -164,5 +164,26 @@
     <string name="log_out">Log out</string>
     <string name="checkbox_warning">Please check \'I agree to Terms and conditions\'</string>
 
+    <!-- activity_thankyou Strings-->
+    <string name="thank_you"> Thank You, Angela </string>
+    <string name="user_name"> Angela </string>
+    <string name="thank_message_p1"> We Really appreciate your help in fighting illegal parking.
+        You are making Frankfurt\'s car parks a friendly environment.
+    </string>
+    <string name="thank_message_p2">
+    Your report will be carefully processed within 24 h.
+    An email will be sent to your adress to inform you about your report\'s status.
+    </string>
+    <string name="new_violation"> New Violation </string>
+    <string name="my_reports"> My Reports </string>
+
+    <!-- activity_my_reports Strings-->
+    <string name="screen_name"> My Reports </string>
+    <string name="pending"> Pending </string>
+    <string name="accepted"> Accepted </string>
+    <string name="rejected"> Rejected </string>
+    <string name="date"> Date </string>
+    <string name="time"> Time</string>
+
 
 </resources>

@@ -30,6 +30,12 @@ public class ViolationReport {
         this.sendingTime = sendingTime;
     }
 
+    public ViolationReport(String type, String status, String sendingTime){
+        this.type = type;
+        this.status = status;
+        this.sendingTime = sendingTime;
+    }
+
     /**
      * Getter methods
      */

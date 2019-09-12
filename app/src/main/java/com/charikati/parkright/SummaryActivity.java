@@ -144,7 +144,9 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                     Toast.makeText(SummaryActivity.this, R.string.checkbox_warning, Toast.LENGTH_SHORT).show();
                 }else {
                     //Upload images to Firebase Storage and write violation data in database
-                    uploadImagetoFirebase();
+                    //uploadImagetoFirebase();
+                    Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -270,6 +272,9 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()) {
                                 Log.d(TAG, "Writing in database Users segment Succeeded");
+                                //Go to Thankyou page
+                                Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
+                                startActivity(intent);
                             }
                         }
                     });
