@@ -20,7 +20,7 @@
             android:id="@+id/list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp"
+            android:padding="8dp"
             android:background="@color/colorPrimary"
             android:orientation="vertical"
             android:drawSelectorOnTop="true">

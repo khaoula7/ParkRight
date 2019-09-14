@@ -17,8 +17,11 @@ public class ViolationReport {
     private String sendingTime;
 
     /**
-     * Constructor
+     * Constructors
      */
+    public ViolationReport() {
+    }
+
     public ViolationReport(String type, String status, String firstImageUrl, String secondImageUrl, String thirdImageUrl, double latitude, double longitude, String sendingTime) {
         this.type = type;
         this.status = status;
@@ -30,11 +33,12 @@ public class ViolationReport {
         this.sendingTime = sendingTime;
     }
 
-    public ViolationReport(String type, String status, String sendingTime){
+
+    /*public ViolationReport(String type, String status, String sendingTime){
         this.type = type;
         this.status = status;
         this.sendingTime = sendingTime;
-    }
+    }*/
 
     /**
      * Getter methods

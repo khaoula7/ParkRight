@@ -144,9 +144,9 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                     Toast.makeText(SummaryActivity.this, R.string.checkbox_warning, Toast.LENGTH_SHORT).show();
                 }else {
                     //Upload images to Firebase Storage and write violation data in database
-                    //uploadImagetoFirebase();
-                    Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
-                    startActivity(intent);
+                    uploadImagetoFirebase();
+                    //Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
+                    //startActivity(intent);
                 }
             }
         });
@@ -241,7 +241,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
      */
     private void storeViolation(){
         String type = mExtras.getString("VIOLATION_TYPE");
-        String status = "PENDING";
+        String status = "Pending";
         double latitude = mExtras.getDouble("LATITUDE");
         double longitude = mExtras.getDouble("LONGITUDE");
         Calendar calendar = Calendar.getInstance();

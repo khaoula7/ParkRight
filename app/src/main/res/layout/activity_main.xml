@@ -68,7 +68,7 @@
                     android:layout_marginRight="16dp"
                     android:gravity="center"
                     android:text="@string/home_phrase_2"
-                    android:textColor="#A9DFFA"
+                    android:textColor="@color/lightBlue"
                     android:textColorLink="#FFFFFF"
                     android:textSize="20sp"
                     android:textStyle="normal"
