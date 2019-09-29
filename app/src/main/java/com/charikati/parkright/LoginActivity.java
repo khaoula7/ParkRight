@@ -44,8 +44,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -277,7 +280,9 @@ public class LoginActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            writeUserInDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail());
+                            //writeUserInDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail());
+                            checkUidExists(account);
+                            //Log.d(TAG, account.getIdToken());
                             //Go to SummaryActivity
                             updateUI();
                         } else {
@@ -472,5 +477,25 @@ public class LoginActivity extends BaseActivity {
         request.setParameters(parameters);
         // Initiate the GraphRequest
         request.executeAsync();
+    }
+
+    private void checkUidExists(GoogleSignInAccount account){
+        String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d(TAG, " Uid=" + Uid );
+        mUsersDatabaseReference.orderByKey().equalTo(Uid).limitToFirst(1).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    Log.d(TAG, Uid + " does not exist");
+                    writeUserInDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail());
+                }else{
+                    Log.d(TAG, Uid + " exists");
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

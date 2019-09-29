@@ -24,7 +24,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MyReportsActivity"></activity>
+        <activity android:name=".ViolationDetails"></activity>
+        <activity android:name=".MyReportsActivity" />
         <activity android:name=".ThankyouActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
