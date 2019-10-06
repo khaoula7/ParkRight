@@ -45,7 +45,6 @@ public class TypeActivity extends AppCompatActivity {
         TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         toolbarTitle.setText(R.string.step_1);
 
-
         //Initialize the RecyclerView.
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         // Set the Layout Manager.

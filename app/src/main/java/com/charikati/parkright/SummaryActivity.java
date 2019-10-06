@@ -144,9 +144,9 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                     Toast.makeText(SummaryActivity.this, R.string.checkbox_warning, Toast.LENGTH_SHORT).show();
                 }else {
                     //Upload images to Firebase Storage and write violation data in database
-                    uploadImagetoFirebase();
-                    //Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
-                    //startActivity(intent);
+                    //uploadImagetoFirebase();
+                    Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -251,12 +251,12 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         //Get current Time
         SimpleDateFormat currentTimeFormat = new SimpleDateFormat("HH:mm:ss");
         String currentTime = currentTimeFormat.format(calendar.getTime());
-        String sending_time = currentDate + " " + currentTime;
+        String sending_time = currentDate + "   " + currentTime;
         //Generate unique Firebase key
         String violationId = mViolationsDatabaseReference.push().getKey();
         //Create ViolationReport object
         ViolationReport violationReport = new ViolationReport(
-                type, status, downloadUrlArray[0], downloadUrlArray[1], downloadUrlArray[2], latitude, longitude, sending_time);
+                type, status, downloadUrlArray[0], downloadUrlArray[1], downloadUrlArray[2], latitude, longitude, sending_time, null);
         //Send to Violations segment in database
         mViolationsDatabaseReference.child(violationId).setValue(violationReport)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {

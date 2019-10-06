@@ -1,6 +1,7 @@
 package com.charikati.parkright;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 
 public class ReportAdapter extends ArrayAdapter<ViolationReport> {
+    private static final String TAG = "ReportAdapter";
     /**
      * Create a new {@link ReportAdapter} object.
      *
@@ -27,7 +29,7 @@ public class ReportAdapter extends ArrayAdapter<ViolationReport> {
             reportItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.report_item, parent, false);
         }
-        // Get the {@link Word} object located at this position in the list
+        // Get the {@link Violation} object located at this position in the list
         ViolationReport currentViolation = getItem(position);
 
         // Find the TextView in the list_item.xml layout with the ID status_txt.

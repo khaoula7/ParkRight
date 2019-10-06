@@ -15,6 +15,8 @@ public class ViolationReport {
     private double longitude;
     // Date and time of sending violation
     private String sendingTime;
+    //Reason of rejection
+    private String declineReason;
 
     /**
      * Constructors
@@ -22,7 +24,7 @@ public class ViolationReport {
     public ViolationReport() {
     }
 
-    public ViolationReport(String type, String status, String firstImageUrl, String secondImageUrl, String thirdImageUrl, double latitude, double longitude, String sendingTime) {
+    public ViolationReport(String type, String status, String firstImageUrl, String secondImageUrl, String thirdImageUrl, double latitude, double longitude, String sendingTime, String declineReason) {
         this.type = type;
         this.status = status;
         this.firstImageUrl = firstImageUrl;
@@ -31,14 +33,9 @@ public class ViolationReport {
         this.latitude = latitude;
         this.longitude = longitude;
         this.sendingTime = sendingTime;
+        this.declineReason = declineReason;
     }
 
-
-    /*public ViolationReport(String type, String status, String sendingTime){
-        this.type = type;
-        this.status = status;
-        this.sendingTime = sendingTime;
-    }*/
 
     /**
      * Getter methods
@@ -58,6 +55,8 @@ public class ViolationReport {
     public double getLongitude() { return longitude; }
 
     public String getSendingTime() { return sendingTime; }
+
+    public String getDeclineReason() { return declineReason; }
 
     /**
      * Setter methods
@@ -94,4 +93,9 @@ public class ViolationReport {
     public void setSendingTime(String sendingTime) {
         this.sendingTime = sendingTime;
     }
+
+    public void setDeclineReason(String declineReason) {
+        this.declineReason = declineReason;
+    }
+
 }

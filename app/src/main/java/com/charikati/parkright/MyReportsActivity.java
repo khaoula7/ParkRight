@@ -3,6 +3,7 @@ package com.charikati.parkright;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -18,8 +20,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MyReportsActivity extends AppCompatActivity {
     private static final String TAG = "MyReportsActivity";
@@ -39,6 +43,19 @@ public class MyReportsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_reports);
+
+        //Use toolbar as the ActionBar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // Display Up button
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        // Remove default title text
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
+        toolbarTitle.setText(R.string.reports_name);
 
         // Create a list of violations
         final ArrayList<ViolationReport> myViolations = new ArrayList<>();
@@ -69,7 +86,11 @@ public class MyReportsActivity extends AppCompatActivity {
         mViolationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MyReportsActivity.this, ViolationDetails.class);
+                ViolationReport violationReport = (ViolationReport) parent.getItemAtPosition(position);
+                Log.d(TAG, "position: "+ position + " id: "+ id + " Type: " + violationReport.getType());
+                Intent intent = new Intent(MyReportsActivity.this, DetailsActivity.class);
+                //Convert ViolationReport object into a JSON object
+                intent.putExtra("report", new Gson().toJson(violationReport));
                 startActivity(intent);
             }
         });

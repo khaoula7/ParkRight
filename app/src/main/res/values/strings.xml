@@ -178,12 +178,21 @@
     <string name="my_reports"> My Reports </string>
 
     <!-- activity_my_reports Strings-->
-    <string name="screen_name"> My Reports </string>
+    <string name="reports_name"> My Reports </string>
     <string name="pending"> Pending </string>
-    <string name="accepted"> Accepted </string>
-    <string name="rejected"> Rejected </string>
+    <string name="Approved"> Approved </string>
+    <string name="declined"> Declined </string>
     <string name="date"> Date </string>
     <string name="time"> Time</string>
 
+    <!-- activity_details Strings-->
+    <string name="details_name"> Report Details</string>
+    <string name="info_desc"> Report Information Icon </string>
+    <string name="info_section"> Report Information </string>
+    <string name="status"> Status </string>
+    <string name="photos_desc"> Report Photos Icon </string>
+    <string name="photos_section"> Report Photos </string>
+    <string name="location_desc"> Report Location Icon </string>
+    <string name="location_section"> Report Location </string>
 
 </resources>
