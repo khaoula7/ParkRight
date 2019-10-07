@@ -36,7 +36,7 @@ public class ReportAdapter extends ArrayAdapter<ViolationReport> {
         TextView statusTextView= reportItemView.findViewById(R.id.status_txt);
         String status = currentViolation.getStatus();
         //Apply a different background drawable according to the violation status
-        if(status == "Pending"){
+        if(status.equals("Pending")){
             statusTextView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.status_text_style));
         }else if(status.equals("Accepted")){
             statusTextView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.status_text_style));
@@ -49,15 +49,12 @@ public class ReportAdapter extends ArrayAdapter<ViolationReport> {
         // Get the violation type from the currentWord object and set it to type TextView
         typeTextView.setText(currentViolation.getType());
 
-        // Find the TextView in the list_item.xml layout with the ID date_txt.
+        // Find the TextView in the list_item.xml layout with the ID date_txt and populate it.
         TextView dateTextView = reportItemView.findViewById(R.id.date_txt);
-        // Find the TextView in the list_item.xml layout with the ID time_txt
+        dateTextView.setText(currentViolation.getSendingDate());
+        // Find the TextView in the list_item.xml layout with the ID time_txt and populate it.
         TextView timeTextView = reportItemView.findViewById(R.id.time_txt);
-        // Get the sending time from the currentWord object and split it between date and time TextViews
-        String [] dateTime = currentViolation.getSendingTime().split("\\s");
-        //Set the date and time
-        dateTextView.setText(dateTime[0]);
-        timeTextView.setText(dateTime[1]);
+        timeTextView.setText(currentViolation.getSendingTime());
 
         // Return the whole list item layout so that it can be shown in the ListView.
         return reportItemView;

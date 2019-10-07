@@ -1,43 +1,43 @@
 <resources>
-    <string name="app_name">ParkRight</string>
+    <string name="app_name" translatable="false">ParkRight</string>
     <!-- For Facebook Login-->
-    <string name="facebook_app_id">660416774437195</string>
-    <string name="fb_login_protocol_scheme">fb660416774437195</string>
+    <string name="facebook_app_id" translatable="false">660416774437195</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb660416774437195</string>
 
 
     <!-- activity_main Strings -->
-    <string name="home_phrase_1"> Got Sick of Bad Parking?</string>
-    <string name="home_phrase_2"> Help your community solve parking issues by reporting violations</string>
-    <string name="home_button">Report Violation</string>
-    <string name="home_menu_desc">Hamburger Menu vector icon</string>
-    <string name="home_share_desc">Share vector icon</string>
-    <string name="home_image_desc">Home image</string>
+    <string name="home_phrase_1" translatable="false"> Got Sick of Bad Parking?</string>
+    <string name="home_phrase_2" translatable="false"> Help your community solve parking issues by reporting violations</string>
+    <string name="home_button" translatable="false">Report Violation</string>
+    <string name="home_menu_desc" translatable="false">Hamburger Menu vector icon</string>
+    <string name="home_share_desc" translatable="false">Share vector icon</string>
+    <string name="home_image_desc" translatable="false">Home image</string>
 
     <!-- draw_menu strings -->
-    <string name="nav_new">New Violation</string>
-    <string name="nav_report">How to Report Violation</string>
-    <string name="nav_login">Login</string>
-    <string name="nav_account">My Account</string>
-    <string name="nav_reports">My Reports</string>
-    <string name="nav_status">My Status</string>
-    <string name="nav_settings">Settings</string>
-    <string name="nav_share">Share</string>
+    <string name="nav_new" translatable="false">New Violation</string>
+    <string name="nav_report" translatable="false">How to Report Violation</string>
+    <string name="nav_login" translatable="false">Login</string>
+    <string name="nav_account" translatable="false">My Account</string>
+    <string name="nav_reports" translatable="false">My Reports</string>
+    <string name="nav_status" translatable="false">My Status</string>
+    <string name="nav_settings" translatable="false">Settings</string>
+    <string name="nav_share" translatable="false">Share</string>
 
 
     <!-- activity_how Strings -->
-    <string name="how_back_arrow_desc"> Back arrow image </string>
-    <string name="how_phrase_1"> First Time User? </string>
-    <string name="how_phrase_2"> We highly recommend you watch this short video </string>
-    <string name="how_button"> SKIP VIDEO </string>
+    <string name="how_back_arrow_desc" translatable="false"> Back arrow image </string>
+    <string name="how_phrase_1" translatable="false"> First Time User? </string>
+    <string name="how_phrase_2" translatable="false"> We highly recommend you watch this short video </string>
+    <string name="how_button" translatable="false"> SKIP VIDEO </string>
 
     <!-- activity_type Strings -->
-    <string name="step_1"> Violation Type</string>
-    <string name="one"> 1 </string>
-    <string name="two"> 2 </string>
-    <string name="three"> 3 </string>
-    <string name="four"> 4 </string>
-    <string name="five"> 5 </string>
-    <string name="violation_type_Phrase_1"> Select Parking Violation  </string>
+    <string name="step_1" translatable="false"> Violation Type</string>
+    <string name="one" translatable="false"> 1 </string>
+    <string name="two" translatable="false"> 2 </string>
+    <string name="three" translatable="false"> 3 </string>
+    <string name="four" translatable="false"> 4 </string>
+    <string name="five" translatable="false"> 5 </string>
+    <string name="violation_type_Phrase_1" translatable="false"> Select Parking Violation  </string>
 
     <string-array name="violation_types">
         <item>Parking in front of Fire Hydrant!</item>
@@ -60,139 +60,142 @@
     </array>
 
     <!-- violation_item Strings -->
-    <string name="card_image_desc"> Parking Violation image </string>
-    <string name="violation_type"> Violation Type </string>
-    <string name="choose_button"> choose </string>
+    <string name="card_image_desc" translatable="false"> Parking Violation image </string>
+    <string name="violation_type" translatable="false"> Violation Type </string>
+    <string name="choose_button" translatable="false"> choose </string>
 
     <!-- activity_photo Strings -->
-    <string name="step_2"> Photos </string>
-    <string name="activity_photo_phrase_1"> Snap 3 photos of the violating car </string>
-    <string name="activity_photo_phrase_2"> How Should I take photos ? </string>
-    <string name="show_button"> Show Tips </string>
-    <string name="camera_button_1"> Front </string>
-    <string name="camera_button_2"> Rear </string>
-    <string name="camera_button_3"> Evidence </string>
-    <string name="camera_button_desc"> Click on this button to take photo of violating car </string>
-    <string name="plate_check_box"> I clearly snapped Licence Plate </string>
-    <string name="context_check_box"> I clearly snapped Car in Violation Context </string>
-    <string name="photo_continue_button"> Great Job! Continue </string>
-    <string name="photos_warning"> All Photos must be taken</string>
-    <string name="checkboxes_warning"> All Boxes must be checked</string>
+    <string name="step_2" translatable="false"> Photos </string>
+    <string name="activity_photo_phrase_1" translatable="false"> Snap 3 photos of the violating car </string>
+    <string name="activity_photo_phrase_2" translatable="false"> How Should I take photos ? </string>
+    <string name="show_button" translatable="false"> Show Tips </string>
+    <string name="camera_button_1" translatable="false"> Front </string>
+    <string name="camera_button_2" translatable="false"> Rear </string>
+    <string name="camera_button_3" translatable="false"> Evidence </string>
+    <string name="camera_button_desc" translatable="false"> Click on this button to take photo of violating car </string>
+    <string name="plate_check_box" translatable="false"> I clearly snapped Licence Plate </string>
+    <string name="context_check_box" translatable="false"> I clearly snapped Car in Violation Context </string>
+    <string name="photo_continue_button" translatable="false"> Great Job! Continue </string>
+    <string name="photos_warning" translatable="false"> All Photos must be taken</string>
+    <string name="checkboxes_warning" translatable="false"> All Boxes must be checked</string>
 
     <!-- tips_dialog Strings -->
-    <string name="close"> X </string>
-    <string name="tip_1"> Tip 1 </string>
-    <string name="tip_2"> Tip 2 </string>
-    <string name="tip_3"> Tip 3 </string>
-    <string name="tip_1_text"> Lorem ipsum dolor sit amet. </string>
-    <string name="tip_2_text"> Consectetur adipiscing elit. </string>
-    <string name="tip_3_text"> Sed do eiusmod tempor incididut.  </string>
+    <string name="close" translatable="false"> X </string>
+    <string name="tip_1" translatable="false"> Tip 1 </string>
+    <string name="tip_2" translatable="false"> Tip 2 </string>
+    <string name="tip_3" translatable="false"> Tip 3 </string>
+    <string name="tip_1_text" translatable="false"> Lorem ipsum dolor sit amet. </string>
+    <string name="tip_2_text" translatable="false"> Consectetur adipiscing elit. </string>
+    <string name="tip_3_text" translatable="false"> Sed do eiusmod tempor incididut.  </string>
 
     <!-- activity_map Strings -->
-    <string name="step_3"> Map </string>
-    <string name="activity_map_phrase_1"> Tap Map to identify Location </string>
-    <string name="map_continue_button"> Almost There! Continue </string>
-    <string name="action_geolocate">Pick Place</string>
-    <string name="default_info_title">Default Location</string>
-    <string name="default_info_snippet">No places found, because location permission is disabled.</string>
+    <string name="step_3" translatable="false"> Map </string>
+    <string name="activity_map_phrase_1" translatable="false"> Tap Map to identify Location </string>
+    <string name="map_continue_button" translatable="false"> Almost There! Continue </string>
+    <string name="action_geolocate" translatable="false">Pick Place</string>
+    <string name="default_info_title" translatable="false">Default Location</string>
+    <string name="default_info_snippet" translatable="false">No places found, because location permission is disabled.</string>
 
 
     <!-- BaseActivity Strings -->
-    <string name="loading">Loading…</string>
+    <string name="loading" translatable="false">Loading…</string>
 
     <!-- activity_login Strings -->
-    <string name="step_4"> Login </string>
-    <string name="activity_login_phrase_1"> Please Login to your Account </string>
-    <string name="facebook"> LOGIN WITH FACEBOOK </string>
-    <string name="Google"> Google </string>
-    <string name="client_id">843254302439-ireeq2d7ecnbrfisbn79o8v2qp6dei5b.apps.googleusercontent.com</string>
-    <string name="or"> OR </string>
-    <string name="email"> Email </string>
-    <string name="password"> Password </string>
-    <string name="forgot_password"> Forgot Password? </string>
-    <string name="login_button"> Login </string>
-    <string name="activity_login_phrase_2"> Don\'t have an account yet?</string>
-    <string name="register"> Please Register </string>
-    <string name="title_activity_login2">Sign in</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="step_4" translatable="false"> Login </string>
+    <string name="activity_login_phrase_1" translatable="false"> Please Login to your Account </string>
+    <string name="facebook" translatable="false"> LOGIN WITH FACEBOOK </string>
+    <string name="Google" translatable="false"> Google </string>
+    <string name="client_id" translatable="false">843254302439-ireeq2d7ecnbrfisbn79o8v2qp6dei5b.apps.googleusercontent.com</string>
+    <string name="or" translatable="false"> OR </string>
+    <string name="email" translatable="false"> Email </string>
+    <string name="password" translatable="false"> Password </string>
+    <string name="forgot_password" translatable="false"> Forgot Password? </string>
+    <string name="login_button" translatable="false"> Login </string>
+    <string name="activity_login_phrase_2" translatable="false"> Don\'t have an account yet?</string>
+    <string name="register" translatable="false"> Please Register </string>
+    <string name="title_activity_login2" translatable="false">Sign in</string>
+    <string name="prompt_email" translatable="false">Email</string>
+    <string name="prompt_password" translatable="false">Password</string>
+    <string name="action_sign_in" translatable="false">Sign in or register</string>
+    <string name="action_sign_in_short" translatable="false">Sign in</string>
+    <string name="welcome" translatable="false">"Welcome !"</string>
+    <string name="invalid_username" translatable="false">Not a valid username</string>
+    <string name="invalid_password" translatable="false">Password must be >5 characters</string>
+    <string name="login_failed" translatable="false">"Login failed"</string>
 
     <!--forgot_password_dialog-->
-    <string name="enter_email">Enter your email here </string>
-    <string name="dialog_title">Reset Password </string>
-    <string name="reset">RESET </string>
-    <string name="cancel">CANCEL </string>
-    <string name="password_sent">Password sent to your email </string>
+    <string name="enter_email" translatable="false">Enter your email here </string>
+    <string name="dialog_title" translatable="false">Reset Password </string>
+    <string name="reset" translatable="false">Reset </string>
+    <string name="cancel" translatable="false">Cancel </string>
+    <string name="password_sent" translatable="false">Password sent to your email </string>
 
     <!-- activity_register Strings -->
-    <string name="step_4_1"> Register </string>
-    <string name="activity_register_phrase_1"> Please Register to create an Account </string>
-    <string name="name"> Name </string>
-    <string name="last_name"> Last Name </string>
-    <string name="terms_conditions"> I agree to Terms and Conditions </string>
-    <string name="register_button"> Register </string>
-    <string name="activity_register_phrase_2"> Already have an Account?</string>
-    <string name="login"> Please Login </string>
-    <string name="register_success">  Registration Succeeded </string>
-    <string name="register_failure">  Registration Failed </string>
+    <string name="step_4_1" translatable="false"> Register </string>
+    <string name="activity_register_phrase_1" translatable="false"> Please Register to create an Account </string>
+    <string name="name" translatable="false"> Name </string>
+    <string name="last_name" translatable="false"> Last Name </string>
+    <string name="terms_conditions" translatable="false"> I agree to Terms and Conditions </string>
+    <string name="register_button" translatable="false"> Register </string>
+    <string name="activity_register_phrase_2" translatable="false"> Already have an Account?</string>
+    <string name="login" translatable="false"> Please Login </string>
+    <string name="register_success" translatable="false">  Registration Succeeded </string>
+    <string name="register_failure" translatable="false">  Registration Failed </string>
 
     <!--email_verif_dialog strings-->
-    <string name="verif_phrase_1">An Email has been sent to your address:  </string>
-    <string name="verif_phrase_2">Click on the provided link to verify your email address</string>
+    <string name="verif_phrase_1" translatable="false">An Email has been sent to your address:  </string>
+    <string name="verif_phrase_2" translatable="false">Click on the provided link to verify your email address</string>
 
     <!-- activity_summary Strings -->
-    <string name="step_4_2"> Summary </string>
-    <string name="summary_phrase_1"> Violation Report Summary </string>
-    <string name="type"> Type </string>
-    <string name="spinner_title"> Violation Type </string>
-    <string name="photos"> Photos </string>
-    <string name="location"> Location </string>
-    <string name="send_button"> Send Report </string>
-    <string name="title_activity_drawer">DrawerActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="log_out">Log out</string>
-    <string name="checkbox_warning">Please check \'I agree to Terms and conditions\'</string>
+    <string name="step_4_2" translatable="false"> Summary </string>
+    <string name="summary_phrase_1" translatable="false"> Violation Report Summary </string>
+    <string name="type" translatable="false"> Type </string>
+    <string name="spinner_title" translatable="false"> Violation Type </string>
+    <string name="photos" translatable="false"> Photos </string>
+    <string name="location" translatable="false"> Location </string>
+    <string name="send_button" translatable="false"> Send Report </string>
+    <string name="title_activity_drawer" translatable="false">DrawerActivity</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="log_out" translatable="false">Log out</string>
+    <string name="checkbox_warning" translatable="false">Please check \'I agree to Terms and conditions\'</string>
 
     <!-- activity_thankyou Strings-->
-    <string name="thank_you"> Thank You, Angela </string>
-    <string name="user_name"> Angela </string>
-    <string name="thank_message_p1"> We Really appreciate your help in fighting illegal parking.
+    <string name="thank_you" translatable="false"> Thank You, Angela </string>
+    <string name="user_name" translatable="false"> Angela </string>
+    <string name="thank_message_p1" translatable="false"> We Really appreciate your help in fighting illegal parking.
         You are making Frankfurt\'s car parks a friendly environment.
     </string>
-    <string name="thank_message_p2">
+    <string name="thank_message_p2" translatable="false">
     Your report will be carefully processed within 24 h.
     An email will be sent to your adress to inform you about your report\'s status.
     </string>
-    <string name="new_violation"> New Violation </string>
-    <string name="my_reports"> My Reports </string>
+    <string name="new_violation" translatable="false"> New Violation </string>
+    <string name="my_reports" translatable="false"> My Reports </string>
 
     <!-- activity_my_reports Strings-->
-    <string name="reports_name"> My Reports </string>
-    <string name="pending"> Pending </string>
-    <string name="Approved"> Approved </string>
-    <string name="declined"> Declined </string>
-    <string name="date"> Date </string>
-    <string name="time"> Time</string>
+    <string name="reports_name" translatable="false"> My Reports </string>
+    <string name="pending" translatable="false"> Pending </string>
+    <string name="Approved" translatable="false"> Approved </string>
+    <string name="declined" translatable="false"> Declined </string>
+    <string name="date" translatable="false"> Date </string>
+    <string name="time" translatable="false"> Time</string>
 
     <!-- activity_details Strings-->
-    <string name="details_name"> Report Details</string>
-    <string name="info_desc"> Report Information Icon </string>
-    <string name="info_section"> Report Information </string>
-    <string name="status"> Status </string>
-    <string name="photos_desc"> Report Photos Icon </string>
-    <string name="photos_section"> Report Photos </string>
-    <string name="location_desc"> Report Location Icon </string>
-    <string name="location_section"> Report Location </string>
+    <string name="details_name" translatable="false"> Report Details</string>
+    <string name="info_desc" translatable="false"> Report Information Icon </string>
+    <string name="info_section" translatable="false"> Report Information </string>
+    <string name="status" translatable="false"> Status </string>
+    <string name="photos_desc" translatable="false"> Report Photos Icon </string>
+    <string name="photos_section" translatable="false"> Report Photos </string>
+    <string name="location_desc" translatable="false"> Report Location Icon </string>
+    <string name="location_section" translatable="false"> Report Location </string>
+
+    <string name="date_format">MMM d, yyyy</string>
+    <string name="time_format">HH:mm:ss</string>
 
 </resources>

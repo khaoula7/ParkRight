@@ -6,8 +6,10 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 import java.util.Objects;
@@ -18,6 +20,10 @@ public class DetailsActivity extends AppCompatActivity {
     private TextView statusTextView;
     private TextView reasonTextView;
     private TextView dateTextView;
+    private ImageView firstImage;
+    private ImageView secondImage;
+    private ImageView thirdImage;
+
 
 
     @Override
@@ -49,20 +55,36 @@ public class DetailsActivity extends AppCompatActivity {
             typeTextView.setText(violationReport.getType());
             statusTextView = findViewById(R.id.status_textView);
             statusTextView.setText(violationReport.getStatus());
-            if(violationReport.getStatus() == "Declined"){
+            if(violationReport.getStatus().equals("Declined")){
                 reasonTextView = findViewById(R.id.reason_textView);
                 reasonTextView.setVisibility(View.VISIBLE);
                 reasonTextView.setText(violationReport.getDeclineReason());
             }
             dateTextView = findViewById(R.id.date_textView);
-            String date = violationReport.getSendingTime();
-            date = date.substring(0, date.length()-3);
+            String date = violationReport.getSendingDate() + ",   " + violationReport.getSendingTime();
             dateTextView.setText(date);
 
+            firstImage = findViewById(R.id.first_image);
+            loadImage(firstImage, violationReport.getFirstImageUrl());
 
+            secondImage = findViewById(R.id.second_image);
+            loadImage(secondImage, violationReport.getSecondImageUrl());
 
-
+            thirdImage = findViewById(R.id.third_image);
+            loadImage(thirdImage, violationReport.getThirdImageUrl());
         }
 
+    }
+
+    /**
+     * Load image from Firebase storage into correspondent ImageView
+     * @param imageView
+     * @param imageUrl
+     */
+
+    void loadImage(ImageView imageView, String imageUrl){
+        Glide.with(imageView.getContext())
+                .load(imageUrl)
+                .into(imageView);
     }
 }

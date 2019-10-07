@@ -13,7 +13,9 @@ public class ViolationReport {
     private double latitude;
     //Location longitude
     private double longitude;
-    // Date and time of sending violation
+    // Date of sending violation
+    private String sendingDate;
+    // Time of sending violation
     private String sendingTime;
     //Reason of rejection
     private String declineReason;
@@ -24,7 +26,7 @@ public class ViolationReport {
     public ViolationReport() {
     }
 
-    public ViolationReport(String type, String status, String firstImageUrl, String secondImageUrl, String thirdImageUrl, double latitude, double longitude, String sendingTime, String declineReason) {
+    public ViolationReport(String type, String status, String firstImageUrl, String secondImageUrl, String thirdImageUrl, double latitude, double longitude, String sendingDate, String sendingTime, String declineReason) {
         this.type = type;
         this.status = status;
         this.firstImageUrl = firstImageUrl;
@@ -32,6 +34,7 @@ public class ViolationReport {
         this.thirdImageUrl = thirdImageUrl;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.sendingDate = sendingDate;
         this.sendingTime = sendingTime;
         this.declineReason = declineReason;
     }
@@ -53,6 +56,8 @@ public class ViolationReport {
     public double getLatitude() { return latitude; }
 
     public double getLongitude() { return longitude; }
+
+    public String getSendingDate() { return sendingDate; }
 
     public String getSendingTime() { return sendingTime; }
 
@@ -88,6 +93,10 @@ public class ViolationReport {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public void setSendingDate(String sendingDate) {
+        this.sendingDate = sendingDate;
     }
 
     public void setSendingTime(String sendingTime) {

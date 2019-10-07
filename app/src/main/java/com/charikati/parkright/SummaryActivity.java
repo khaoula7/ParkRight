@@ -43,6 +43,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.zxing.common.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,6 +52,8 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class SummaryActivity extends BaseActivity implements OnMapReadyCallback {
@@ -144,9 +147,9 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                     Toast.makeText(SummaryActivity.this, R.string.checkbox_warning, Toast.LENGTH_SHORT).show();
                 }else {
                     //Upload images to Firebase Storage and write violation data in database
-                    //uploadImagetoFirebase();
-                    Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
-                    startActivity(intent);
+                    uploadImagetoFirebase();
+//                    Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
+//                    startActivity(intent);
                 }
             }
         });
@@ -241,22 +244,34 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
      */
     private void storeViolation(){
         String type = mExtras.getString("VIOLATION_TYPE");
-        String status = "Pending";
+        String status = "Declined";
+        String reason = "";
+        if(status.equals("Declined")){
+            reason = "We cannot accept Photos not originally taken within the app";
+        }
         double latitude = mExtras.getDouble("LATITUDE");
         double longitude = mExtras.getDouble("LONGITUDE");
         Calendar calendar = Calendar.getInstance();
-        //Get current Date
-        SimpleDateFormat currentDateFormat = new SimpleDateFormat("dd-MM-YYYY");
+        /*//Get current Date
+        SimpleDateFormat currentDateFormat = new SimpleDateFormat("dd-MM-YYYY", Locale.GERMANY);
         String currentDate = currentDateFormat.format(calendar.getTime());
         //Get current Time
         SimpleDateFormat currentTimeFormat = new SimpleDateFormat("HH:mm:ss");
         String currentTime = currentTimeFormat.format(calendar.getTime());
-        String sending_time = currentDate + "   " + currentTime;
+        String sending_time = currentDate + ", " + currentTime;*/
+
+
+        // Get formatted date
+        SimpleDateFormat currentDateFormat = new SimpleDateFormat(this.getString(R.string.date_format), Locale.getDefault());
+        String sending_date = currentDateFormat.format(calendar.getTime());
+        // Get formatted time
+        SimpleDateFormat currentTimeFormat = new SimpleDateFormat(this.getString(R.string.time_format), Locale.getDefault());
+        String sending_time = currentTimeFormat.format(calendar.getTime());
         //Generate unique Firebase key
         String violationId = mViolationsDatabaseReference.push().getKey();
         //Create ViolationReport object
         ViolationReport violationReport = new ViolationReport(
-                type, status, downloadUrlArray[0], downloadUrlArray[1], downloadUrlArray[2], latitude, longitude, sending_time, null);
+                type, status, downloadUrlArray[0], downloadUrlArray[1], downloadUrlArray[2], latitude, longitude, sending_date, sending_time, reason);
         //Send to Violations segment in database
         mViolationsDatabaseReference.child(violationId).setValue(violationReport)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -285,6 +300,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
             }
         });
     }
+
 
     /**
      * Inflate menu layout
