@@ -267,9 +267,7 @@ public class LoginActivity extends BaseActivity {
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-
         showProgressDialog("Loading");
-
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -278,9 +276,7 @@ public class LoginActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            //writeUserInDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail());
-                            checkUidExists(account);
-                            //Log.d(TAG, account.getIdToken());
+                            //checkUidExists(account);
                             //Go to SummaryActivity
                             updateUI();
                         } else {
@@ -326,7 +322,7 @@ public class LoginActivity extends BaseActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             mFacebookBtn.setEnabled(true);
-                            useLoginInformation(token);
+                            //useLoginInformation(token);
                             updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -334,7 +330,6 @@ public class LoginActivity extends BaseActivity {
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             mFacebookBtn.setEnabled(true);
-                            updateUI();
                         }
                         hideProgressDialog();
                     }
@@ -475,6 +470,10 @@ public class LoginActivity extends BaseActivity {
         request.executeAsync();
     }
 
+    /**
+     * Only first time users will be written in database
+     * @param account
+     */
     private void checkUidExists(GoogleSignInAccount account){
         String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Log.d(TAG, " Uid=" + Uid );
@@ -490,7 +489,6 @@ public class LoginActivity extends BaseActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
