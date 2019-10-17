@@ -3,8 +3,12 @@ package com.charikati.parkright;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -81,10 +85,24 @@ public class DetailsActivity extends AppCompatActivity {
      * @param imageView
      * @param imageUrl
      */
-
     void loadImage(ImageView imageView, String imageUrl){
         Glide.with(imageView.getContext())
                 .load(imageUrl)
                 .into(imageView);
     }
+
+    /**
+     * Implement menu icons (up button and sign out) behaviour
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch(item.getItemId()){
+            case android.R.id.home:
+                intent = new Intent(DetailsActivity.this, MyReportsActivity.class);
+                startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

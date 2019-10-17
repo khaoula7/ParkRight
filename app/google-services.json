@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "1084690010062",
-    "firebase_url": "https://parkrightproject-a8f75.firebaseio.com",
-    "project_id": "parkrightproject-a8f75",
-    "storage_bucket": "parkrightproject-a8f75.appspot.com"
+    "project_number": "508584935404",
+    "firebase_url": "https://parkright-1e206.firebaseio.com",
+    "project_id": "parkright-1e206",
+    "storage_bucket": "parkright-1e206.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1084690010062:android:5d7365eb3f34dba7",
+        "mobilesdk_app_id": "1:508584935404:android:b5aad80ae4f968e6cf0ac9",
         "android_client_info": {
           "package_name": "com.charikati.parkright"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1084690010062-fpl1ekqln66q75i4cj71jgap1sdb879n.apps.googleusercontent.com",
+          "client_id": "508584935404-8ghs7kf1f4r3taj1ad9li58liav8mi3i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.charikati.parkright",
@@ -23,20 +23,20 @@
           }
         },
         {
-          "client_id": "1084690010062-qekj8utfdthn3l109a3qs9v2qi5i5ggh.apps.googleusercontent.com",
+          "client_id": "508584935404-ahvfu0rc77ut2vjdml6m8q95ru6rehnv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDf2gdFA2bxf49LZfemu9nQ4EWNtofF6iw"
+          "current_key": "AIzaSyBv6wg_d3tgka5apk8Jp8CJ8ISm_vGYAF0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1084690010062-qekj8utfdthn3l109a3qs9v2qi5i5ggh.apps.googleusercontent.com",
+              "client_id": "508584935404-ahvfu0rc77ut2vjdml6m8q95ru6rehnv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -27,10 +27,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.annotation:annotation:1.1.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
@@ -43,16 +43,20 @@ dependencies {
 
     // Firebase Authentication
     implementation 'com.google.firebase:firebase-core:17.2.0'
-    implementation 'com.google.firebase:firebase-auth:19.0.0'
+    implementation 'com.google.firebase:firebase-auth:19.1.0'
 
     // Google Sign In SDK (only required for Google Sign In)
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     //Firebase Realtime database
-    implementation 'com.google.firebase:firebase-database:19.0.0'
+    implementation 'com.google.firebase:firebase-database:19.2.0'
+
+    //Firebase Firestore
+    implementation 'com.google.firebase:firebase-firestore:21.2.0'
 
 
     // Facebook Android SDK (only required for Facebook Login)
-    implementation 'com.facebook.android:facebook-login:5.2.0'
+    implementation 'com.facebook.android:facebook-login:5.8.0'
+    //implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
 
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.android.libraries.places:places:2.0.0'
@@ -61,7 +65,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.2.0'
 
     // Add Firebase storage
-    implementation 'com.google.firebase:firebase-storage:19.0.0'
+    implementation 'com.google.firebase:firebase-storage:19.1.0'
 
 
 }

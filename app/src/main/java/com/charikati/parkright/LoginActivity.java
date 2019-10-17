@@ -130,7 +130,7 @@ public class LoginActivity extends BaseActivity {
         mFacebookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFacebookBtn.setEnabled(false);
+                //mFacebookBtn.setEnabled(false);
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email", "public_profile"));
                 LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
                     @Override
@@ -142,13 +142,11 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onCancel() {
                         Log.d(TAG, "facebook:onCancel");
-                        // ...
                     }
 
                     @Override
                     public void onError(FacebookException error) {
                         Log.d(TAG, "facebook:onError", error);
-                        // ...
                     }
                 });
             }
@@ -327,9 +325,7 @@ public class LoginActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
                             mFacebookBtn.setEnabled(true);
-                            FirebaseUser fbUser = mAuth.getCurrentUser();
                             useLoginInformation(token);
                             updateUI();
                         } else {

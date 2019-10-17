@@ -147,9 +147,9 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                     Toast.makeText(SummaryActivity.this, R.string.checkbox_warning, Toast.LENGTH_SHORT).show();
                 }else {
                     //Upload images to Firebase Storage and write violation data in database
-                    uploadImagetoFirebase();
-//                    Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
-//                    startActivity(intent);
+//                    uploadImagetoFirebase();
+                    Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -252,15 +252,6 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         double latitude = mExtras.getDouble("LATITUDE");
         double longitude = mExtras.getDouble("LONGITUDE");
         Calendar calendar = Calendar.getInstance();
-        /*//Get current Date
-        SimpleDateFormat currentDateFormat = new SimpleDateFormat("dd-MM-YYYY", Locale.GERMANY);
-        String currentDate = currentDateFormat.format(calendar.getTime());
-        //Get current Time
-        SimpleDateFormat currentTimeFormat = new SimpleDateFormat("HH:mm:ss");
-        String currentTime = currentTimeFormat.format(calendar.getTime());
-        String sending_time = currentDate + ", " + currentTime;*/
-
-
         // Get formatted date
         SimpleDateFormat currentDateFormat = new SimpleDateFormat(this.getString(R.string.date_format), Locale.getDefault());
         String sending_date = currentDateFormat.format(calendar.getTime());
