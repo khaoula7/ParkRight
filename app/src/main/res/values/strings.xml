@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">ParkRight</string>
     <!-- For Facebook Login-->
-    <string name="facebook_app_id" translatable="false">382526675967039</string>
+    <string name="facebook_application_id" translatable="false">382526675967039</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb382526675967039</string>
 
 

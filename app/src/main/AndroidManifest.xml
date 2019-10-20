@@ -67,7 +67,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- Facebook Activity launched after click on facebook button -->
+        <!-- Facebook Activity launched after click on facebook button
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
@@ -84,7 +84,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
-        </activity>
+        </activity>-->
     </application>
 
 </manifest>

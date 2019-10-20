@@ -11,6 +11,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
+
+        resConfigs "en", "de"
+
     }
     buildTypes {
         release {
@@ -44,6 +47,10 @@ dependencies {
     // Firebase Authentication
     implementation 'com.google.firebase:firebase-core:17.2.0'
     implementation 'com.google.firebase:firebase-auth:19.1.0'
+    implementation 'com.firebaseui:firebase-ui-auth:6.0.2'
+    // Facebook Android SDK (only required for Facebook Login)
+    implementation 'com.facebook.android:facebook-login:5.8.0'
+
 
     // Google Sign In SDK (only required for Google Sign In)
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
@@ -53,10 +60,6 @@ dependencies {
     //Firebase Firestore
     implementation 'com.google.firebase:firebase-firestore:21.2.0'
 
-
-    // Facebook Android SDK (only required for Facebook Login)
-    implementation 'com.facebook.android:facebook-login:5.8.0'
-    //implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
 
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.android.libraries.places:places:2.0.0'
