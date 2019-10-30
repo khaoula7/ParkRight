@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -59,23 +60,26 @@ import java.util.Objects;
 public class SummaryActivity extends BaseActivity implements OnMapReadyCallback {
 
     private static final String TAG = "SummaryActivity";
-
+    //Screen widget varibles
     private Spinner mSpinner;
-    private Bundle mExtras;
     private String[] fileNameArray;
     private ImageView[] imageViewArray;
     private String[] downloadUrlArray;
     private CheckBox termsCheckBox;
-
     private Button mSendButton;
-
-    /* Firebase instance variables */
+    //Firebase instance variables
     private FirebaseAuth mAuth;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mPhotosStorageReference;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mViolationsDatabaseReference;
     private DatabaseReference mUsersDatabaseReference;
+    //Shared Preferences variables
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.charikati.parkright";
+    private Double mLatitude;
+    private Double mLongitude;
+    private String mViolationType;
 
 
     @Override
@@ -94,6 +98,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         toolbarTitle.setText(R.string.step_4_2);
+
         /*Initialize Firebase components  */
         mAuth = FirebaseAuth.getInstance();
         mFirebaseStorage = FirebaseStorage.getInstance();
@@ -102,42 +107,37 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mViolationsDatabaseReference = mFirebaseDatabase.getReference().child("Violations");
         mUsersDatabaseReference = mFirebaseDatabase.getReference().child("Users");
-
-
-        //Retrieve data from intent
-        mExtras = getIntent().getExtras();
+        //Open sharedPrefs file at the given filename (sharedPrefFile) with the mode MODE_PRIVATE.
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         //Array of image files names
-        fileNameArray = new String[]{mExtras.getString("FILE_NAME_1"),
-                mExtras.getString("FILE_NAME_2"),
-                mExtras.getString("FILE_NAME_3")};
-
+        fileNameArray = new String[]{mPreferences.getString("FILE_NAME_1", null),
+                mPreferences.getString("FILE_NAME_2", null),
+                mPreferences.getString("FILE_NAME_3", null)};
         //Array of ImageViews references
         imageViewArray = new ImageView[]{findViewById(R.id.image_1),
                 findViewById(R.id.image_2),
                 findViewById(R.id.image_3)};
-
         //Array of images downloadUrl
         downloadUrlArray = new String[3];
-
         //Fill the Spinner with values from string-array resource
         mSpinner = findViewById(R.id.spinner);
         String[] violations = getResources().getStringArray(R.array.violation_types);
         ArrayAdapter<String> violationAdapter=new ArrayAdapter<String>(this,R.layout.spinner_item, violations);
         mSpinner.setAdapter(violationAdapter);
-        //Get violation index from bundle and set it as selected item in the spinner
-        int spinnerPosition = mExtras.getInt("VIOLATION_INDEX");
+        //Get violation index and set it as selected item in the spinner
+        mViolationType = mPreferences.getString("VIOLATION_TYPE", null);
+        int spinnerPosition = mPreferences.getInt("VIOLATION_INDEX", 0);
         mSpinner.setSelection(spinnerPosition);
-        
         termsCheckBox = findViewById(R.id.terms_chk_box);
-
         //Display images in layout
         displayImages();
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        //Get location latitude and longitude
+        mLatitude = getDouble(mPreferences, "LATITUDE", 0.0);
+        mLongitude = getDouble(mPreferences, "LONGITUDE", 0.0);
+        Log.d(TAG, "Latitude "+ mLatitude + " Longitude "+ mLongitude);
         //Implement Send Button
         mSendButton = findViewById(R.id.send_btn);
         mSendButton.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +156,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
     }
 
     /**
-     * Display image in ImageView using Glide image library
+     * Display image in Layout using Glide image library
      */
     private void displayImages() {
         for(int i = 0; i<3; i++)
@@ -168,11 +168,8 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        //Get location latitude and longitude
-        double latitude = mExtras.getDouble("LATITUDE");
-        double longitude = mExtras.getDouble("LONGITUDE");
         // Add a marker in Frankfurt and move the camera
-        LatLng location = new LatLng(latitude, longitude);
+        LatLng location = new LatLng(mLatitude, mLongitude);
         googleMap.addMarker(new MarkerOptions().position(location).title("Marker in violation location"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
         // Enable the zoom controls for the map
@@ -226,9 +223,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                                 if(finalI == 2){
                                     hideProgressDialog();
                                     storeViolation();
-
                                 }
-
                             } else {
                                 Log.d(TAG, "No download URI");
                             }
@@ -243,14 +238,11 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
      * Send Violation information to database
      */
     private void storeViolation(){
-        String type = mExtras.getString("VIOLATION_TYPE");
         String status = "Declined";
         String reason = "";
         if(status.equals("Declined")){
             reason = "We cannot accept Photos not originally taken within the app";
         }
-        double latitude = mExtras.getDouble("LATITUDE");
-        double longitude = mExtras.getDouble("LONGITUDE");
         Calendar calendar = Calendar.getInstance();
         // Get formatted date
         SimpleDateFormat currentDateFormat = new SimpleDateFormat(this.getString(R.string.date_format), Locale.getDefault());
@@ -262,7 +254,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         String violationId = mViolationsDatabaseReference.push().getKey();
         //Create ViolationReport object
         ViolationReport violationReport = new ViolationReport(
-                type, status, downloadUrlArray[0], downloadUrlArray[1], downloadUrlArray[2], latitude, longitude, sending_date, sending_time, reason);
+                mViolationType, status, downloadUrlArray[0], downloadUrlArray[1], downloadUrlArray[2], mLatitude, mLongitude, sending_date, sending_time, reason);
         //Send to Violations segment in database
         mViolationsDatabaseReference.child(violationId).setValue(violationReport)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -284,14 +276,12 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                             }
                         }
                     });
-
                 }else{
                     Log.w(TAG, "Writing in database failed");
                 }
             }
         });
     }
-
 
     /**
      * Inflate menu layout
@@ -310,39 +300,37 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch(item.getItemId()){
-            case android.R.id.home:
-                intent = new Intent(SummaryActivity.this, MapsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
             case R.id.sign_out_menu:
+                //Firebase Signout
                 mAuth.signOut();
                 //Sign out from google
                 //mGoogleSignInClient.signOut();
                 //Sign out from Facebook
-                //LoginManager.getInstance().logout()
+                //LoginManager.getInstance().logout();
                 intent = new Intent(SummaryActivity.this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     * Go back to previous screen: activity_map
-     */
-    public void goBack(){
+     * Override back button behaviour to point towards MapsActivity
+     * and not LoginActivity which is the normal behaviour*/
+    @Override
+    public void onBackPressed() {
         Intent intent = new Intent(SummaryActivity.this, MapsActivity.class);
-        intent.putExtras(mExtras);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
     /**
-     * Override back button behaviour to point towards MapsActivity
-     * and not LoginActivity which is the normal behaviour
+     * Getter method
+     * Get longitude and latitude from sharedPrefs file as doubles
      */
-    @Override
-    public void onBackPressed() {
-        //goBack();
+    double getDouble(final SharedPreferences prefs, final String key, final double defaultValue) {
+        if (!prefs.contains(key))
+            return defaultValue;
+        return Double.longBitsToDouble(prefs.getLong(key, 0));
     }
 
 

@@ -26,7 +26,6 @@ import java.util.Objects;
 
 public class RegisterActivity extends BaseActivity {
     private static final String TAG = "RegisterActivity";
-
     private TextInputEditText mNameField;
     private TextInputEditText mLastNameField;
     private TextInputEditText mEmailField;
@@ -37,18 +36,14 @@ public class RegisterActivity extends BaseActivity {
     private String last_name;
     private String email;
     private String password;
-    private Bundle mExtras;
     private TextView mLogin;
-
-    // [START declare_auth]
+    // Firebase Instance variables
     private FirebaseAuth mAuth;
-    // [END declare_auth]
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
         //Use toolbar as the ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -61,8 +56,8 @@ public class RegisterActivity extends BaseActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         toolbarTitle.setText(R.string.step_4_1);
-
-
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
         //Views
         mNameField = findViewById(R.id.name_edit_txt);
         mLastNameField = findViewById(R.id.last_name_edit_txt);
@@ -70,12 +65,7 @@ public class RegisterActivity extends BaseActivity {
         mPasswordField = findViewById(R.id.password_edit_text);
         mTermsCheck = findViewById(R.id.terms_chk_box);
         mRegisterBtn = findViewById(R.id.send_btn);
-
-        //Intent Bundle
-        mExtras = getIntent().getExtras();
-
-
-
+        //Handle click on register button
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,59 +76,51 @@ public class RegisterActivity extends BaseActivity {
                 createAccount();
             }
         });
-
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-
-        //Go to RegisterActivity to login with created Email/Password account
+        //Skip to LoginActivity
         mLogin = findViewById(R.id.login_txt);
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                intent.putExtras(mExtras);
-                Log.d(TAG, String.valueOf(mExtras.getDouble("LATITUDE")));
                 startActivity(intent);
-                finish();
             }
         });
     }
 
     /**
-     * checks if a form is valid or not before sending user account information
-     * @return valid
+     * checks if the form data is valid before sending user account information
      */
     private boolean validateForm() {
         boolean validForm = true;
-
+        //first name
         if (TextUtils.isEmpty(first_name)) {
             mNameField.setError("Required.");
             validForm = false;
         } else {
             mNameField.setError(null);
         }
-
+        //last name
         if (TextUtils.isEmpty(last_name)) {
             mLastNameField.setError("Required.");
             validForm = false;
         } else {
             mLastNameField.setError(null);
         }
-
+        //email
         if (TextUtils.isEmpty(email)) {
             mEmailField.setError("Required.");
             validForm = false;
         } else {
             mEmailField.setError(null);
         }
-
+        //password
         if (TextUtils.isEmpty(password)) {
             mPasswordField.setError("Required.");
             validForm = false;
         } else {
             mPasswordField.setError(null);
         }
-
+        //Terms checkbox
         if(!mTermsCheck.isChecked()) {
             mTermsCheck.setError("Required.");
             validForm = false;
@@ -146,15 +128,15 @@ public class RegisterActivity extends BaseActivity {
         return validForm;
     }
 
-
+    /**
+     * Create a new account for user
+     */
     private void createAccount() {
         Log.d(TAG, "createAccount:" + email);
         if (!validateForm()) {
             return;
         }
         showProgressDialog("Creating new user account");
-
-        // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -163,7 +145,6 @@ public class RegisterActivity extends BaseActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             Toast.makeText(RegisterActivity.this, "createUserWithEmail:success\"", Toast.LENGTH_LONG).show();
-
                             //Save additional data about user in realtime database
                             User user = new User(first_name, last_name, email);
                             //Connect to realtime database and write in it
@@ -179,7 +160,6 @@ public class RegisterActivity extends BaseActivity {
                                                 sendEmailVerification();
                                                 //Go back to LoginActivity
                                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                                intent.putExtras(mExtras);
                                                 startActivity(intent);
 
                                             }else{
@@ -213,10 +193,8 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                updateUI();
-
             }
         });
-
         emailDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         //Show the tip dialog
         emailDialog.show();
@@ -246,14 +224,11 @@ public class RegisterActivity extends BaseActivity {
                 });
     }
 
-
-
     /**
      * Go back to previous screen: activity_map
      */
     public void goBack(){
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        //intent.putExtras(mExtras);
         startActivity(intent);
     }
 

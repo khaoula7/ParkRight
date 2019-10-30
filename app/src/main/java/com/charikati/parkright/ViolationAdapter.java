@@ -24,7 +24,6 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
     // Member variables.
     private ArrayList<Violation> mViolationsData;
     private Context mContext;
-
     /**
      * Constructor that passes in the parking violations data and the context.
      *
@@ -110,7 +109,6 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
         @Override
         public void onClick(View v) {
             //get the Violation object for the item that was clicked using getAdapterPosition()
-            //Toast.makeText(mContext, "violation position =  "+getAdapterPosition(), Toast.LENGTH_SHORT).show();
             Violation currentViolation = mViolationsData.get(getAdapterPosition());
             // Launch DetailActivity using an explicit in tent
             Intent photoIntent = new Intent(mContext, PhotoActivity.class);

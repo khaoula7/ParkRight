@@ -104,7 +104,7 @@
     <!-- activity_login Strings -->
     <string name="step_4" translatable="false"> Login </string>
     <string name="activity_login_phrase_1" translatable="false"> Please Login to your Account </string>
-    <string name="facebook" translatable="false"> LOGIN WITH FACEBOOK </string>
+    <string name="facebook" translatable="false"> Login with Facebook </string>
     <string name="Google" translatable="false"> Google </string>
     <string name="client_id" translatable="false">843254302439-ireeq2d7ecnbrfisbn79o8v2qp6dei5b.apps.googleusercontent.com</string>
     <string name="or" translatable="false"> OR </string>

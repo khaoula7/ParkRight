@@ -4,10 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NavUtils;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -38,15 +37,11 @@ import java.util.Objects;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    // New variables for Current Place Picker
     private static final String TAG = "MapsActivity";
-    private PlacesClient mPlacesClient;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
-
     // A default location (Frankfurt, Germany) and default zoom to use when location permission is
     // not granted.
     private final LatLng mDefaultLocation = new LatLng(50.1109, 8.6821);
@@ -55,15 +50,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean mLocationPermissionGranted;
 
     private FloatingActionButton mLocationFAB;
-
-    private Bundle mExtras;
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.charikati.parkright";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
         //Use toolbar as the ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,13 +70,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         toolbarTitle.setText(R.string.step_3);
-
-
-
-        //Get Bundle from PhotosActivity
-        mExtras = getIntent().getExtras();
-        mExtras.putDouble("LATITUDE", mDefaultLocation.latitude);
-        mExtras.putDouble("LONGITUDE", mDefaultLocation.longitude);
+        //SharedPrefs file
+        mPreferences = getSharedPreferences(
+                sharedPrefFile, MODE_PRIVATE);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -91,8 +81,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Initialize the Places client
         String apiKey = getString(R.string.google_maps_key);
-        Places.initialize(getApplicationContext(), apiKey);
-        mPlacesClient = Places.createClient(this);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         //location floating action button
@@ -107,18 +95,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
         //Click on map_continue_btn Button will open Summary Activity
-        Button mapContinueBtn = findViewById(R.id.login_btn);
+        Button mapContinueBtn = findViewById(R.id.login_button);
         mapContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
-
                 //Open LoginActivity screen
                 Intent intent = new Intent(MapsActivity.this, LoginActivity.class);
-                //attach the bundle to the Intent object
-                intent.putExtras(mExtras);
-                Log.d(TAG, mExtras.toString());
-                //finally start the activity
                 startActivity(intent);
             }
         });
@@ -169,7 +151,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * we just add a marker near Frankfurt, Germany.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -177,15 +159,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         // Add a marker in Frankfurt and move the camera
         LatLng frankfurt = new LatLng(50.1109, 8.6821);
         mMap.addMarker(new MarkerOptions().position(frankfurt).title("Marker in Frankfurt"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(frankfurt));
-
         // Enable the zoom controls for the map
         mMap.getUiSettings().setZoomControlsEnabled(true);
-
         // Prompt the user for permission.
         getLocationPermission();
     }
@@ -213,19 +192,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             mLastKnownLocation = task.getResult();
                             double latitude = mLastKnownLocation.getLatitude();
                             double longitude = mLastKnownLocation.getLongitude();
-                            Log.d(TAG, "Latitude: " + latitude);
-                            Log.d(TAG, "Longitude: " + longitude);
-                            //Toast.makeText(MapsActivity.this, "Latitude "+latitude+"Longitude "+longitude, Toast.LENGTH_LONG).show();
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(latitude, longitude), DEFAULT_ZOOM));
                             //Add latitude and longitude to the bundle to be sent to SummaryActivity
-                            mExtras.putDouble("LATITUDE", latitude);
-                            mExtras.putDouble("LONGITUDE", longitude);
-                            //Add a marker
+//                            mExtras.putDouble("LATITUDE", latitude);
+//                            mExtras.putDouble("LONGITUDE", longitude);
+                            //Add a marker on the new location
                             LatLng myLocation = new LatLng( latitude, longitude);
-
                             mMap.addMarker(new MarkerOptions().position(myLocation).title("Car Location"));
-
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
@@ -240,13 +214,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.e("Exception: %s", e.getMessage());
         }
     }
+
     /* When the user taps the Pick Place button you created,
      *  this method checks for location permissions
      *  and re-prompts for permission if the user has not yet granted permission.
      *  If the user has granted permission,
      *  then the method calls getDeviceLocation to initiate the process of getting the current likely places.
      */
-
     private void pickCurrentPlace() {
         if (mMap == null) {
             return;
@@ -268,24 +242,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    /**
-     * Go back to previous screen: activity_map
-    */
-    public void goBack(){
-        Intent intent = new Intent(MapsActivity.this, PhotoActivity.class);
-        //intent.putExtras(mExtras);
-        startActivity(intent);
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+        putDouble(preferencesEditor, "LATITUDE", mDefaultLocation.latitude);
+        putDouble(preferencesEditor, "LONGITUDE", mDefaultLocation.longitude);
+        preferencesEditor.apply();
     }
 
     /**
-     * Up button: Go back to previous screen: activity_type
+     * Setter method
+     * Convert the double to its 'raw long bits' equivalent and store that long
+     * in order to be able to use double with sharedPrefs for latitude and longitude
      */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home ) {
-           goBack();
-        }
-        return true;
+    SharedPreferences.Editor putDouble(final SharedPreferences.Editor edit, final String key, final double value) {
+        return edit.putLong(key, Double.doubleToRawLongBits(value));
+    }
+
+    /**
+     * Getter method
+     * Get longitude and latitude from sharedPrefs file by converting 'raw long bits' into its double equivalent
+     */
+    double getDouble(final SharedPreferences prefs, final String key, final double defaultValue) {
+        if (!prefs.contains(key))
+            return defaultValue;
+        return Double.longBitsToDouble(prefs.getLong(key, 0));
     }
 
 }

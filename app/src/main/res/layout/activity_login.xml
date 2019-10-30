@@ -215,7 +215,7 @@
 
 
     <Button
-        android:id="@+id/login_btn"
+        android:id="@+id/login_button"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
@@ -237,7 +237,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline7" />
 
     <Button
-        android:id="@+id/facebook_btn"
+        android:id="@+id/facebook_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -249,6 +249,7 @@
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
         android:text="@string/facebook"
+        android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -383,7 +384,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_login_phrase_2"
-            android:textColor="@color/Grey"
+            android:textColor="@color/white"
             android:textSize="17sp"
             tools:layout_editor_absoluteX="23dp"
             tools:layout_editor_absoluteY="660dp" />

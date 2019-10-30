@@ -30,14 +30,16 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".HowActivity" />
         <activity android:name=".TypeActivity" />
-        <activity android:name=".PhotoActivity" />
-        <activity android:name=".MapsActivity" />
+        <activity android:name=".PhotoActivity"
+                  android:label="@string/step_2"
+                  android:parentActivityName=".TypeActivity" />
+        <activity android:name=".MapsActivity"
+            android:parentActivityName=".PhotoActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -53,10 +55,13 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".LoginActivity"
+            android:parentActivityName=".MapsActivity"/>
 
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".SummaryActivity" /> <!-- File Provider -->
+        <activity android:name=".RegisterActivity"
+            android:parentActivityName=".LoginActivity"/>
+        <activity android:name=".SummaryActivity"
+            android:parentActivityName=".MapsActivity"/> <!-- File Provider -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.charikati.parkright.fileprovider"
@@ -67,10 +72,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- Facebook Activity launched after click on facebook button
+        <!-- Facebook Activity launched after click on facebook button-->
         <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
-
+            android:value="@string/facebook_application_id"/>
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -84,7 +88,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
-        </activity>-->
+        </activity>
     </application>
 
 </manifest>

@@ -329,7 +329,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_register_phrase_2"
-            android:textColor="@color/Grey"
+            android:textColor="@color/white"
             android:textSize="17sp"
             tools:layout_editor_absoluteX="23dp"
             tools:layout_editor_absoluteY="660dp" />
@@ -345,7 +345,7 @@
             android:clickable="true"
             android:focusable="true"
             android:text="@string/login"
-            android:textColor="@color/white"
+            android:textColor="@color/colorAccent"
             android:textSize="17sp"
             android:textStyle="normal"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView20"

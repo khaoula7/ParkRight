@@ -2,6 +2,7 @@ package com.charikati.parkright;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +48,7 @@ import java.util.Date;
 import java.util.Objects;
 
 public class PhotoActivity extends AppCompatActivity {
+    private static final String TAG = "PhotoActivity";
     // Constants for camera intent
     static final int REQUEST_IMAGE_CAPTURE_1 = 1;
     static final int REQUEST_IMAGE_CAPTURE_2 = 2;
@@ -59,10 +62,18 @@ public class PhotoActivity extends AppCompatActivity {
     private boolean mSecondPhotoCaptured = false;
     private boolean mThirdPhotoCaptured = false;
 
+    //The only Exras I will keep
     private Bundle mExtras;
     private String mViolationType;
+    private int mViolationIndex;
 
+    private String mFilePath1;
+    private String mFilePath2;
+    private String mFilePath3;
     private String mCurrentPhotoPath;
+
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.charikati.parkright";
 
 
     @Override
@@ -75,19 +86,53 @@ public class PhotoActivity extends AppCompatActivity {
         // Display Up button
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            //getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         // Remove default title text
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         toolbarTitle.setText(R.string.step_2);
 
+        //Open sharedPrefs file at the given filename (sharedPrefFile) with the mode MODE_PRIVATE.
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        //ImageButtons
+        mFirstCameraButton = findViewById(R.id.camera_1_btn);
+        mSecondCameraButton = findViewById(R.id.camera_2_btn);
+        mThirdCameraButton = findViewById(R.id.camera_3_btn);
+        // Checkboxes
+        final CheckBox plateCheckBox = findViewById(R.id.plate_chk_box);
+        final CheckBox contextCheckBox = findViewById(R.id.context_check_box);
+        //Get information sent by TypeActivity from intent
+        //This is the first time PhotoActivity is accessed
         mExtras = getIntent().getExtras();
-
-        //Get the violation type from the incoming Intent
-        mViolationType = mExtras.getString("VIOLATION_TYPE");
-
-
+        if (mExtras != null) {
+            mViolationType = mExtras.getString("VIOLATION_TYPE");
+            mViolationIndex = mExtras.getInt("VIOLATION_INDEX");
+        }else {
+            //Display already taken photos from sharedPrefs file
+            //coming from Up or back button
+            String file_1 = mPreferences.getString("FILE_NAME_1", null);
+            if (file_1 != null) {
+                displayImages(mFirstCameraButton, file_1);
+            }
+            String file_2 = mPreferences.getString("FILE_NAME_2", null);
+            if(file_2 != null) {
+                displayImages(mSecondCameraButton, file_2);
+            }
+            String file_3 = mPreferences.getString("FILE_NAME_3", null);
+            if(file_3 != null) {
+                displayImages(mThirdCameraButton, file_3);
+            }
+            //Restore show Tips dialog
+            mViolationType = mPreferences.getString("VIOLATION_TYPE", null);
+            //I need it to link tips to violation type
+            mViolationIndex = mPreferences.getInt("VIOLATION_INDEX", 0);
+            plateCheckBox.setChecked(true);
+            contextCheckBox.setChecked(true);
+            mFirstPhotoCaptured = true;
+            mSecondPhotoCaptured = true;
+            mThirdPhotoCaptured = true;
+        }
         //Click on show button will open tips dialog
         Button showBtn = (Button)findViewById(R.id.show_btn);
         showBtn.setOnClickListener(new View.OnClickListener() {
@@ -96,27 +141,21 @@ public class PhotoActivity extends AppCompatActivity {
                 showTipsDialog();
             }
         });
-
         //Click on first camera button will send a camera intent
-        mFirstCameraButton = (ImageButton) findViewById(R.id.camera_1_btn);
         mFirstCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_1);
             }
         });
-
         //Click on second camera button will send a camera intent
-       mSecondCameraButton = (ImageButton) findViewById(R.id.camera_2_btn);
        mSecondCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_2);
             }
        });
-
         //Click on third camera button will send a camera intent
-        mThirdCameraButton = (ImageButton) findViewById(R.id.camera_3_btn);
         mThirdCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,16 +163,12 @@ public class PhotoActivity extends AppCompatActivity {
             }
         });
 
-        // Checkboxes
-        final CheckBox plateCheckBox = (CheckBox) findViewById(R.id.plate_chk_box);
-        final CheckBox contextCheckBox = (CheckBox) findViewById(R.id.context_check_box);
-
         //Click on map_continue_btn button will open MapActivity
         Button photoContinueBtn = findViewById(R.id.photo_continue_btn);
         photoContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if(!firstPhotoCaptured || !secondPhotoCaptured || !thirdPhotoCaptured) {
+                if(!mFirstPhotoCaptured|| !mSecondPhotoCaptured|| !mThirdPhotoCaptured) {
                     Toast.makeText(PhotoActivity.this, R.string.photos_warning, Toast.LENGTH_LONG).show();
                 }
                 else if (!plateCheckBox.isChecked() || !contextCheckBox.isChecked()) {
@@ -141,15 +176,9 @@ public class PhotoActivity extends AppCompatActivity {
                 }
                 else{
                     //Open MapActivity screen (Locate the violating Car)
-                    Intent intent = new Intent(PhotoActivity.this, MapActivity.class);
+                    Intent intent = new Intent(PhotoActivity.this, MapsActivity.class);
                     startActivity(intent);
-                }*/
-                //Open MapActivity screen (to locate the violating Car)
-                Intent intent = new Intent(PhotoActivity.this, MapsActivity.class);
-                //attach the bundle to the Intent object
-                intent.putExtras(mExtras);
-                //finally start the activity
-                startActivity(intent);
+                }
             }
         });
     }
@@ -174,7 +203,6 @@ public class PhotoActivity extends AppCompatActivity {
         mCurrentPhotoPath = imageFile.getAbsolutePath();
         return imageFile;
     }
-
 
     /**
      *Take a picture and provide file for saving it
@@ -217,26 +245,19 @@ public class PhotoActivity extends AppCompatActivity {
             mFirstPhotoCaptured = true;
             //Display image in its appropriate ImageView
             displayImages(mFirstCameraButton, mCurrentPhotoPath);
-            //setPic(mFirstCameraButton);
-            //Add photo path to intent bundle
-            mExtras.putString("FILE_NAME_1", mCurrentPhotoPath);
-
+            mFilePath1 = mCurrentPhotoPath;
         } else if (requestCode == REQUEST_IMAGE_CAPTURE_2 && resultCode == RESULT_OK) {
             //User has captured the first photo
             mSecondPhotoCaptured = true;
             //Display image in its appropriate ImageView
             displayImages(mSecondCameraButton, mCurrentPhotoPath);
-            //Add photo path to intent bundle
-            mExtras.putString("FILE_NAME_2", mCurrentPhotoPath);
-
+            mFilePath2 = mCurrentPhotoPath;
         } else if (requestCode == REQUEST_IMAGE_CAPTURE_3 && resultCode == RESULT_OK) {
             //User has captured the first photo
             mThirdPhotoCaptured = true;
             //Display image in its appropriate ImageView
             displayImages(mThirdCameraButton, mCurrentPhotoPath);
-            //Add photo path to intent bundle
-            mExtras.putString("FILE_NAME_3", mCurrentPhotoPath);
-
+            mFilePath3 = mCurrentPhotoPath;
         }
     }
 
@@ -281,22 +302,39 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     /**
-     * Go back to previous screen: activity_type
+     * Write image file paths to shared Preferences
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home ) {
-            finish();
-        }
-        return true;
+    protected void onPause() {
+        super.onPause();
+        //shared preferences editor is required to write to the shared preferences object
+        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+        preferencesEditor.putString("VIOLATION_TYPE", mViolationType);
+        preferencesEditor.putInt("VIOLATION_INDEX", mViolationIndex);
+        if(mFilePath1 != null)
+            preferencesEditor.putString("FILE_NAME_1", mFilePath1);
+        if(mFilePath2 != null)
+            preferencesEditor.putString("FILE_NAME_2",mFilePath2);
+        if(mFilePath3 != null)
+            preferencesEditor.putString("FILE_NAME_3",mFilePath3);
+        preferencesEditor.apply();
     }
 
-
-
-
-
-
-
-
-
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        Log.d(TAG, "onStop");
+//    }
+//
+//    @Override
+//    protected void onRestart() {
+//        super.onRestart();
+//        Log.d(TAG, "onRestart");
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        Log.d(TAG, "onResume");
+//    }
 }
