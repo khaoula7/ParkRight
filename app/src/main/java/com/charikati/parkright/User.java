@@ -2,27 +2,27 @@ package com.charikati.parkright;
 
 public class User {
 
-    private String first_name;
-    private String last_name;
-    private String email;
+    private String mFirstName;
+    private String mLastName;
+    private String mEmail;
 
 
     public User(String first_name, String last_name, String email) {
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.email = email;
+        this.mFirstName = first_name;
+        this.mLastName = last_name;
+        this.mEmail = email;
     }
 
     public String getFirstName() {
-        return first_name;
+        return mFirstName;
     }
 
     public String getLastName() {
-        return last_name;
+        return mLastName;
     }
 
     public String getEmail() {
-        return email;
+        return mEmail;
     }
 
 

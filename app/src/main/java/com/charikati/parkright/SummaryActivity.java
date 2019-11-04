@@ -1,21 +1,16 @@
 package com.charikati.parkright;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NavUtils;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,9 +18,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-import com.facebook.login.LoginManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,29 +31,23 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.zxing.common.StringUtils;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class SummaryActivity extends BaseActivity implements OnMapReadyCallback {
 
     private static final String TAG = "SummaryActivity";
-    //Screen widget varibles
+    //Screen widget variables
     private Spinner mSpinner;
     private String[] fileNameArray;
     private ImageView[] imageViewArray;
@@ -68,12 +55,10 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
     private CheckBox termsCheckBox;
     private Button mSendButton;
     //Firebase instance variables
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mFirebaseAuth;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mPhotosStorageReference;
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mViolationsDatabaseReference;
-    private DatabaseReference mUsersDatabaseReference;
+    private FirebaseFirestore mFirestore;
     //Shared Preferences variables
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.charikati.parkright";
@@ -98,15 +83,12 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         toolbarTitle.setText(R.string.step_4_2);
-
         /*Initialize Firebase components  */
-        mAuth = FirebaseAuth.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseStorage = FirebaseStorage.getInstance();
         //Set Reference  to the violation_photos folder location
         mPhotosStorageReference = mFirebaseStorage.getReference().child("violation_photos");
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mViolationsDatabaseReference = mFirebaseDatabase.getReference().child("Violations");
-        mUsersDatabaseReference = mFirebaseDatabase.getReference().child("Users");
+        mFirestore = FirebaseFirestore.getInstance();
         //Open sharedPrefs file at the given filename (sharedPrefFile) with the mode MODE_PRIVATE.
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         //Array of image files names
@@ -124,6 +106,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         String[] violations = getResources().getStringArray(R.array.violation_types);
         ArrayAdapter<String> violationAdapter=new ArrayAdapter<String>(this,R.layout.spinner_item, violations);
         mSpinner.setAdapter(violationAdapter);
+        mSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         //Get violation index and set it as selected item in the spinner
         mViolationType = mPreferences.getString("VIOLATION_TYPE", null);
         int spinnerPosition = mPreferences.getInt("VIOLATION_INDEX", 0);
@@ -137,20 +120,21 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         //Get location latitude and longitude
         mLatitude = getDouble(mPreferences, "LATITUDE", 0.0);
         mLongitude = getDouble(mPreferences, "LONGITUDE", 0.0);
-        Log.d(TAG, "Latitude "+ mLatitude + " Longitude "+ mLongitude);
         //Implement Send Button
         mSendButton = findViewById(R.id.send_btn);
-        mSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!termsCheckBox.isChecked()){
-                    Toast.makeText(SummaryActivity.this, R.string.checkbox_warning, Toast.LENGTH_SHORT).show();
-                }else {
-                    //Upload images to Firebase Storage and write violation data in database
-//                    uploadImagetoFirebase();
-                    Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
-                    startActivity(intent);
-                }
+        mSendButton.setOnClickListener(v -> {
+            if(!termsCheckBox.isChecked()){
+                Toast.makeText(SummaryActivity.this, R.string.checkbox_warning, Toast.LENGTH_SHORT).show();
+            }else {
+                //Upload images to Firebase Storage and write violation data in database
+                sendReport();
+                //Delete all sharedPreferences
+                SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+                preferencesEditor.clear();
+                preferencesEditor.apply();
+                //Go to ThankYou screen
+                Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -179,14 +163,13 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
     /**
      * upload the 3 images to Firebase storage under violations_photos folder
      */
-    private void uploadImagetoFirebase(){
+    private void sendReport(){
         Uri fileUri;
         showProgressDialog("Uploading photos and sending report");
         for(int i = 0; i<3; i++) {
             fileUri = Uri.fromFile(new File(fileNameArray[i]));
             StorageReference photoRef = mPhotosStorageReference.child(fileUri.getLastPathSegment());
             UploadTask uploadTask = photoRef.putFile(fileUri);
-
             // Register observers to listen for when the download is done or if it fails
             final int finalI = i;
             uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -207,16 +190,12 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                                 throw task.getException();
                             }
                             // Continue with the task to get the download URL
-
                             return photoRef.getDownloadUrl();
                         }
                     }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
-                                //Get the download URL of the uploaded image
-                                //downloadUrlArray[finalI] = task.getResult().toString();
-                                Log.d(TAG, task.getResult().toString());
                                 //Get download url
                                 downloadUrlArray[finalI] = task.getResult().toString();
                                 //if all images has been successfully uploaded
@@ -251,36 +230,41 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         SimpleDateFormat currentTimeFormat = new SimpleDateFormat(this.getString(R.string.time_format), Locale.getDefault());
         String sending_time = currentTimeFormat.format(calendar.getTime());
         //Generate unique Firebase key
-        String violationId = mViolationsDatabaseReference.push().getKey();
         //Create ViolationReport object
         ViolationReport violationReport = new ViolationReport(
                 mViolationType, status, downloadUrlArray[0], downloadUrlArray[1], downloadUrlArray[2], mLatitude, mLongitude, sending_date, sending_time, reason);
-        //Send to Violations segment in database
-        mViolationsDatabaseReference.child(violationId).setValue(violationReport)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    //Toast.makeText(SummaryActivity.this, "Writing Violation in database Succeeded", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "Writing in database Violations segment Succeeded");
-                    //Add violation Id to user's sent violations
-                    mUsersDatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .child("sent_violations").child(violationId).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()) {
-                                Log.d(TAG, "Writing in database Users segment Succeeded");
-                                //Go to Thankyou page
-                                Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
-                                startActivity(intent);
-                            }
-                        }
-                    });
-                }else{
-                    Log.w(TAG, "Writing in database failed");
-                }
-            }
-        });
+        mFirestore.collection("Violations")
+                .add(violationReport)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        //Add violation Id to user's sent violations
+                        Map<String, Object> violation = new HashMap<>();
+
+                        mFirestore.collection("Users")
+                                .document(mFirebaseAuth.getCurrentUser().getUid())
+                                .collection("sent_violations").document(documentReference.getId()).set(violation)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "Writing in database Succeeded");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e(TAG, "Error writing user", e);
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
     }
 
     /**
@@ -302,7 +286,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         switch(item.getItemId()){
             case R.id.sign_out_menu:
                 //Firebase Signout
-                mAuth.signOut();
+                mFirebaseAuth.signOut();
                 //Sign out from google
                 //mGoogleSignInClient.signOut();
                 //Sign out from Facebook

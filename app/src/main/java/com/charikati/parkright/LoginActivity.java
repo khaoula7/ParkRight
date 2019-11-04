@@ -32,6 +32,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
@@ -45,6 +47,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,12 +59,13 @@ import java.util.Objects;
 
 public class LoginActivity extends BaseActivity {
     private static final String TAG = "LoginActivity";
+    // Firebase Instance variables
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private FirebaseFirestore mFireDb;
     //Variables for Google Sign In
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
-    //Firebase Authentication
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
     private SignInButton mGoogleBtn;
     //Variables for Facebook Login
     private CallbackManager mCallbackManager;
@@ -70,8 +76,9 @@ public class LoginActivity extends BaseActivity {
     private Button mLoginButton;
     private TextView mRegister;
     /*Firebase realtime database*/
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mUsersDatabaseReference;
+//    private FirebaseDatabase mFirebaseDatabase;
+//    private DatabaseReference mUsersDatabaseReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,30 +96,21 @@ public class LoginActivity extends BaseActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         toolbarTitle.setText(R.string.step_4);
-
         // Initialize Firebase Components
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        Log.d(TAG, "onCreate "+mFirebaseAuth.getCurrentUser());
-
-        mUsersDatabaseReference = mFirebaseDatabase.getReference().child("Users");
+        mFireDb = FirebaseFirestore.getInstance();
         //AuthStateListener reacts to auth state changes (sign in, sign out)
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 //Check if user is logged in or not and act accordingly
                 FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-                Log.d(TAG, "onCreate "+currentUser);
-                if(currentUser != null){
+                if(currentUser != null && currentUser.isEmailVerified()){
+                    Log.d(TAG, "email verified:  "+currentUser.isEmailVerified());
                     //User is signed in
-                    //Log.d(TAG, "User is logged in");
                     updateUI();
-                    //onSignedInInitialize(user.getDisplayName());
-
                 }else {
-                    //Log.d(TAG, "User is logged out");
                     //User is signed out, start sign in flow
-                    //onSignedOutCleanup();
                     googleSignIn();
                     facebookLogIn();
                     emailSignIn();
@@ -132,12 +130,9 @@ public class LoginActivity extends BaseActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mGoogleBtn = findViewById(R.id.google_button);
-        mGoogleBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN);
-            }
+        mGoogleBtn.setOnClickListener(v -> {
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
         });
     }
     /**
@@ -194,7 +189,7 @@ public class LoginActivity extends BaseActivity {
      * Authenticate google user with Firebase
      */
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        showProgressDialog("Loading");
+        showProgressDialog("Signing In");
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mFirebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -203,7 +198,7 @@ public class LoginActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            //checkUidExists(account);
+                            checkUidExists(account);
                             //Go to SummaryActivity
                             updateUI();
                         } else {
@@ -229,11 +224,11 @@ public class LoginActivity extends BaseActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             mFacebookBtn.setEnabled(true);
-                            //useLoginInformation(token);
+                            useLoginInformation(token);
                             updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Log.d(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             mFacebookBtn.setEnabled(true);
@@ -281,7 +276,7 @@ public class LoginActivity extends BaseActivity {
         if (!validateForm()) {
             return;
         }
-        showProgressDialog("Loading");
+        showProgressDialog("Signing In");
         mFirebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -293,7 +288,7 @@ public class LoginActivity extends BaseActivity {
                                 updateUI();
                             }else {
                                 Toast.makeText(LoginActivity.this,
-                                        "Your Email is not verified yet. \n Please verify it then proceed",
+                                        "Your Email is not verified yet. Check your " + user.getEmail() + " before proceeding",
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
@@ -310,7 +305,6 @@ public class LoginActivity extends BaseActivity {
      */
     private boolean validateForm() {
         boolean validForm = true;
-
         String email = mEmailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
             mEmailField.setError("Required.");
@@ -318,7 +312,6 @@ public class LoginActivity extends BaseActivity {
         } else {
             mEmailField.setError(null);
         }
-
         String password = mPasswordField.getText().toString();
         if (TextUtils.isEmpty(password)) {
             mPasswordField.setError("Required.");
@@ -329,19 +322,12 @@ public class LoginActivity extends BaseActivity {
         return validForm;
     }
 
-    private void onSignedInInitialize(String username) {
-       //Write in database if signup
-    }
-    private void onSignedOutCleanup(){
-    }
-
     /**
      * App is started and visible, Attach AuthStateListener
      */
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume "+mFirebaseAuth.getCurrentUser());
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
     /**
@@ -350,21 +336,18 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause "+mFirebaseAuth.getCurrentUser());
         if(mAuthStateListener != null) {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
         }
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
-//        Log.d(TAG, "onStart "+currentUser);
-//        if (currentUser != null)
-//            updateUI();
-//    }
+    /**
+     * If user is signed in, go to summary activity
+     */
+    private void updateUI() {
+        Intent summaryIntent = new Intent(LoginActivity.this, SummaryActivity.class);
+        startActivity(summaryIntent);
+    }
 
     /**
      * Shows an AlertDialog to reset forgotten password
@@ -413,104 +396,80 @@ public class LoginActivity extends BaseActivity {
             }
         });
     }
+
     /**
-     * Adds a new user to Firebase realtime database
+     * Only first time users will be written in database( Google Sign In and Facebook Login)
+     */
+    private void checkUidExists(GoogleSignInAccount account){
+        String Uid = mFirebaseAuth.getCurrentUser().getUid();
+        DocumentReference docRef = mFireDb.collection("Users").document(Uid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (!document.exists()) {
+                        Log.d(TAG, "No such document");
+                        writeUserInDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail());
+                    } else {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    /**
+     * Adds a new user to FireStore database
      */
     private void writeUserInDatabase(String first_name, String last_name, String email){
         User user = new User(first_name, last_name, email);
-        //Connect to realtime database and write in Users segment
-        mUsersDatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+        //Connect to Firestore and write in Users collection
+        mFireDb.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid())
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Writing in database Succeeded");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Error writing user", e);
+                    }
+                });
+    }
+
+    /**
+     * Creating the GraphRequest to fetch user details
+     */
+    private void useLoginInformation(AccessToken accessToken) {
+        GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+            //OnCompleted is invoked once the GraphRequest is successful
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Log.d(TAG, "Writing in database Succeeded");
-                }else{
-                    Log.w(TAG, "Writing in database failed");
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                try {
+                    String first_name = object.getString("first_name");
+                    String last_name = object.getString("last_name");
+                    String email = object.getString("email");
+                    writeUserInDatabase(first_name, last_name, email);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d(TAG, e.getMessage());
                 }
             }
         });
+        // We set parameters to the GraphRequest using a Bundle.
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "first_name, last_name, email");
+        request.setParameters(parameters);
+        // Initiate the GraphRequest
+        request.executeAsync();
     }
 
 
-    private void updateUI() {
-        Intent summaryIntent = new Intent(LoginActivity.this, SummaryActivity.class);
-        startActivity(summaryIntent);
-    }
 
-
-
-
-    /**
-     * Go back to previous screen: activity_map
-     */
-    public void goBack(){
-        Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
-        //intent.putExtras(mExtras);
-        startActivity(intent);
-    }
-
-    /**
-     * Up button: Go back to previous screen: activity_type
-     */
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if(item.getItemId() == android.R.id.home ) {
-//            goBack();
-//        }
-//        return true;
-//    }
-
-//    private void useLoginInformation(AccessToken accessToken) {
-//        /**
-//         Creating the GraphRequest to fetch user details
-//         1st Param - AccessToken
-//         2nd Param - Callback (which will be invoked once the request is successful)
-//         **/
-//        GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
-//            //OnCompleted is invoked once the GraphRequest is successful
-//            @Override
-//            public void onCompleted(JSONObject object, GraphResponse response) {
-//                try {
-//                    String first_name = object.getString("first_name");
-//                    String last_name = object.getString("last_name");
-//                    String email = object.getString("email");
-//                    Log.d(TAG, "name = "+first_name + " lastname = "+ last_name + " email = "+ email);
-//                    writeUserInDatabase(first_name, last_name, email);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Log.d(TAG, e.getMessage());
-//                }
-//            }
-//        });
-//        // We set parameters to the GraphRequest using a Bundle.
-//        Bundle parameters = new Bundle();
-//        parameters.putString("fields", "first_name, last_name, email");
-//        request.setParameters(parameters);
-//        // Initiate the GraphRequest
-//        request.executeAsync();
-//    }
-
-    /**
-     * Only first time users will be written in database
-     * @param account
-     */
-    private void checkUidExists(GoogleSignInAccount account){
-        String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Log.d(TAG, " Uid=" + Uid );
-        mUsersDatabaseReference.orderByKey().equalTo(Uid).limitToFirst(1).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()){
-                    Log.d(TAG, Uid + " does not exist");
-                    writeUserInDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail());
-                }else{
-                    Log.d(TAG, Uid + " exists");
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
 }

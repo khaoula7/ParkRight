@@ -5,9 +5,6 @@ public class Violation {
     private String mViolationType;
     // Image resource ID for the violation
     private final int mImageResourceId;
-    //
-
-
 
     /**
      * Create a new Violation object.

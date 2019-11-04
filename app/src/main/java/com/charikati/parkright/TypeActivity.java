@@ -1,6 +1,7 @@
 package com.charikati.parkright;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -24,9 +25,9 @@ public class TypeActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ArrayList<Violation> mViolationData;
     private ViolationAdapter mAdapter;
-
-
-
+    //Shared Preferences variables
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.charikati.parkright";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,15 +36,16 @@ public class TypeActivity extends AppCompatActivity {
         //Use toolbar as the ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Display Up button
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
         // Remove default title text
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         toolbarTitle.setText(R.string.step_1);
+        //Open sharedPrefs file at the given filename (sharedPrefFile) with the mode MODE_PRIVATE.
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        //Delete all sharedPreferences
+        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+        preferencesEditor.clear();
+        preferencesEditor.apply();
 
         //Initialize the RecyclerView.
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -51,11 +53,9 @@ public class TypeActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Initialize the ArrayList that will contain the data.
         mViolationData = new ArrayList<>();
-
         // Initialize the adapter and set it to the RecyclerView.
         mAdapter = new ViolationAdapter(this, mViolationData);
         mRecyclerView.setAdapter(mAdapter);
-
         // Get the data.
         initializeData();
         /*Use ItemTouchHelper to define what happens to RecyclerView list items when the user performs
@@ -79,12 +79,9 @@ public class TypeActivity extends AppCompatActivity {
                 //Notify the adapter that the item was moved, passing in the old and new indexes
                 mAdapter.notifyItemMoved(from, to);
                 return true;
-
             }
-
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-
             }
         });
         // Attach the helper object to the RecyclerView
@@ -111,32 +108,4 @@ public class TypeActivity extends AppCompatActivity {
         // Notify the adapter of the change.
         mAdapter.notifyDataSetChanged();
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home ) {
-            finish();
-        }
-        return true;
-    }
-
-
-
-    /**
-     * Go back to previous screen
-     * @param v
-     */
-    public void goBack(View v){
-        Intent intent = new Intent(TypeActivity.this, HowActivity.class);
-        startActivity(intent);
-    }
-
-
-
-
-
-
-
-
-
 }
