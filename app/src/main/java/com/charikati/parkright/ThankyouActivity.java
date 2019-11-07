@@ -14,15 +14,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ThankyouActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     public static final String TAG = "ThankyouActivity";
     private DrawerLayout drawer;
     private Button newViolationBtn;
     private Button myReportsBtn;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseFirestore mFireDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +42,31 @@ public class ThankyouActivity extends AppCompatActivity implements NavigationVie
         setSupportActionBar(toolbar);
         // Remove default title text
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         // A reference to the NavigationView
         NavigationView navigationView = findViewById(R.id.nav_view);
         //To listen to click events on navigation drawer items, Implement NavigationView interface
         navigationView.setNavigationItemSelectedListener(this);
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFireDb = FirebaseFirestore.getInstance();
+        TextView userName = findViewById(R.id.user_name_txt);
+        String Uid = mFirebaseAuth.getCurrentUser().getUid();
+        DocumentReference docRef = mFireDb.collection("Users").document(Uid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        userName.setText("Thank You, "+ document.getData().get("firstName"));
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
 
         // A reference to the DrawerLayout
         drawer = findViewById(R.id.drawer);
@@ -46,21 +75,16 @@ public class ThankyouActivity extends AppCompatActivity implements NavigationVie
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         //Click on New Violation Button
-        Log.d(TAG,"Inside newViolationBtn");
         newViolationBtn = findViewById(R.id.new_violation_btn);
         newViolationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG,"Inside newViolationBtn");
-                Toast.makeText(ThankyouActivity.this, "Inside newViolationBtn", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(ThankyouActivity.this, TypeActivity.class);
                 startActivity(intent);
 
             }
         });
-
         //Click on My Reports Button
         myReportsBtn = findViewById(R.id.my_reports_btn);
         myReportsBtn.setOnClickListener(new View.OnClickListener() {

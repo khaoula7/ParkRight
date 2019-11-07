@@ -6,19 +6,24 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.charikati.parkright.model.ViolationReport;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
 import java.util.Objects;
 
-public class DetailsActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = "DetailsActivity";
     private TextView typeTextView;
     private TextView statusTextView;
@@ -27,14 +32,12 @@ public class DetailsActivity extends AppCompatActivity {
     private ImageView firstImage;
     private ImageView secondImage;
     private ImageView thirdImage;
-
-
-
+    private double mLatitude;
+    private double mLongitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-
         //Use toolbar as the ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -54,7 +57,6 @@ public class DetailsActivity extends AppCompatActivity {
             jsonMyObject = extras.getString("report");
             //Convert JSON object into a ViolationReport object
             ViolationReport violationReport = new Gson().fromJson(jsonMyObject, ViolationReport.class);
-            Log.d(TAG, "Type: " + violationReport.getType());
             typeTextView = findViewById(R.id.type_textView);
             typeTextView.setText(violationReport.getType());
             statusTextView = findViewById(R.id.status_textView);
@@ -67,17 +69,20 @@ public class DetailsActivity extends AppCompatActivity {
             dateTextView = findViewById(R.id.date_textView);
             String date = violationReport.getSendingDate() + ",   " + violationReport.getSendingTime();
             dateTextView.setText(date);
-
+            //Load images
             firstImage = findViewById(R.id.first_image);
             loadImage(firstImage, violationReport.getFirstImageUrl());
-
             secondImage = findViewById(R.id.second_image);
             loadImage(secondImage, violationReport.getSecondImageUrl());
-
             thirdImage = findViewById(R.id.third_image);
             loadImage(thirdImage, violationReport.getThirdImageUrl());
+            //Load Map
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+            //Get location latitude and longitude
+            mLatitude = violationReport.getLatitude();
+            mLongitude = violationReport.getLongitude();
         }
-
     }
 
     /**
@@ -92,17 +97,15 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     /**
-     * Implement menu icons (up button and sign out) behaviour
+     *Display current location marker in google maps
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
-        switch(item.getItemId()){
-            case android.R.id.home:
-                intent = new Intent(DetailsActivity.this, MyReportsActivity.class);
-                startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
+    public void onMapReady(GoogleMap googleMap) {
+        // Add a marker in Frankfurt and move the camera
+        LatLng location = new LatLng(mLatitude, mLongitude);
+        googleMap.addMarker(new MarkerOptions().position(location).title("Marker in violation location"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+        // Enable the zoom controls for the map
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
     }
-
 }

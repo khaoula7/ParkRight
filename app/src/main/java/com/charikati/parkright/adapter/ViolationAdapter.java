@@ -1,4 +1,4 @@
-package com.charikati.parkright;
+package com.charikati.parkright.adapter;
 
 
 import android.content.Context;
@@ -11,9 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.charikati.parkright.PhotoActivity;
+import com.charikati.parkright.R;
+import com.charikati.parkright.model.ViolationReport;
 
 import java.util.ArrayList;
 
@@ -22,7 +24,7 @@ import java.util.ArrayList;
  */
 public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.ViewHolder> {
     // Member variables.
-    private ArrayList<Violation> mViolationsData;
+    private ArrayList<ViolationReport> mViolationsData;
     private Context mContext;
     /**
      * Constructor that passes in the parking violations data and the context.
@@ -30,7 +32,7 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
      * @param violationsData ArrayList containing the sports data.
      * @param context Context of the application.
      */
-    ViolationAdapter(Context context, ArrayList<Violation> violationsData) {
+    public ViolationAdapter(Context context, ArrayList<ViolationReport> violationsData) {
         this.mViolationsData = violationsData ;
         this.mContext = context;
     }
@@ -59,7 +61,7 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
     public void onBindViewHolder(ViolationAdapter.ViewHolder holder,
                                  int position) {
         // Get current violation.
-        Violation currentViolation = mViolationsData.get(position);
+        ViolationReport currentViolation = mViolationsData.get(position);
 
         // Populate the textviews with data.
         holder.bindTo(currentViolation);
@@ -98,9 +100,9 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
             itemView.setOnClickListener(this);
         }
 
-        void bindTo(Violation currentViolation){
+        void bindTo(ViolationReport currentViolation){
             // Populate the textview with data.
-            mViolationType.setText(currentViolation.getViolationType());
+            mViolationType.setText(currentViolation.getType());
             //Get the image resource from the Violation object and load it into the ImageView using Glide
             Glide.with(mContext).load(currentViolation.getImageResourceId()).into(mViolationImage);
 
@@ -109,13 +111,13 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
         @Override
         public void onClick(View v) {
             //get the Violation object for the item that was clicked using getAdapterPosition()
-            Violation currentViolation = mViolationsData.get(getAdapterPosition());
+            ViolationReport currentViolation = mViolationsData.get(getAdapterPosition());
             // Launch DetailActivity using an explicit in tent
             Intent photoIntent = new Intent(mContext, PhotoActivity.class);
             //Create a bundle and add violation index and type
             Bundle extras = new Bundle();
             extras.putInt("VIOLATION_INDEX", getAdapterPosition());
-            extras.putString("VIOLATION_TYPE", currentViolation.getViolationType());
+            extras.putString("VIOLATION_TYPE", currentViolation.getType());
             photoIntent.putExtras(extras);
             mContext.startActivity(photoIntent);
 

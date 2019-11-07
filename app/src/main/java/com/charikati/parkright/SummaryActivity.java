@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
+import com.charikati.parkright.model.ViolationReport;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -127,7 +128,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                 Toast.makeText(SummaryActivity.this, R.string.checkbox_warning, Toast.LENGTH_SHORT).show();
             }else {
                 //Upload images to Firebase Storage and write violation data in database
-                sendReport();
+                //sendReport();
                 //Delete all sharedPreferences
                 SharedPreferences.Editor preferencesEditor = mPreferences.edit();
                 preferencesEditor.clear();

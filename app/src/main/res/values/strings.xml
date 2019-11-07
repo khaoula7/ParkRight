@@ -166,8 +166,7 @@
     <string name="checkbox_warning" translatable="false">Please check \'I agree to Terms and conditions\'</string>
 
     <!-- activity_thankyou Strings-->
-    <string name="thank_you" translatable="false"> Thank You, Angela </string>
-    <string name="user_name" translatable="false"> Angela </string>
+    <string name="thank_you" translatable="false"> Thank You </string>
     <string name="thank_message_p1" translatable="false"> We Really appreciate your help in fighting illegal parking.
         You are making Frankfurt\'s car parks a friendly environment.
     </string>

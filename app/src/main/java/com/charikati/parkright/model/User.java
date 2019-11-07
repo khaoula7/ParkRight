@@ -1,4 +1,4 @@
-package com.charikati.parkright;
+package com.charikati.parkright.model;
 
 public class User {
 

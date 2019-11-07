@@ -4,21 +4,21 @@
     <color name="colorPrimaryDark">#39437C</color>
     <color name="colorAccent">#FFF488</color>
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
     <color name="green">#45BC62</color>
     <color name="orange">#EAAD43</color>
-    <color name="otherGreen">#08AE9E</color>
     <color name="lighterPrimary">#46518E</color>
     <color name="lightBlue">#A9DFFA</color>
     <color name="Blue">#49ACD5</color>
     <color name="Grey">#CCCCCC</color>
-    <color name="facebook"> #3b5998</color>
+    <color name="facebook">#3b5998</color>
 
-    <color name="material_green_50">#E8F5E9</color>
-    <color name="material_green_500">#4CAF50</color>
-    <color name="material_green_700">#388E3C</color>
-    <color name="material_green_a200">#69F0AE</color>
-    <color name="material_lime_a700">#AEEA00</color>
-    <color name="material_purple_a700">#AA00FF</color>
+    <!--<color name="material_green_50">#E8F5E9</color>-->
+    <!--<color name="material_green_500">#4CAF50</color>-->
+    <!--<color name="material_green_700">#388E3C</color>-->
+    <!--<color name="material_green_a200">#69F0AE</color>-->
+    <!--<color name="material_lime_a700">#AEEA00</color>-->
+    <!--<color name="material_purple_a700">#AA00FF</color>-->
 
 
 

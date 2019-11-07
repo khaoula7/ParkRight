@@ -1,8 +1,10 @@
-package com.charikati.parkright;
+package com.charikati.parkright.model;
 
 public class ViolationReport {
     //Type of violation
     private String type;
+    //Image resource ID for the violation
+    private int imageResourceId;
     //Status of violation - pending, accepted or rejected -- initialized to pending
     private String status;
     //Images download Url
@@ -23,7 +25,10 @@ public class ViolationReport {
     /**
      * Constructors
      */
-    public ViolationReport() {
+
+    public ViolationReport(String type, int imageResourceId) {
+        this.type = type;
+        this.imageResourceId = imageResourceId;
     }
 
     public ViolationReport(String type, String status, String firstImageUrl, String secondImageUrl, String thirdImageUrl, double latitude, double longitude, String sendingDate, String sendingTime, String declineReason) {
@@ -39,11 +44,15 @@ public class ViolationReport {
         this.declineReason = declineReason;
     }
 
+    public ViolationReport(){}
+
 
     /**
      * Getter methods
      */
     public String getType() { return type; }
+
+    public int getImageResourceId() {return imageResourceId;}
 
     public String getStatus() { return status; }
 
@@ -62,6 +71,7 @@ public class ViolationReport {
     public String getSendingTime() { return sendingTime; }
 
     public String getDeclineReason() { return declineReason; }
+
 
     /**
      * Setter methods
