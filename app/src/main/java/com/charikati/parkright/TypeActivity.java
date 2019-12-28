@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import android.widget.TextView;
 
 import com.charikati.parkright.adapter.ViolationAdapter;
-import com.charikati.parkright.model.ViolationReport;
+import com.charikati.parkright.model.ViolationPreview;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +23,7 @@ import java.util.Objects;
 public class TypeActivity extends AppCompatActivity {
     // Member variables.
     private RecyclerView mRecyclerView;
-    private ArrayList<ViolationReport> mViolationData;
+    private ArrayList<ViolationPreview> mViolationData;
     private ViolationAdapter mAdapter;
     //Shared Preferences variables
     private SharedPreferences mPreferences;
@@ -101,7 +101,7 @@ public class TypeActivity extends AppCompatActivity {
         mViolationData.clear();
         // Create the ArrayList of violation objects with types and images about each violation.
         for(int i=0;i<violationList.length;i++){
-            mViolationData.add(new ViolationReport(violationList[i], violationImageResources.getResourceId(i,0)));
+            mViolationData.add(new ViolationPreview(violationList[i], violationImageResources.getResourceId(i,0)));
         }
         //Clean up the data in the typed array once you have created the Violation data ArrayList
         violationImageResources.recycle();

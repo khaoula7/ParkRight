@@ -21,7 +21,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
 import java.util.Objects;
+import java.util.TimeZone;
 
 public class DetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = "DetailsActivity";
@@ -67,8 +69,13 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
                 reasonTextView.setText(violationReport.getDeclineReason());
             }
             dateTextView = findViewById(R.id.date_textView);
-            String date = violationReport.getSendingDate() + ",   " + violationReport.getSendingTime();
-            dateTextView.setText(date);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy, HH:mm a");
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String sending_time = sdf.format(violationReport.getSendingTime());
+
+
+
+            dateTextView.setText(sending_time);
             //Load images
             firstImage = findViewById(R.id.first_image);
             loadImage(firstImage, violationReport.getFirstImageUrl());

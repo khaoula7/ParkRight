@@ -20,7 +20,6 @@ public class BaseActivity extends AppCompatActivity {
             mProgressDialog.setMessage(message);
             mProgressDialog.setIndeterminate(true);
         }
-
         mProgressDialog.show();
     }
 

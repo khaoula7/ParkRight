@@ -227,24 +227,22 @@
                 android:id="@+id/second_image"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/third_image"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/first_image"
-                app:layout_constraintTop_toTopOf="@+id/first_image"
                 app:srcCompat="@drawable/ic_launcher_background" />
 
             <ImageView
                 android:id="@+id/third_image"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/second_image"
-                app:layout_constraintTop_toTopOf="@+id/second_image"
                 app:srcCompat="@drawable/ic_launcher_background" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

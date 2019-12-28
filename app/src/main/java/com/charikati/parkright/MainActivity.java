@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void howIntent(){
 
         Intent intent = new Intent(MainActivity.this, HowActivity.class);
+//        Intent intent = new Intent(MainActivity.this, MyReportsActivity.class);
         startActivity(intent);
     }
 

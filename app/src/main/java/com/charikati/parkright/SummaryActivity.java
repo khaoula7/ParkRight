@@ -38,15 +38,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 public class SummaryActivity extends BaseActivity implements OnMapReadyCallback {
-
     private static final String TAG = "SummaryActivity";
     //Screen widget variables
     private Spinner mSpinner;
@@ -67,7 +64,6 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
     private Double mLongitude;
     private String mViolationType;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +80,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         toolbarTitle.setText(R.string.step_4_2);
+
         /*Initialize Firebase components  */
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseStorage = FirebaseStorage.getInstance();
@@ -128,7 +125,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                 Toast.makeText(SummaryActivity.this, R.string.checkbox_warning, Toast.LENGTH_SHORT).show();
             }else {
                 //Upload images to Firebase Storage and write violation data in database
-                //sendReport();
+                sendReport();
                 //Delete all sharedPreferences
                 SharedPreferences.Editor preferencesEditor = mPreferences.edit();
                 preferencesEditor.clear();
@@ -218,22 +215,13 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
      * Send Violation information to database
      */
     private void storeViolation(){
-        String status = "Declined";
-        String reason = "";
-        if(status.equals("Declined")){
-            reason = "We cannot accept Photos not originally taken within the app";
-        }
-        Calendar calendar = Calendar.getInstance();
-        // Get formatted date
-        SimpleDateFormat currentDateFormat = new SimpleDateFormat(this.getString(R.string.date_format), Locale.getDefault());
-        String sending_date = currentDateFormat.format(calendar.getTime());
-        // Get formatted time
-        SimpleDateFormat currentTimeFormat = new SimpleDateFormat(this.getString(R.string.time_format), Locale.getDefault());
-        String sending_time = currentTimeFormat.format(calendar.getTime());
-        //Generate unique Firebase key
+        String status = "Pending";
+        long sendingTime = new Date().getTime();
+        Log.d(TAG, "sendingTime "+ sendingTime);
         //Create ViolationReport object
         ViolationReport violationReport = new ViolationReport(
-                mViolationType, status, downloadUrlArray[0], downloadUrlArray[1], downloadUrlArray[2], mLatitude, mLongitude, sending_date, sending_time, reason);
+                mViolationType, status, downloadUrlArray[0], downloadUrlArray[1], downloadUrlArray[2],
+                mLatitude, mLongitude, sendingTime, 0, null, null, null);
         mFirestore.collection("Violations")
                 .add(violationReport)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -242,7 +230,6 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                         //Add violation Id to user's sent violations
                         Map<String, Object> violation = new HashMap<>();
-
                         mFirestore.collection("Users")
                                 .document(mFirebaseAuth.getCurrentUser().getUid())
                                 .collection("sent_violations").document(documentReference.getId()).set(violation)

@@ -6,17 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-
 import com.charikati.parkright.R;
+import com.charikati.parkright.TimeAgo;
 import com.charikati.parkright.model.ViolationReport;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ReportAdapter extends ArrayAdapter<ViolationReport>  {
     private static final String TAG = "ReportAdapter";
@@ -27,7 +22,7 @@ public class ReportAdapter extends ArrayAdapter<ViolationReport>  {
      */
     public ReportAdapter(Context context, int resource, ArrayList<ViolationReport> violations) {
             super(context, resource, violations);
-        }
+    }
 
     @Override
     public View getView(int position, View reportItemView, ViewGroup parent) {
@@ -45,7 +40,7 @@ public class ReportAdapter extends ArrayAdapter<ViolationReport>  {
         //Apply a different background drawable according to the violation status
         if(status.equals("Pending")){
             statusTextView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.pending_text_style));
-        }else if(status.equals("Accepted")){
+        }else if(status.equals("Approved")){
             statusTextView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.accepted_text_style));
         }else{
             statusTextView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.declined_text_style));
@@ -54,12 +49,9 @@ public class ReportAdapter extends ArrayAdapter<ViolationReport>  {
         TextView typeTextView= (TextView) reportItemView.findViewById(R.id.violation_txt);
         // Get the violation type from the currentWord object and set it to type TextView
         typeTextView.setText(currentViolation.getType());
-        // Find the TextView in the list_item.xml layout with the ID date_txt and populate it.
-        TextView dateTextView = reportItemView.findViewById(R.id.date_txt);
-        dateTextView.setText(currentViolation.getSendingDate());
         // Find the TextView in the list_item.xml layout with the ID time_txt and populate it.
         TextView timeTextView = reportItemView.findViewById(R.id.time_txt);
-        timeTextView.setText(currentViolation.getSendingTime());
+        timeTextView.setText(TimeAgo.toRelative(new Date().getTime() - currentViolation.getSendingTime(), 1));
         // Return the whole list item layout so that it can be shown in the ListView.
         return reportItemView;
     }

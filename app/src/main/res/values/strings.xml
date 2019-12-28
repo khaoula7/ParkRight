@@ -179,10 +179,11 @@
 
     <!-- activity_my_reports Strings-->
     <string name="reports_name" translatable="false"> My Reports </string>
+    <string name="empty" translatable="false"> You don\'t have any reports yet ! </string>
     <string name="pending" translatable="false"> Pending </string>
     <string name="Approved" translatable="false"> Approved </string>
     <string name="declined" translatable="false"> Declined </string>
-    <string name="date" translatable="false"> Date </string>
+    <string name="date" translatable="false"> Date</string>
     <string name="time" translatable="false"> Time</string>
 
     <!-- activity_details Strings-->
