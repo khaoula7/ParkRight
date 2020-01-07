@@ -1,8 +1,11 @@
 package com.charikati.parkright;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -16,9 +19,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +43,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -168,17 +179,19 @@ public class PhotoActivity extends AppCompatActivity {
         photoContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!mFirstPhotoCaptured|| !mSecondPhotoCaptured|| !mThirdPhotoCaptured) {
-                    Toast.makeText(PhotoActivity.this, R.string.photos_warning, Toast.LENGTH_LONG).show();
-                }
-                else if (!plateCheckBox.isChecked() || !contextCheckBox.isChecked()) {
-                    Toast.makeText(PhotoActivity.this, R.string.checkboxes_warning, Toast.LENGTH_LONG).show();
-                }
-                else{
+//                if(!mFirstPhotoCaptured|| !mSecondPhotoCaptured|| !mThirdPhotoCaptured) {
+//                    Toast.makeText(PhotoActivity.this, R.string.photos_warning, Toast.LENGTH_LONG).show();
+//                }
+//                else if (!plateCheckBox.isChecked() || !contextCheckBox.isChecked()) {
+//                    Toast.makeText(PhotoActivity.this, R.string.checkboxes_warning, Toast.LENGTH_LONG).show();
+//                }
+//                else{
                     //Open MapActivity screen (Locate the violating Car)
-                    Intent intent = new Intent(PhotoActivity.this, MapsActivity.class);
-                    startActivity(intent);
-                }
+//                    Intent intent = new Intent(PhotoActivity.this, LocationActivity.class);
+//                    startActivity(intent);
+                CheckLoactionPermission();
+
+//                }
             }
         });
     }
@@ -301,6 +314,53 @@ public class PhotoActivity extends AppCompatActivity {
         tipDialog.show();
     }
 
+    private void CheckLoactionPermission(){
+        if(ContextCompat.checkSelfPermission(PhotoActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            //Toast.makeText(PhotoActivity.this, "Permission Already Granted", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(PhotoActivity.this, LocationActivity.class));
+            finish();
+            return;
+        }else {
+            // Dexter is an android library that simplifies the process of requesting permissions at runtime.
+            Dexter.withActivity(PhotoActivity.this)
+                    .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    .withListener(new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted(PermissionGrantedResponse response) {
+                            //Toast.makeText(PhotoActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(PhotoActivity.this, LocationActivity.class));
+                            finish();
+                        }
+                        @Override
+                        public void onPermissionDenied(PermissionDeniedResponse response) {
+                            if(response.isPermanentlyDenied()){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(PhotoActivity.this);
+                                builder.setTitle("Permission Denied")
+                                        .setMessage("Permission to access device location is permanently denied. you need to go to Settings to allow the permission.")
+                                        .setNegativeButton("Cancel", null)
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent intent = new Intent();
+                                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                                intent.setData(Uri.fromParts("package", getPackageName(), null));
+                                            }
+                                        })
+                                        .show();
+                            } else {
+                                Toast.makeText(PhotoActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                            token.continuePermissionRequest();
+                        }
+                    })
+                    .check();
+        }
+    }
+
     /**
      * Write image file paths to shared Preferences
      */
@@ -320,21 +380,4 @@ public class PhotoActivity extends AppCompatActivity {
         preferencesEditor.apply();
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        Log.d(TAG, "onStop");
-//    }
-//
-//    @Override
-//    protected void onRestart() {
-//        super.onRestart();
-//        Log.d(TAG, "onRestart");
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        Log.d(TAG, "onResume");
-//    }
 }

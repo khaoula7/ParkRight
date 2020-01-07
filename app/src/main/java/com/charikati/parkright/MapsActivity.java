@@ -1,18 +1,25 @@
 package com.charikati.parkright;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -161,13 +168,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
-                            mCurrentLatitude = mLastKnownLocation.getLatitude();
-                            mCurrentLongitude = mLastKnownLocation.getLongitude();
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mCurrentLatitude, mCurrentLongitude), DEFAULT_ZOOM));
-                            //Add a marker on the new location
-                            LatLng myLocation = new LatLng(mCurrentLatitude, mCurrentLongitude);
-                            mMap.addMarker(new MarkerOptions().position(myLocation).title("Car Location"));
+                            Log.d(TAG, "LastKnownLocation "+ mLastKnownLocation);
+                            if(mLastKnownLocation != null) {
+                                mCurrentLatitude = mLastKnownLocation.getLatitude();
+                                mCurrentLongitude = mLastKnownLocation.getLongitude();
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        new LatLng(mCurrentLatitude, mCurrentLongitude), DEFAULT_ZOOM));
+                                //Add a marker on the new location
+                                LatLng myLocation = new LatLng(mCurrentLatitude, mCurrentLongitude);
+                                mMap.addMarker(new MarkerOptions().position(myLocation).title("Car Location"));
+                            }
+                            else {
+                                Log.d(TAG, "Current location is null. Using defaults.");
+//                                Log.e(TAG, "Exception: %s", task.getException());
+//                                mMap.moveCamera(CameraUpdateFactory
+//                                        .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                            }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
@@ -207,6 +223,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -215,6 +233,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         putDouble(preferencesEditor, "LONGITUDE", mCurrentLongitude);
         preferencesEditor.apply();
     }
+
+
 
     /**
      * Setter method

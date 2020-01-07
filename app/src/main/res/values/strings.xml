@@ -5,7 +5,6 @@
     <string name="fb_login_protocol_scheme" translatable="false">fb382526675967039</string>
 
 
-
     <!-- activity_main Strings -->
     <string name="home_phrase_1" translatable="false"> Got Sick of Bad Parking?</string>
     <string name="home_phrase_2" translatable="false"> Help your community solve parking issues by reporting violations</string>
@@ -198,5 +197,6 @@
 
     <string name="date_format">MMM d, yyyy</string>
     <string name="time_format">HH:mm:ss</string>
+    <string name="title_activity_location">LocationActivity</string>
 
 </resources>

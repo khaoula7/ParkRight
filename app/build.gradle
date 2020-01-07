@@ -38,15 +38,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha01'
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
 
     // Firebase Authentication
     implementation 'com.google.firebase:firebase-core:17.2.1'
-    implementation 'com.google.firebase:firebase-auth:19.1.0'
+    implementation 'com.google.firebase:firebase-auth:19.2.0'
     // Facebook Android SDK (only required for Facebook Login)
     implementation 'com.facebook.android:facebook-login:5.8.0'
     // Google Sign In SDK (only required for Google Sign In)
@@ -54,12 +54,16 @@ dependencies {
     //Firebase Realtime database
     implementation 'com.google.firebase:firebase-database:19.2.0'
     //Firebase Firestore
-    implementation 'com.google.firebase:firebase-firestore:21.2.1'
+    implementation 'com.google.firebase:firebase-firestore:21.3.1'
+    //Google maps
     implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation 'com.google.android.libraries.places:places:2.0.0'
+    implementation 'com.google.android.libraries.places:places:2.1.0'
     //Firebase Analytics
     implementation 'com.google.firebase:firebase-analytics:17.2.1'
     // Add Firebase storage
     implementation 'com.google.firebase:firebase-storage:19.1.0'
+    // Requesting permissions at runtime
+    implementation 'com.karumi:dexter:6.0.1'
 }
+//Plugin for firebase
 apply plugin: 'com.google.gms.google-services'
