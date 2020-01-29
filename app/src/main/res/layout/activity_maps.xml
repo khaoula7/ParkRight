@@ -215,6 +215,6 @@
         app:backgroundTint="@color/Grey"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_action_geolocate" />
+        app:srcCompat="@drawable/ic_my_location" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

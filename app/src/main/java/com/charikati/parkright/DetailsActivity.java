@@ -36,6 +36,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private ImageView thirdImage;
     private double mLatitude;
     private double mLongitude;
+    private final float DEFAULT_ZOOM = 15;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,12 +71,11 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             }
             dateTextView = findViewById(R.id.date_textView);
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy, HH:mm a");
-            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-            String sending_time = sdf.format(violationReport.getSendingTime());
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT+0400"));
+//            String sending_time = sdf.format(violationReport.getSendingTime());
+            String date = new java.text.SimpleDateFormat("dd/MM/yyyy  hh:mm:ss aa").format(new java.util.Date (violationReport.getSendingTime()));
 
-
-
-            dateTextView.setText(sending_time);
+            dateTextView.setText(date);
             //Load images
             firstImage = findViewById(R.id.first_image);
             loadImage(firstImage, violationReport.getFirstImageUrl());
@@ -110,9 +110,9 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     public void onMapReady(GoogleMap googleMap) {
         // Add a marker in Frankfurt and move the camera
         LatLng location = new LatLng(mLatitude, mLongitude);
-        googleMap.addMarker(new MarkerOptions().position(location).title("Marker in violation location"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
         // Enable the zoom controls for the map
         googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.addMarker(new MarkerOptions().position(location).title("Marker in violation location"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
     }
 }

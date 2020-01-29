@@ -1,5 +1,6 @@
 package com.charikati.parkright;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,7 +13,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.charikati.parkright.adapter.ReportAdapter;
 import com.charikati.parkright.model.ViolationReport;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -61,26 +64,49 @@ public class MyReportsActivity extends BaseActivity {
         // Apply adapter to the listView
         mViolationList.setAdapter(mAdapter);
         //Get a realtime snapshot of all documents in subcollection sent_violations
+//        mFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid())
+//                .collection("sent_violations")
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+//                        if (e != null) {
+//                            Log.w(TAG, "Listen failed.", e);
+//                            return;
+//                        }
+//                        if(value.isEmpty()){
+//                            Log.d(TAG, "No Reports Yet !");
+//                            progressBar.setVisibility(View.GONE);
+//                            emptyView.setVisibility(View.VISIBLE);
+//                        }
+//                        for (QueryDocumentSnapshot doc : value) {
+//                            if (doc.getId() != null) {
+//                               queryViolations(doc.getId());
+//                            }
+//                        }
+//
+//                    }
+//                });
+
+        //Get all documents in subcollection sent_violations
         mFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid())
                 .collection("sent_violations")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
-                        if(value.isEmpty()){
-                            Log.d(TAG, "No Reports Yet !");
-                            progressBar.setVisibility(View.GONE);
-                            emptyView.setVisibility(View.VISIBLE);
-                        }
-                        for (QueryDocumentSnapshot doc : value) {
-                            if (doc.getId() != null) {
-                               queryViolations(doc.getId());
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if(task.getResult().isEmpty()) {
+                                Log.d(TAG, "No Reports Yet !");
+                                progressBar.setVisibility(View.GONE);
+                                emptyView.setVisibility(View.VISIBLE);
                             }
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                queryViolations(document.getId());
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-
                     }
                 });
 

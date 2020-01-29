@@ -186,10 +186,9 @@ public class PhotoActivity extends AppCompatActivity {
 //                    Toast.makeText(PhotoActivity.this, R.string.checkboxes_warning, Toast.LENGTH_LONG).show();
 //                }
 //                else{
-                    //Open MapActivity screen (Locate the violating Car)
-//                    Intent intent = new Intent(PhotoActivity.this, LocationActivity.class);
-//                    startActivity(intent);
-                CheckLoactionPermission();
+                    //Open MapsActivity screen (Locate the violating Car)
+                    //startActivity(new Intent(PhotoActivity.this, LocationActivity.class));
+                    checkLoactionPermission();
 
 //                }
             }
@@ -314,13 +313,11 @@ public class PhotoActivity extends AppCompatActivity {
         tipDialog.show();
     }
 
-    private void CheckLoactionPermission(){
+    private void checkLoactionPermission(){
         if(ContextCompat.checkSelfPermission(PhotoActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             //Toast.makeText(PhotoActivity.this, "Permission Already Granted", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(PhotoActivity.this, LocationActivity.class));
-            finish();
-            return;
         }else {
             // Dexter is an android library that simplifies the process of requesting permissions at runtime.
             Dexter.withActivity(PhotoActivity.this)
@@ -330,7 +327,6 @@ public class PhotoActivity extends AppCompatActivity {
                         public void onPermissionGranted(PermissionGrantedResponse response) {
                             //Toast.makeText(PhotoActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(PhotoActivity.this, LocationActivity.class));
-                            finish();
                         }
                         @Override
                         public void onPermissionDenied(PermissionDeniedResponse response) {

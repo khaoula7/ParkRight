@@ -27,12 +27,27 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="96dp"
         android:background="@color/Grey"
-        android:clickable="true"
-        app:backgroundTint="@color/Grey"
-        app:srcCompat="@drawable/ic_action_geolocate" />
+        app:srcCompat="@drawable/ic_my_location" />
 
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorPrimary"
+        android:text="Continue"
+        android:textSize="18sp"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textStyle="normal" />
 
 </RelativeLayout>

@@ -10,6 +10,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,23 +18,27 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     public static final String TAG = "MainActivity";
     private DrawerLayout drawer;
+    private FirebaseAuth mFirebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         //Use toolbar as the ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Remove default title text
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        /*Initialize Firebase components  */
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
         // A reference to the NavigationView
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -73,13 +78,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 howIntent();
                 break;
             case R.id.nav_login:
-                Toast.makeText(this, "Login", Toast.LENGTH_SHORT).show();
+                if(mFirebaseAuth == null){
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }else {
+                    Toast.makeText(this, "Already Logged In", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.nav_logout:
+                if(mFirebaseAuth != null) {
+                    mFirebaseAuth.signOut();
+                    Toast.makeText(this, "Logout "+ mFirebaseAuth, Toast.LENGTH_LONG).show();
+                    mFirebaseAuth = null;
+                } else {
+                    Toast.makeText(this, "Already Logged out "+mFirebaseAuth, Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.nav_account:
                 Toast.makeText(this, "Account", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_reports:
-                Toast.makeText(this, "Reports", Toast.LENGTH_SHORT).show();
+                if(mFirebaseAuth != null){
+                    startActivity(new Intent(MainActivity.this, MyReportsActivity.class));
+                }else {
+                    Toast.makeText(this, "You are not logged In", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
                 break;
             case R.id.nav_status:
                 Toast.makeText(this, "Status", Toast.LENGTH_SHORT).show();
@@ -132,10 +155,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * //Open HowActivity screen (Tips and instructions on how to use the app)
      */
     public void howIntent(){
-
-        Intent intent = new Intent(MainActivity.this, HowActivity.class);
-//        Intent intent = new Intent(MainActivity.this, MyReportsActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(MainActivity.this, HowActivity.class));
     }
 
 

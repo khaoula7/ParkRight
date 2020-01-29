@@ -46,14 +46,14 @@ import java.util.Objects;
 public class SummaryActivity extends BaseActivity implements OnMapReadyCallback {
     private static final String TAG = "SummaryActivity";
     //Screen widget variables
-    private Spinner mSpinner;
+    private Spinner mSpinner; private FirebaseAuth mFirebaseAuth;
     private String[] fileNameArray;
     private ImageView[] imageViewArray;
     private String[] downloadUrlArray;
     private CheckBox termsCheckBox;
     private Button mSendButton;
     //Firebase instance variables
-    private FirebaseAuth mFirebaseAuth;
+
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mPhotosStorageReference;
     private FirebaseFirestore mFirestore;
@@ -62,6 +62,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
     private String sharedPrefFile = "com.charikati.parkright";
     private Double mLatitude;
     private Double mLongitude;
+    private final float DEFAULT_ZOOM = 15;
     private String mViolationType;
 
     @Override
@@ -118,6 +119,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         //Get location latitude and longitude
         mLatitude = getDouble(mPreferences, "LATITUDE", 0.0);
         mLongitude = getDouble(mPreferences, "LONGITUDE", 0.0);
+        Log.d(TAG, "Latitude: "+ mLatitude + " Longitude: "+ mLongitude );
         //Implement Send Button
         mSendButton = findViewById(R.id.send_btn);
         mSendButton.setOnClickListener(v -> {
@@ -127,12 +129,10 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                 //Upload images to Firebase Storage and write violation data in database
                 sendReport();
                 //Delete all sharedPreferences
-                SharedPreferences.Editor preferencesEditor = mPreferences.edit();
-                preferencesEditor.clear();
-                preferencesEditor.apply();
-                //Go to ThankYou screen
-                Intent intent = new Intent(SummaryActivity.this, ThankyouActivity.class);
-                startActivity(intent);
+//                SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+//                preferencesEditor.clear();
+//                preferencesEditor.apply();
+
             }
         });
     }
@@ -152,10 +152,11 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
     public void onMapReady(GoogleMap googleMap) {
         // Add a marker in Frankfurt and move the camera
         LatLng location = new LatLng(mLatitude, mLongitude);
-        googleMap.addMarker(new MarkerOptions().position(location).title("Marker in violation location"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
         // Enable the zoom controls for the map
         googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.addMarker(new MarkerOptions().position(location).title("Marker in violation location"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
+
     }
 
     /**
@@ -198,11 +199,12 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                                 downloadUrlArray[finalI] = task.getResult().toString();
                                 //if all images has been successfully uploaded
                                 if(finalI == 2){
-                                    hideProgressDialog();
+                                    //hideProgressDialog();
                                     storeViolation();
                                 }
                             } else {
-                                Log.d(TAG, "No download URI");
+                                Log.d(TAG, "Uploading Failed");
+                                hideProgressDialog();
                             }
                         }
                     });
@@ -216,7 +218,8 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
      */
     private void storeViolation(){
         String status = "Pending";
-        long sendingTime = new Date().getTime();
+        //Get the current timestamp
+        long sendingTime = System.currentTimeMillis();
         Log.d(TAG, "sendingTime "+ sendingTime);
         //Create ViolationReport object
         ViolationReport violationReport = new ViolationReport(
@@ -237,12 +240,20 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d(TAG, "Writing in database Succeeded");
+                                        hideProgressDialog();
+                                        //Delete all sharedPreferences
+                                        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+                                        preferencesEditor.clear();
+                                        preferencesEditor.apply();
+                                        //Go to ThankYou screen
+                                        startActivity(new Intent(SummaryActivity.this, ThankyouActivity.class));
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.e(TAG, "Error writing user", e);
+                                        hideProgressDialog();
                                     }
                                 });
                     }
@@ -251,6 +262,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error adding document", e);
+                        hideProgressDialog();
                     }
                 });
     }
@@ -290,9 +302,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
      * and not LoginActivity which is the normal behaviour*/
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(SummaryActivity.this, MapsActivity.class);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        startActivity(new Intent(SummaryActivity.this, LocationActivity.class));
     }
 
     /**
