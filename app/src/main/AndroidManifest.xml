@@ -40,15 +40,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HowActivity" />
         <activity android:name=".TypeActivity" />
         <activity
             android:name=".PhotoActivity"
             android:label="@string/step_2"
             android:parentActivityName=".TypeActivity" />
-        <activity
-            android:name=".MapsActivity"
-            android:parentActivityName=".PhotoActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -66,7 +62,7 @@
 
         <activity
             android:name=".LoginActivity"
-            android:parentActivityName=".MapsActivity" />
+            android:parentActivityName=".LocationActivity" />
         <activity
             android:name=".RegisterActivity"
             android:parentActivityName=".LoginActivity" />
@@ -85,6 +81,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_application_id" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <activity
             android:name="com.facebook.FacebookActivity"

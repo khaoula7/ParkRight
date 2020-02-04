@@ -5,26 +5,20 @@
     <group
         android:id="@+id/group_1"
         android:checkableBehavior="single">
+        <item android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="Home">
+        </item>
         <item android:id="@+id/nav_new"
-            android:icon="@drawable/ic_photo_camera"
+            android:icon="@drawable/ic_new"
             android:title="New Violation">
         </item>
-        <item android:id="@+id/nav_help"
-            android:icon="@drawable/ic_help"
-            android:title="How to Report Violation">
-        </item>
+
     </group>
 
     <group
-        android:id="@+id/group_2" android:checkableBehavior="single">
-        <item android:id="@+id/nav_login"
-            android:icon="@drawable/ic_login"
-            android:title="Login">
-        </item>
-        <item android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_logout"
-            android:title="Logout">
-        </item>
+        android:id="@+id/group_2"
+        android:checkableBehavior="single">
         <item android:id="@+id/nav_account"
             android:icon="@drawable/ic_account"
             android:title="My Account">
@@ -37,19 +31,41 @@
             android:icon="@drawable/ic_status"
             android:title="My Status">
         </item>
+        <item android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Logout">
+        </item>
     </group>
 
     <group
         android:id="@+id/group_3"
         android:checkableBehavior="single">
-        <item android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_settings"
-            android:title="Settings">
-        </item>
         <item android:id="@+id/nav_share"
             android:icon="@drawable/ic_share"
-            android:title="Share">
+            android:title="Share with Friends">
         </item>
+        <item android:id="@+id/nav_contact"
+            android:icon="@drawable/ic_contact"
+            android:title="Contact Us">
+        </item>
+        <item android:id="@+id/nav_rate"
+            android:icon="@drawable/ic_rate"
+            android:title="Rate Us">
+        </item>
+    </group>
+
+    <group
+        android:id="@+id/group_4"
+        android:checkableBehavior="single">
+        <item android:id="@+id/nav_terms"
+            android:icon="@drawable/ic_terms"
+            android:title="Terms and Conditions">
+        </item>
+        <item android:id="@+id/nav_privacy"
+            android:icon="@drawable/ic_privacy"
+            android:title="Privacy Policy">
+        </item>
+
     </group>
 
 </menu>

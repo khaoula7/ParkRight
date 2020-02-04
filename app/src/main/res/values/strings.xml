@@ -6,8 +6,9 @@
 
 
     <!-- activity_main Strings -->
-    <string name="home_phrase_1" translatable="false"> Got Sick of Bad Parking?</string>
-    <string name="home_phrase_2" translatable="false"> Help your community solve parking issues by reporting violations</string>
+    <string name="home_phrase_1" translatable="false"> Sick of Bad Parking?</string>
+    <string name="home_phrase_2" translatable="false"> Let your frustration out by reporting parking violations to relevant authorities in 4 simple steps.</string>
+    <string name="home_phrase_3" translatable="false"> Help your community solve parking issues by reporting violations</string>
     <string name="home_button" translatable="false">Report Violation</string>
     <string name="home_menu_desc" translatable="false">Hamburger Menu vector icon</string>
     <string name="home_share_desc" translatable="false">Share vector icon</string>
@@ -197,6 +198,6 @@
 
     <string name="date_format">MMM d, yyyy</string>
     <string name="time_format">HH:mm:ss</string>
-    <string name="title_activity_location">LocationActivity</string>
+    <string name="title_activity_location" translatable="false">LocationActivity</string>
 
 </resources>

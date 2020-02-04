@@ -30,21 +30,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //Use toolbar as the ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Remove default title text
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        /*Initialize Firebase components  */
+        //Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
-
         // A reference to the NavigationView
         NavigationView navigationView = findViewById(R.id.nav_view);
         //To listen to click events on navigation drawer items, Implement NavigationView interface
         navigationView.setNavigationItemSelectedListener(this);
-
         // A reference to the DrawerLayout
         drawer = findViewById(R.id.drawer);
         //Button to show/hide navigation drawer placed in toolbar
@@ -52,46 +48,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        //Click on Report Violation button
-        Button reportBtn = findViewById(R.id.login_button);
-        reportBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                howIntent();
-            }
-        });
+        //Change the navigation drawer icon
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
+        //If we open the app for the first time or we leave it by back button then come back HomeFragment will be displayed.
+        //Otherwise, in case of rotating device or other configuration changes,selected fragment will be automatically saved and retrieved.
+        if(savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new HomeFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_home);
+        }
     }
 
     /**
      * Implement NavigationView method to specify the behaviour of each item in Navigation drawer
-     * @param item
-     * @return
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
+            case R.id.nav_home:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new HomeFragment()).commit();
+                break;
             case R.id.nav_new:
-                Toast.makeText(this, "New Violation", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.nav_help:
-                howIntent();
-                break;
-            case R.id.nav_login:
-                if(mFirebaseAuth == null){
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                }else {
-                    Toast.makeText(this, "Already Logged In", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.nav_logout:
-                if(mFirebaseAuth != null) {
-                    mFirebaseAuth.signOut();
-                    Toast.makeText(this, "Logout "+ mFirebaseAuth, Toast.LENGTH_LONG).show();
-                    mFirebaseAuth = null;
-                } else {
-                    Toast.makeText(this, "Already Logged out "+mFirebaseAuth, Toast.LENGTH_SHORT).show();
-                }
                 break;
             case R.id.nav_account:
                 Toast.makeText(this, "Account", Toast.LENGTH_SHORT).show();
@@ -107,11 +87,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_status:
                 Toast.makeText(this, "Status", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.nav_settings:
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+//            case R.id.nav_login:
+//                if(mFirebaseAuth == null){
+//                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+//                }else {
+//                    Toast.makeText(this, "Already Logged In", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
+            case R.id.nav_logout:
+                if(mFirebaseAuth != null) {
+                    mFirebaseAuth.signOut();
+                    Toast.makeText(this, "Logout "+ mFirebaseAuth, Toast.LENGTH_LONG).show();
+                    mFirebaseAuth = null;
+                } else {
+                    Toast.makeText(this, "Already Logged out "+mFirebaseAuth, Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.nav_share:
                 Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_contact:
+                Toast.makeText(this, "Contact US", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_terms:
+                Toast.makeText(this, "Terms and Conditions", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_privacy:
+                Toast.makeText(this, "Privacy Policy", Toast.LENGTH_SHORT).show();
                 break;
         }
         //Close drawer once item is selected
@@ -124,11 +126,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void onBackPressed() {
-        //Always close the Drawer navigation before closing the activity
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else {
+        }else {
             super.onBackPressed();
         }
     }
@@ -150,14 +150,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return true;
     }
-
-    /**
-     * //Open HowActivity screen (Tips and instructions on how to use the app)
-     */
-    public void howIntent(){
-        startActivity(new Intent(MainActivity.this, HowActivity.class));
-    }
-
-
 }
 
