@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.charikati.parkright.model.User;
@@ -56,10 +57,10 @@ public class LoginActivity extends BaseActivity {
     //Variables for Google Sign In
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
-    private SignInButton mGoogleBtn;
+    private ImageButton mGoogleBtn;
     //Variables for Facebook Login
     private CallbackManager mCallbackManager;
-    private Button mFacebookBtn;
+    private ImageButton mFacebookBtn;
     //Variables for Email/password Sign In
     private TextInputEditText mEmailField;
     private TextInputEditText mPasswordField;
@@ -71,7 +72,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //Use toolbar as the ActionBar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
         // Display Up button
         if (getSupportActionBar() != null) {
@@ -80,7 +81,7 @@ public class LoginActivity extends BaseActivity {
         }
         // Remove default title text
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
+        TextView toolbarTitle = toolbar.findViewById(R.id.activity_toolbar_title);
         toolbarTitle.setText(R.string.step_4);
         // Initialize Firebase Components
         mFirebaseAuth = FirebaseAuth.getInstance();

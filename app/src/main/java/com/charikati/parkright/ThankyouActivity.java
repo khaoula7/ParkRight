@@ -38,13 +38,11 @@ public class ThankyouActivity extends AppCompatActivity {
         setContentView(R.layout.activity_thankyou);
 
         //Use toolbar as the ActionBar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
         // Remove default title text
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        // A reference to the NavigationView
-
-
+        //
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFireDb = FirebaseFirestore.getInstance();
         TextView userName = findViewById(R.id.user_name_txt);
@@ -65,14 +63,6 @@ public class ThankyouActivity extends AppCompatActivity {
                 }
             }
         });
-
-        // A reference to the DrawerLayout
-        drawer = findViewById(R.id.drawer);
-        //Button to show/hide navigation drawer placed in toolbar
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
         //Click on New Violation Button
         newViolationBtn = findViewById(R.id.new_violation_btn);
         newViolationBtn.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +70,6 @@ public class ThankyouActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ThankyouActivity.this, TypeActivity.class);
                 startActivity(intent);
-
             }
         });
         //Click on My Reports Button
@@ -94,10 +83,6 @@ public class ThankyouActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,7 +101,4 @@ public class ThankyouActivity extends AppCompatActivity {
         }
         return true;
     }
-
-
-
 }

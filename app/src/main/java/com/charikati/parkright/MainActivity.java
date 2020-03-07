@@ -15,14 +15,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     public static final String TAG = "MainActivity";
+    private Toolbar toolbar;
+    private TextView toolbarTitle;
     private DrawerLayout drawer;
     private FirebaseAuth mFirebaseAuth;
 
@@ -31,10 +36,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Use toolbar as the ActionBar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Remove default title text
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarTitle = findViewById(R.id.toolbar_title);
         //Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         // A reference to the NavigationView
@@ -61,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void setActionBarTitle(String title){
+        toolbarTitle.setText(R.string.step_1);
+    }
+
     /**
      * Implement NavigationView method to specify the behaviour of each item in Navigation drawer
      */
@@ -72,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .replace(R.id.fragment_container, new HomeFragment()).commit();
                 break;
             case R.id.nav_new:
+                startActivity( new Intent(MainActivity.this, TypeActivity.class));
                 break;
             case R.id.nav_account:
                 Toast.makeText(this, "Account", Toast.LENGTH_SHORT).show();
@@ -148,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             default:
                 break;
         }
-        return true;
+        return false;
     }
 }
 

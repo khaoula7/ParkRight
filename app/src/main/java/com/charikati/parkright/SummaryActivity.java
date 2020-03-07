@@ -43,6 +43,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static java.util.Objects.*;
+
 public class SummaryActivity extends BaseActivity implements OnMapReadyCallback {
     private static final String TAG = "SummaryActivity";
     //Screen widget variables
@@ -70,7 +72,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
         //Use toolbar as the ActionBar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
         // Display Up button
         if (getSupportActionBar() != null) {
@@ -78,8 +80,8 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         // Remove default title text
-        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
+        requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        TextView toolbarTitle = toolbar.findViewById(R.id.activity_toolbar_title);
         toolbarTitle.setText(R.string.step_4_2);
 
         /*Initialize Firebase components  */
@@ -105,7 +107,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         String[] violations = getResources().getStringArray(R.array.violation_types);
         ArrayAdapter<String> violationAdapter=new ArrayAdapter<String>(this,R.layout.spinner_item, violations);
         mSpinner.setAdapter(violationAdapter);
-        mSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+//        mSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         //Get violation index and set it as selected item in the spinner
         mViolationType = mPreferences.getString("VIOLATION_TYPE", null);
         int spinnerPosition = mPreferences.getInt("VIOLATION_INDEX", 0);
@@ -126,8 +128,9 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
             if(!termsCheckBox.isChecked()){
                 Toast.makeText(SummaryActivity.this, R.string.checkbox_warning, Toast.LENGTH_SHORT).show();
             }else {
+                startActivity(new Intent(SummaryActivity.this, ThankyouActivity.class));
                 //Upload images to Firebase Storage and write violation data in database
-                sendReport();
+//                sendReport();
                 //Delete all sharedPreferences
 //                SharedPreferences.Editor preferencesEditor = mPreferences.edit();
 //                preferencesEditor.clear();

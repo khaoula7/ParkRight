@@ -35,9 +35,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.Objects;
-
 
 public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = "LocationActivity";
@@ -60,7 +58,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
         // Display Up button
         if (getSupportActionBar() != null) {
@@ -69,7 +67,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         }
         // Remove default title text
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
+        TextView toolbarTitle = toolbar.findViewById(R.id.activity_toolbar_title);
         toolbarTitle.setText("Location");
         //SharedPrefs file
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);

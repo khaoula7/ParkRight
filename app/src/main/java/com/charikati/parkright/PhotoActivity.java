@@ -1,30 +1,23 @@
 package com.charikati.parkright;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -33,33 +26,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 public class PhotoActivity extends AppCompatActivity {
     private static final String TAG = "PhotoActivity";
+    private Toolbar toolbar;
     // Constants for camera intent
     static final int REQUEST_IMAGE_CAPTURE_1 = 1;
     static final int REQUEST_IMAGE_CAPTURE_2 = 2;
@@ -77,6 +58,7 @@ public class PhotoActivity extends AppCompatActivity {
     private Bundle mExtras;
     private String mViolationType;
     private int mViolationIndex;
+    private int mViolationRessource;
 
     private String mFilePath1;
     private String mFilePath2;
@@ -92,18 +74,17 @@ public class PhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
         //Use toolbar as the ActionBar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
+        // Remove default title text
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        TextView toolbarTitle = toolbar.findViewById(R.id.activity_toolbar_title);
+        toolbarTitle.setText(R.string.step_2);
         // Display Up button
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             //getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        // Remove default title text
-        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
-        toolbarTitle.setText(R.string.step_2);
-
         //Open sharedPrefs file at the given filename (sharedPrefFile) with the mode MODE_PRIVATE.
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         //ImageButtons
@@ -119,6 +100,8 @@ public class PhotoActivity extends AppCompatActivity {
         if (mExtras != null) {
             mViolationType = mExtras.getString("VIOLATION_TYPE");
             mViolationIndex = mExtras.getInt("VIOLATION_INDEX");
+            mViolationRessource = mExtras.getInt("VIOLATION_RESOURCE");
+
         }else {
             //Display already taken photos from sharedPrefs file
             //coming from Up or back button
@@ -145,7 +128,7 @@ public class PhotoActivity extends AppCompatActivity {
             mThirdPhotoCaptured = true;
         }
         //Click on show button will open tips dialog
-        Button showBtn = (Button)findViewById(R.id.show_btn);
+        Button showBtn = findViewById(R.id.show_btn);
         showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,9 +279,12 @@ public class PhotoActivity extends AppCompatActivity {
         builder.setView(inflater);
         //Create the Tip Dialog
         final AlertDialog tipDialog = builder.create();
-        //Get the violation type from the incoming Intent and set it to the TextView
+        //Get the violation image and type from the incoming Intent and set it to ImageView and TextView
+        ImageView violationImage = inflater.findViewById(R.id.image);
+        violationImage.setImageResource(mViolationRessource);
         TextView violationTxt = inflater.findViewById(R.id.message_txt);
         violationTxt.setText(mViolationType);
+
         //Close tip dialog
         ImageView closeImg = inflater.findViewById(R.id.close_img);
         closeImg.setOnClickListener(new View.OnClickListener() {
@@ -355,6 +341,25 @@ public class PhotoActivity extends AppCompatActivity {
                     })
                     .check();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.show_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.show_btn:
+                showTipsDialog();
+                break;
+            default:
+                break;
+        }
+        return false;
+
     }
 
     /**

@@ -38,7 +38,7 @@
     <string name="three" translatable="false"> 3 </string>
     <string name="four" translatable="false"> 4 </string>
     <string name="five" translatable="false"> 5 </string>
-    <string name="violation_type_Phrase_1" translatable="false"> Select Parking Violation  </string>
+    <string name="violation_type_Phrase_1" translatable="false"> Select Parking Violation Type  </string>
 
     <string-array name="violation_types">
         <item>Parking in front of Fire Hydrant!</item>
@@ -51,13 +51,13 @@
     </string-array>
 
     <array name="violation_images">
-        <item>@drawable/img_badminton</item>
-        <item>@drawable/img_baseball</item>
-        <item>@drawable/img_basketball</item>
-        <item>@drawable/img_bowling</item>
-        <item>@drawable/img_cycling</item>
-        <item>@drawable/img_golf</item>
-        <item>@drawable/img_running</item>
+        <item>@drawable/fire_hydrant</item>
+        <item>@drawable/disabled_spot</item>
+        <item>@drawable/double_parking</item>
+        <item>@drawable/over_two_spaces</item>
+        <item>@drawable/against_traffic</item>
+        <item>@drawable/sidewalk</item>
+        <item>@drawable/bus_stop</item>
     </array>
 
     <!-- violation_item Strings -->
@@ -75,8 +75,8 @@
     <string name="camera_button_3" translatable="false"> Evidence </string>
     <string name="camera_button_desc" translatable="false"> Click on this button to take photo of violating car </string>
     <string name="plate_check_box" translatable="false"> I clearly snapped Licence Plate </string>
-    <string name="context_check_box" translatable="false"> I clearly snapped Car in Violation Context </string>
-    <string name="photo_continue_button" translatable="false"> Great Job! Continue </string>
+    <string name="context_check_box" translatable="false"> I clearly snapped Car in Violation Context</string>
+    <string name="photo_continue_button" translatable="false"> Continue </string>
     <string name="photos_warning" translatable="false"> All Photos must be taken</string>
     <string name="checkboxes_warning" translatable="false"> All Boxes must be checked</string>
 
@@ -87,7 +87,7 @@
     <string name="tip_3" translatable="false"> Tip 3 </string>
     <string name="tip_1_text" translatable="false"> Lorem ipsum dolor sit amet. </string>
     <string name="tip_2_text" translatable="false"> Consectetur adipiscing elit. </string>
-    <string name="tip_3_text" translatable="false"> Sed do eiusmod tempor incididut.  </string>
+    <string name="tip_3_text" translatable="false"> Sed do eiusmod tempor.  </string>
 
     <!-- activity_map Strings -->
     <string name="step_3" translatable="false"> Map </string>
@@ -110,7 +110,7 @@
     <string name="or" translatable="false"> OR </string>
     <string name="email" translatable="false"> Email </string>
     <string name="password" translatable="false"> Password </string>
-    <string name="forgot_password" translatable="false"> Forgot Password? </string>
+    <string name="forgot_password" translatable="false"> Forgot your password? </string>
     <string name="login_button" translatable="false"> Login </string>
     <string name="activity_login_phrase_2" translatable="false"> Don\'t have an account yet?</string>
     <string name="register" translatable="false"> Please Register </string>
@@ -125,19 +125,19 @@
     <string name="login_failed" translatable="false">"Login failed"</string>
 
     <!--forgot_password_dialog-->
-    <string name="enter_email" translatable="false">Enter your email here </string>
+    <string name="enter_email" translatable="false">EMAIL ADDRESS </string>
     <string name="dialog_title" translatable="false">Reset Password </string>
-    <string name="reset" translatable="false">Reset </string>
+    <string name="reset" translatable="false">Send </string>
     <string name="cancel" translatable="false">Cancel </string>
     <string name="password_sent" translatable="false">Password sent to your email </string>
 
     <!-- activity_register Strings -->
-    <string name="step_4_1" translatable="false"> Register </string>
+    <string name="step_4_1" translatable="false"> Sign Up</string>
     <string name="activity_register_phrase_1" translatable="false"> Please Register to create an Account </string>
     <string name="name" translatable="false"> Name </string>
     <string name="last_name" translatable="false"> Last Name </string>
     <string name="terms_conditions" translatable="false"> I agree to Terms and Conditions </string>
-    <string name="register_button" translatable="false"> Register </string>
+    <string name="register_button" translatable="false">SIGN UP </string>
     <string name="activity_register_phrase_2" translatable="false"> Already have an Account?</string>
     <string name="login" translatable="false"> Please Login </string>
     <string name="register_success" translatable="false">  Registration Succeeded </string>
@@ -148,7 +148,7 @@
     <string name="verif_phrase_2" translatable="false">Click on the provided link to verify your email address</string>
 
     <!-- activity_summary Strings -->
-    <string name="step_4_2" translatable="false"> Summary </string>
+    <string name="step_4_2" translatable="false"> Report </string>
     <string name="summary_phrase_1" translatable="false"> Violation Report Summary </string>
     <string name="type" translatable="false"> Type </string>
     <string name="spinner_title" translatable="false"> Violation Type </string>
@@ -199,5 +199,8 @@
     <string name="date_format">MMM d, yyyy</string>
     <string name="time_format">HH:mm:ss</string>
     <string name="title_activity_location" translatable="false">LocationActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
 </resources>

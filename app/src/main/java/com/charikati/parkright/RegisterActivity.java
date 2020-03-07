@@ -45,29 +45,24 @@ public class RegisterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         //Use toolbar as the ActionBar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
-        // Display Up button
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
         // Remove default title text
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
+        TextView toolbarTitle = toolbar.findViewById(R.id.activity_toolbar_title);
         toolbarTitle.setText(R.string.step_4_1);
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         //Views
-        mNameField = findViewById(R.id.name_edit_txt);
-        mLastNameField = findViewById(R.id.last_name_edit_txt);
+        mNameField = findViewById(R.id.name_edit_text);
+        mLastNameField = findViewById(R.id.last_edit_text);
         mEmailField = findViewById(R.id.email_edit_text);
         mPasswordField = findViewById(R.id.password_edit_text);
-        mTermsCheck = findViewById(R.id.terms_chk_box);
+        mTermsCheck = findViewById(R.id.terms_check_box);
         // Access a Cloud Firestore instance
         mFireDb = FirebaseFirestore.getInstance();
 
-        Button mRegisterBtn = findViewById(R.id.send_btn);
+        Button mRegisterBtn = findViewById(R.id.sign_button);
         //Handle click on register button
         mRegisterBtn.setOnClickListener(v -> {
             first_name = mNameField.getText().toString();

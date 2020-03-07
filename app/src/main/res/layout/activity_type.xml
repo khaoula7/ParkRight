@@ -4,14 +4,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="#FFFFFF"
     tools:context=".TypeActivity">
+
     <!-- Toolbar -->
-    <include
-        layout="@layout/toolbar"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:background="#FFFFFF"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/activity_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold"
+            android:letterSpacing="0.1"
+            android:text="@string/app_name"
+            android:layout_gravity="center"
+            android:textAllCaps="true"
+            android:textColor="#222222"
+            android:textSize="18sp"
+            app:lineHeight="22sp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- Stepper Layout-->
+
+<!--    <include-->
+<!--        android:id="@+id/include"-->
+<!--        layout="@layout/toolb"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <include
+        layout="@layout/stepper_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline1" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline0"
@@ -27,23 +66,21 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="20dp"
-        app:layout_constraintGuide_percent="0.08" />
+        app:layout_constraintGuide_percent="0.11" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp"
-        app:layout_constraintGuide_percent="0.18"  />
+        app:layout_constraintGuide_percent="0.21" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp"
-        app:layout_constraintGuide_percent="0.24" />
+        app:layout_constraintGuide_percent="0.3" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -53,121 +90,151 @@
         app:layout_constraintGuide_percent="1.0"
         app:layout_constraintGuide_begin="20dp" />
 
-    <TextView
-        android:id="@+id/one_txt"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:background="@drawable/active_text_style"
-        android:gravity="center"
-        android:text="@string/one"
-        android:textColor="@color/colorPrimary"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/two_txt"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <View
-        android:id="@+id/view2"
-        android:layout_width="53dp"
-        android:layout_height="2dp"
-        android:layout_marginTop="28dp"
-        android:background="#CCCCCC"
-        app:layout_constraintStart_toEndOf="@+id/three_txt"
-        app:layout_constraintTop_toTopOf="@+id/guideline1" />
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="50dp"
-        android:layout_height="2dp"
-        android:layout_marginTop="28dp"
-        android:background="#CCCCCC"
-        app:layout_constraintStart_toEndOf="@+id/two_txt"
-        app:layout_constraintTop_toTopOf="@+id/guideline1" />
-
-    <TextView
-        android:id="@+id/three_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:background="@drawable/inactive_text_style"
-        android:gravity="center"
-        android:text="@string/three"
-        android:textColor="#CCCCCC"
-        android:textSize="18sp"
-        android:textStyle="normal"
-        app:layout_constraintBaseline_toBaselineOf="@+id/two_txt"
-        app:layout_constraintStart_toEndOf="@+id/two_txt" />
-
-    <View
-        android:layout_width="50dp"
-        android:layout_height="2dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="28dp"
-        android:background="@color/colorAccent"
-        app:layout_constraintStart_toStartOf="@+id/one_txt"
-        app:layout_constraintTop_toTopOf="@+id/guideline1" />
-
-    <TextView
-        android:id="@+id/four_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
-        android:layout_marginRight="50dp"
-        android:background="@drawable/inactive_text_style"
-        android:gravity="center"
-        android:text="@string/four"
-        android:textColor="#CCCCCC"
-        android:textSize="18sp"
-        android:textStyle="normal"
-        app:layout_constraintBaseline_toBaselineOf="@+id/three_txt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/view2" />
-
-    <TextView
-        android:id="@+id/two_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/inactive_text_style"
-        android:gravity="center"
-        android:text="@string/two"
-        android:textColor="#CCCCCC"
-        android:textSize="18sp"
-        android:textStyle="normal"
-        app:layout_constraintStart_toEndOf="@+id/one_txt"
-        app:layout_constraintTop_toTopOf="@+id/guideline1" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/poppins_medium"
         android:text="@string/violation_type_Phrase_1"
-        android:textColor="#A9DFFA"
-        android:textSize="20sp"
+        android:textColor="#000000"
+        android:textSize="18sp"
         android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
+
+
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginEnd="24dp"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/guideline1">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:orientation="horizontal"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/guideline1">-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/one_txt"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/active_text_style"-->
+<!--                android:fontFamily="@font/poppins_medium"-->
+<!--                android:gravity="center"-->
+<!--                android:text="@string/one"-->
+<!--                android:textColor="#FFFFFF"-->
+<!--                android:textSize="18sp" />-->
+
+<!--            <View-->
+<!--                android:layout_width="62dp"-->
+<!--                android:layout_height="2dp"-->
+<!--                android:background="#0E4D92" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/two_txt"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/inactive_text_style"-->
+<!--                android:fontFamily="@font/poppins_medium"-->
+<!--                android:gravity="center"-->
+<!--                android:text="@string/two"-->
+<!--                android:textColor="#0E4D92"-->
+<!--                android:textSize="18sp" />-->
+
+<!--            <View-->
+<!--                android:layout_width="62dp"-->
+<!--                android:layout_height="2dp"-->
+<!--                android:background="#0E4D92" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/three_txt"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/inactive_text_style"-->
+<!--                android:fontFamily="@font/poppins_medium"-->
+<!--                android:gravity="center"-->
+<!--                android:text="@string/three"-->
+<!--                android:textColor="#0E4D92"-->
+<!--                android:textSize="18sp" />-->
+
+<!--            <View-->
+<!--                android:layout_width="62dp"-->
+<!--                android:layout_height="2dp"-->
+<!--                android:background="#0E4D92" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/four_txt"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/inactive_text_style"-->
+<!--                android:fontFamily="@font/poppins_medium"-->
+<!--                android:gravity="center"-->
+<!--                android:text="@string/four"-->
+<!--                android:textColor="#0E4D92"-->
+<!--                android:textSize="18sp" />-->
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="24dp"-->
+<!--            android:orientation="horizontal">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:fontFamily="@font/poppins"-->
+<!--                android:text="Type"-->
+<!--                android:textColor="#222222" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="62dp"-->
+<!--                android:fontFamily="@font/poppins"-->
+<!--                android:text="Photos"-->
+<!--                android:textColor="#222222" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="48dp"-->
+<!--                android:fontFamily="@font/poppins"-->
+<!--                android:text="Location"-->
+<!--                android:textColor="#222222" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="34dp"-->
+<!--                android:fontFamily="@font/poppins"-->
+<!--                android:text="Report"-->
+<!--                android:textColor="#222222" />-->
+
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="16dp"
+        android:background="#E5E5E5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

@@ -6,22 +6,20 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
-
 import android.widget.TextView;
-
 import com.charikati.parkright.adapter.ViolationAdapter;
 import com.charikati.parkright.model.ViolationPreview;
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Objects;
 
 public class TypeActivity extends AppCompatActivity {
     // Member variables.
+    private Toolbar toolbar;
     private RecyclerView mRecyclerView;
     private ArrayList<ViolationPreview> mViolationData;
     private ViolationAdapter mAdapter;
@@ -34,11 +32,11 @@ public class TypeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_type);
         //Use toolbar as the ActionBar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
         // Remove default title text
-        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
+        this.getSupportActionBar().setDisplayShowTitleEnabled(false);
+        TextView toolbarTitle = findViewById(R.id.activity_toolbar_title);
         toolbarTitle.setText(R.string.step_1);
         //Open sharedPrefs file at the given filename (sharedPrefFile) with the mode MODE_PRIVATE.
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
