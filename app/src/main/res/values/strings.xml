@@ -195,12 +195,18 @@
     <string name="photos_section" translatable="false"> Report Photos </string>
     <string name="location_desc" translatable="false"> Report Location Icon </string>
     <string name="location_section" translatable="false"> Report Location </string>
-
     <string name="date_format">MMM d, yyyy</string>
     <string name="time_format">HH:mm:ss</string>
     <string name="title_activity_location" translatable="false">LocationActivity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <!-- fragment_myaccount-->
+    <string-array name="modalities">
+        <item>Ask Me</item>
+        <item>Always</item>
+        <item>Never</item>
+    </string-array>
+
+
+
 
 </resources>

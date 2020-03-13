@@ -41,11 +41,11 @@ public class MyReportsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_reports);
         //Use toolbar as the ActionBar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
         // Remove default title text
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
+        TextView toolbarTitle = toolbar.findViewById(R.id.activity_toolbar_title);
         toolbarTitle.setText(R.string.reports_name);
         //Initialize firbase instances
         mFirebaseAuth = mFirebaseAuth.getInstance();
@@ -63,29 +63,6 @@ public class MyReportsActivity extends BaseActivity {
 
         // Apply adapter to the listView
         mViolationList.setAdapter(mAdapter);
-        //Get a realtime snapshot of all documents in subcollection sent_violations
-//        mFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid())
-//                .collection("sent_violations")
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-//                        if (e != null) {
-//                            Log.w(TAG, "Listen failed.", e);
-//                            return;
-//                        }
-//                        if(value.isEmpty()){
-//                            Log.d(TAG, "No Reports Yet !");
-//                            progressBar.setVisibility(View.GONE);
-//                            emptyView.setVisibility(View.VISIBLE);
-//                        }
-//                        for (QueryDocumentSnapshot doc : value) {
-//                            if (doc.getId() != null) {
-//                               queryViolations(doc.getId());
-//                            }
-//                        }
-//
-//                    }
-//                });
 
         //Get all documents in subcollection sent_violations
         mFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid())

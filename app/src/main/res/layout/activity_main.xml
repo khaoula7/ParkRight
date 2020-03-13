@@ -11,9 +11,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/white">
             <!-- Toolbar -->
-            <include layout="@layout/drawer_toolbar"/>
+            <include layout="@layout/drawer_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"/>
             <FrameLayout
                 android:id="@+id/fragment_container"
                 android:layout_width="match_parent"
@@ -32,7 +36,8 @@
         app:itemIconTint="#222222"
         app:itemTextAppearance="@style/TextAppearance.AppCompat.Body1"
         app:itemTextColor="#222222"
-        app:menu="@menu/draw_menu" />
+        app:menu="@menu/draw_menu"
+        android:background="@color/white"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

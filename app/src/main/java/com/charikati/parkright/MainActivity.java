@@ -85,18 +85,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity( new Intent(MainActivity.this, TypeActivity.class));
                 break;
             case R.id.nav_account:
-                Toast.makeText(this, "Account", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.nav_reports:
                 if(mFirebaseAuth != null){
-                    startActivity(new Intent(MainActivity.this, MyReportsActivity.class));
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new MyAccountFragment()).commit();
                 }else {
                     Toast.makeText(this, "You are not logged In", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
                 break;
+
+            case R.id.nav_reports:
+                if(mFirebaseAuth != null){
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new MyReportsFragment()).commit();
+                }else {
+                    Toast.makeText(this, "You are not logged In", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
+                break;
+
             case R.id.nav_status:
-                Toast.makeText(this, "Status", Toast.LENGTH_SHORT).show();
+                if(mFirebaseAuth != null){
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new MyStatusFragment()).commit();
+                }else {
+                    Toast.makeText(this, "You are not logged In", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
                 break;
 //            case R.id.nav_login:
 //                if(mFirebaseAuth == null){

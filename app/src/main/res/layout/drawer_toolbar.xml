@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="#ffffff"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+
     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -20,9 +21,8 @@
         android:textAllCaps="true"
         android:textColor="#222222"
         android:textSize="18sp"
-        android:layout_marginTop="24dp"
         android:letterSpacing="0.1"
-        app:lineHeight="22sp" />
+         />
 </androidx.appcompat.widget.Toolbar>
 
 

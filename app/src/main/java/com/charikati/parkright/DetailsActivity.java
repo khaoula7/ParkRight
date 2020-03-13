@@ -27,13 +27,6 @@ import java.util.TimeZone;
 
 public class DetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = "DetailsActivity";
-    private TextView typeTextView;
-    private TextView statusTextView;
-    private TextView reasonTextView;
-    private TextView dateTextView;
-    private ImageView firstImage;
-    private ImageView secondImage;
-    private ImageView thirdImage;
     private double mLatitude;
     private double mLongitude;
     private final float DEFAULT_ZOOM = 15;
@@ -42,7 +35,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         //Use toolbar as the ActionBar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
         // Display Up button
         if (getSupportActionBar() != null) {
@@ -51,7 +44,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         }
         // Remove default title text
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
+        TextView toolbarTitle = toolbar.findViewById(R.id.activity_toolbar_title);
         toolbarTitle.setText(R.string.details_name);
 
         String jsonMyObject;
@@ -60,28 +53,29 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             jsonMyObject = extras.getString("report");
             //Convert JSON object into a ViolationReport object
             ViolationReport violationReport = new Gson().fromJson(jsonMyObject, ViolationReport.class);
-            typeTextView = findViewById(R.id.type_textView);
-            typeTextView.setText(violationReport.getType());
-            statusTextView = findViewById(R.id.status_textView);
-            statusTextView.setText(violationReport.getStatus());
+            TextView typeText = findViewById(R.id.type_txt);
+            typeText.setText(violationReport.getType());
+            TextView statusText = findViewById(R.id.status_txt);
+            statusText.setText(violationReport.getStatus());
             if(violationReport.getStatus().equals("Declined")){
-                reasonTextView = findViewById(R.id.reason_textView);
-                reasonTextView.setVisibility(View.VISIBLE);
-                reasonTextView.setText(violationReport.getDeclineReason());
+                TextView reasonLabel = findViewById(R.id.reason_label);
+                reasonLabel.setVisibility(View.VISIBLE);
+                TextView reasonText = findViewById(R.id.reason_txt);
+                reasonText.setText(violationReport.getDeclineReason());
+                reasonText.setVisibility(View.VISIBLE);
             }
-            dateTextView = findViewById(R.id.date_textView);
+            TextView dateText = findViewById(R.id.date_txt);
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy, HH:mm a");
             sdf.setTimeZone(TimeZone.getTimeZone("GMT+0400"));
 //            String sending_time = sdf.format(violationReport.getSendingTime());
-            String date = new java.text.SimpleDateFormat("dd/MM/yyyy  hh:mm:ss aa").format(new java.util.Date (violationReport.getSendingTime()));
-
-            dateTextView.setText(date);
+            String date = new java.text.SimpleDateFormat("dd-MM-yyyy, hh:mm:ss aa").format(new java.util.Date (violationReport.getSendingTime()));
+            dateText.setText(date);
             //Load images
-            firstImage = findViewById(R.id.first_image);
+            ImageView firstImage = findViewById(R.id.image_1);
             loadImage(firstImage, violationReport.getFirstImageUrl());
-            secondImage = findViewById(R.id.second_image);
+            ImageView secondImage = findViewById(R.id.image_2);
             loadImage(secondImage, violationReport.getSecondImageUrl());
-            thirdImage = findViewById(R.id.third_image);
+            ImageView thirdImage = findViewById(R.id.image_3);
             loadImage(thirdImage, violationReport.getThirdImageUrl());
             //Load Map
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);

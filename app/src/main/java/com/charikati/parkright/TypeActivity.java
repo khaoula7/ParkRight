@@ -19,7 +19,6 @@ import java.util.Collections;
 
 public class TypeActivity extends AppCompatActivity {
     // Member variables.
-    private Toolbar toolbar;
     private RecyclerView mRecyclerView;
     private ArrayList<ViolationPreview> mViolationData;
     private ViolationAdapter mAdapter;
@@ -32,7 +31,7 @@ public class TypeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_type);
         //Use toolbar as the ActionBar
-        toolbar = findViewById(R.id.activity_toolbar);
+        Toolbar toolbar = findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
         // Remove default title text
         this.getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -46,7 +45,7 @@ public class TypeActivity extends AppCompatActivity {
         preferencesEditor.apply();
 
         //Initialize the RecyclerView.
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView = findViewById(R.id.recyclerView);
         // Set the Layout Manager.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Initialize the ArrayList that will contain the data.
