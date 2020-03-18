@@ -41,7 +41,7 @@ public class ReportAdapter extends ArrayAdapter<ViolationReport>  {
         if(status.equals("Pending")){
             statusTextView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.pending_text_style));
         }else if(status.equals("Approved")){
-            statusTextView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.accepted_text_style));
+            statusTextView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.pending_text_style));
         }else{
             statusTextView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.declined_text_style));
         }

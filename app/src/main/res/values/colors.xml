@@ -5,11 +5,15 @@
     <color name="colorAccent">#FDBE10</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="grey">#808080</color>
+    <color name="some_black">#222222</color>
+
+    <color name="Grey">#808080</color>
     <color name="orange">#EAAD43</color>
     <color name="lighterPrimary">#46518E</color>
     <color name="lightBlue">#A9DFFA</color>
     <color name="Blue">#49ACD5</color>
-    <color name="Grey">#CCCCCC</color>
+<!--    <color name="Grey">#CCCCCC</color>-->
     <color name="facebook">#3b5998</color>
     <color name="mycolorPrimary">#0E4D92</color>
 

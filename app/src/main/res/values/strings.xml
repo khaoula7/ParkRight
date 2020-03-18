@@ -6,40 +6,47 @@
 
 
     <!-- activity_main Strings -->
-    <string name="home_phrase_1" translatable="false"> Sick of Bad Parking?</string>
-    <string name="home_phrase_2" translatable="false"> Let your frustration out by reporting parking violations to relevant authorities in 4 simple steps.</string>
-    <string name="home_phrase_3" translatable="false"> Help your community solve parking issues by reporting violations</string>
+    <string name="title_1" translatable="false"> Sick of Bad Parking?</string>
+    <string name="title_2" translatable="false"> Want to Make an Impact?</string>
+    <string name="title_3" translatable="false"> Need Extra Money?</string>
+    <string name="subtitle_1" translatable="false"> Let your frustration out by reporting parking violations to relevant authorities in 4 simple steps.</string>
+    <string name="subtitle_2" translatable="false"> Help your community solving parking issues and making your city more accessible. </string>
+    <string name="subtitle_3" translatable="false">Become one of our reporters and get rewarded for your efforts and impact. </string>
     <string name="home_button" translatable="false">Report Violation</string>
     <string name="home_menu_desc" translatable="false">Hamburger Menu vector icon</string>
     <string name="home_share_desc" translatable="false">Share vector icon</string>
     <string name="home_image_desc" translatable="false">Home image</string>
 
     <!-- draw_menu strings -->
+    <string name="nav_home" translatable="false">Home</string>
     <string name="nav_new" translatable="false">New Violation</string>
-    <string name="nav_report" translatable="false">How to Report Violation</string>
-    <string name="nav_login" translatable="false">Login</string>
+    <string name="nav_logout" translatable="false">Logout</string>
     <string name="nav_account" translatable="false">My Account</string>
     <string name="nav_reports" translatable="false">My Reports</string>
     <string name="nav_status" translatable="false">My Status</string>
-    <string name="nav_settings" translatable="false">Settings</string>
-    <string name="nav_share" translatable="false">Share</string>
+    <string name="nav_share" translatable="false">Share with Friends</string>
+    <string name="nav_contact" translatable="false">Contact Us</string>
+    <string name="nav_rate" translatable="false">Rate Us</string>
+    <string name="nav_terms" translatable="false">Terms and Conditions</string>
+    <string name="nav_privacy" translatable="false">Privacy Policy</string>
 
-
-    <!-- activity_how Strings -->
-    <string name="how_back_arrow_desc" translatable="false"> Back arrow image </string>
-    <string name="how_phrase_1" translatable="false"> First Time User? </string>
-    <string name="how_phrase_2" translatable="false"> We highly recommend you watch this short video </string>
-    <string name="how_button" translatable="false"> SKIP VIDEO </string>
-
-    <!-- activity_type Strings -->
+    <!-- Stepper_layout strings-->
     <string name="step_1" translatable="false"> Violation Type</string>
     <string name="one" translatable="false"> 1 </string>
     <string name="two" translatable="false"> 2 </string>
     <string name="three" translatable="false"> 3 </string>
     <string name="four" translatable="false"> 4 </string>
     <string name="five" translatable="false"> 5 </string>
-    <string name="violation_type_Phrase_1" translatable="false"> Select Parking Violation Type  </string>
+    <string name="type" translatable="false"> Type </string>
+    <string name="photos" translatable="false"> Photos </string>
+    <string name="location" translatable="false"> Location </string>
+    <string name="report" translatable="false"> Report </string>
 
+
+
+    <!-- fragment_type Strings -->
+    <string name="type_label" translatable="false"> VIOLATION TYPE </string>
+    <string name="violation_type_Phrase_1" translatable="false"> Select Parking Violation Type  </string>
     <string-array name="violation_types">
         <item>Parking in front of Fire Hydrant!</item>
         <item>Parking in Disabled Spot!</item>
@@ -62,17 +69,18 @@
 
     <!-- violation_item Strings -->
     <string name="card_image_desc" translatable="false"> Parking Violation image </string>
-    <string name="violation_type" translatable="false"> Violation Type </string>
-    <string name="choose_button" translatable="false"> choose </string>
+    <string name="down_arrow_desc" translatable="false"> Down Arrow </string>
 
     <!-- activity_photo Strings -->
-    <string name="step_2" translatable="false"> Photos </string>
+
     <string name="activity_photo_phrase_1" translatable="false"> Snap 3 photos of the violating car </string>
     <string name="activity_photo_phrase_2" translatable="false"> How Should I take photos ? </string>
     <string name="show_button" translatable="false"> Show Tips </string>
-    <string name="camera_button_1" translatable="false"> Front </string>
-    <string name="camera_button_2" translatable="false"> Rear </string>
-    <string name="camera_button_3" translatable="false"> Evidence </string>
+    <string name="front" translatable="false"> Front </string>
+    <string name="windshield" translatable="false"> windshield </string>
+    <string name="rear" translatable="false"> Rear </string>
+    <string name="licence" translatable="false"> Licence Plate </string>
+    <string name="evidence" translatable="false"> Evidence </string>
     <string name="camera_button_desc" translatable="false"> Click on this button to take photo of violating car </string>
     <string name="plate_check_box" translatable="false"> I clearly snapped Licence Plate </string>
     <string name="context_check_box" translatable="false"> I clearly snapped Car in Violation Context</string>
@@ -148,12 +156,12 @@
     <string name="verif_phrase_2" translatable="false">Click on the provided link to verify your email address</string>
 
     <!-- activity_summary Strings -->
-    <string name="step_4_2" translatable="false"> Report </string>
+
     <string name="summary_phrase_1" translatable="false"> Violation Report Summary </string>
-    <string name="type" translatable="false"> Type </string>
+
     <string name="spinner_title" translatable="false"> Violation Type </string>
-    <string name="photos" translatable="false"> Photos </string>
-    <string name="location" translatable="false"> Location </string>
+
+
     <string name="send_button" translatable="false"> Send Report </string>
     <string name="title_activity_drawer" translatable="false">DrawerActivity</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>

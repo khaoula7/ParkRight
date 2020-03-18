@@ -43,7 +43,7 @@
         <activity android:name=".TypeActivity" />
         <activity
             android:name=".PhotoActivity"
-            android:label="@string/step_2"
+            android:label="Type"
             android:parentActivityName=".TypeActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

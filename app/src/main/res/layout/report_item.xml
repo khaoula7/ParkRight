@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_light"
-                android:text="@string/violation_type"
+                android:text="@string/type_label"
                 android:textColor="#222222"
                 android:textSize="18sp" />
 

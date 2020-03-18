@@ -1,7 +1,6 @@
 package com.charikati.parkright;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -37,10 +36,12 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
+
+import id.zelory.compressor.Compressor;
 
 public class PhotoActivity extends AppCompatActivity {
-    private static final String TAG = "PhotoActivity";
-    private Toolbar toolbar;
+    //private static final String TAG = "PhotoActivity";
     // Constants for camera intent
     static final int REQUEST_IMAGE_CAPTURE_1 = 1;
     static final int REQUEST_IMAGE_CAPTURE_2 = 2;
@@ -55,7 +56,6 @@ public class PhotoActivity extends AppCompatActivity {
     private boolean mThirdPhotoCaptured = false;
 
     //The only Exras I will keep
-    private Bundle mExtras;
     private String mViolationType;
     private int mViolationIndex;
     private int mViolationRessource;
@@ -67,6 +67,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.charikati.parkright";
+    private File mPhotoFile;
 
 
     @Override
@@ -74,17 +75,22 @@ public class PhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
         //Use toolbar as the ActionBar
-        toolbar = findViewById(R.id.activity_toolbar);
+        Toolbar toolbar = findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
         // Remove default title text
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         TextView toolbarTitle = toolbar.findViewById(R.id.activity_toolbar_title);
-        toolbarTitle.setText(R.string.step_2);
+        toolbarTitle.setText(R.string.photos);
         // Display Up button
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             //getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+        //Implement steppers
+        TextView twoTxt = findViewById(R.id.two_txt);
+        twoTxt.setTextColor(getResources().getColor(R.color.white));
+        twoTxt.setBackgroundResource(R.drawable.active_text_style);
+
         //Open sharedPrefs file at the given filename (sharedPrefFile) with the mode MODE_PRIVATE.
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         //ImageButtons
@@ -96,7 +102,7 @@ public class PhotoActivity extends AppCompatActivity {
         final CheckBox contextCheckBox = findViewById(R.id.context_check_box);
         //Get information sent by TypeActivity from intent
         //This is the first time PhotoActivity is accessed
-        mExtras = getIntent().getExtras();
+        Bundle mExtras = getIntent().getExtras();
         if (mExtras != null) {
             mViolationType = mExtras.getString("VIOLATION_TYPE");
             mViolationIndex = mExtras.getInt("VIOLATION_INDEX");
@@ -129,39 +135,17 @@ public class PhotoActivity extends AppCompatActivity {
         }
         //Click on show button will open tips dialog
         Button showBtn = findViewById(R.id.show_btn);
-        showBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTipsDialog();
-            }
-        });
+        showBtn.setOnClickListener(v -> showTipsDialog());
         //Click on first camera button will send a camera intent
-        mFirstCameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_1);
-            }
-        });
+        mFirstCameraButton.setOnClickListener(v -> dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_1));
         //Click on second camera button will send a camera intent
-       mSecondCameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_2);
-            }
-       });
+       mSecondCameraButton.setOnClickListener(v -> dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_2));
         //Click on third camera button will send a camera intent
-        mThirdCameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_3);
-            }
-        });
+        mThirdCameraButton.setOnClickListener(v -> dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_3));
 
         //Click on map_continue_btn button will open MapActivity
         Button photoContinueBtn = findViewById(R.id.photo_continue_btn);
-        photoContinueBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        photoContinueBtn.setOnClickListener(v -> {
 //                if(!mFirstPhotoCaptured|| !mSecondPhotoCaptured|| !mThirdPhotoCaptured) {
 //                    Toast.makeText(PhotoActivity.this, R.string.photos_warning, Toast.LENGTH_LONG).show();
 //                }
@@ -169,19 +153,16 @@ public class PhotoActivity extends AppCompatActivity {
 //                    Toast.makeText(PhotoActivity.this, R.string.checkboxes_warning, Toast.LENGTH_LONG).show();
 //                }
 //                else{
-                    //Open MapsActivity screen (Locate the violating Car)
-                    //startActivity(new Intent(PhotoActivity.this, LocationActivity.class));
-                    checkLoactionPermission();
+                //Open MapsActivity screen (Locate the violating Car)
+                //startActivity(new Intent(PhotoActivity.this, LocationActivity.class));
+                checkLoactionPermission();
 
 //                }
-            }
         });
     }
 
     /**
      * Create a File to store the taken image in app private folder
-     * @return imageFile
-     * @throws IOException
      */
 
     private File createImageFile() throws IOException {
@@ -196,12 +177,12 @@ public class PhotoActivity extends AppCompatActivity {
         );
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = imageFile.getAbsolutePath();
+        mPhotoFile = imageFile;
         return imageFile;
     }
 
     /**
      *Take a picture and provide file for saving it
-     * @param requestCode
      */
     private void dispatchTakePictureIntent(int requestCode) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -287,14 +268,9 @@ public class PhotoActivity extends AppCompatActivity {
 
         //Close tip dialog
         ImageView closeImg = inflater.findViewById(R.id.close_img);
-        closeImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tipDialog.dismiss();
-            }
-        });
+        closeImg.setOnClickListener(v -> tipDialog.dismiss());
         //Set transparent background to the window
-        tipDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(tipDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         //Show the tip dialog
         tipDialog.show();
     }
@@ -321,13 +297,10 @@ public class PhotoActivity extends AppCompatActivity {
                                 builder.setTitle("Permission Denied")
                                         .setMessage("Permission to access device location is permanently denied. you need to go to Settings to allow the permission.")
                                         .setNegativeButton("Cancel", null)
-                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent = new Intent();
-                                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                                intent.setData(Uri.fromParts("package", getPackageName(), null));
-                                            }
+                                        .setPositiveButton("OK", (dialog, which) -> {
+                                            Intent intent = new Intent();
+                                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                            intent.setData(Uri.fromParts("package", getPackageName(), null));
                                         })
                                         .show();
                             } else {
@@ -351,15 +324,10 @@ public class PhotoActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.show_btn:
-                showTipsDialog();
-                break;
-            default:
-                break;
+        if (item.getItemId() == R.id.show_btn) {
+            showTipsDialog();
         }
         return false;
-
     }
 
     /**

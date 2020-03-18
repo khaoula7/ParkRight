@@ -36,8 +36,8 @@
         app:itemIconTint="#222222"
         app:itemTextAppearance="@style/TextAppearance.AppCompat.Body1"
         app:itemTextColor="#222222"
-        app:menu="@menu/draw_menu"
-        android:background="@color/white"/>
+        app:menu="@menu/draw_menu"/>
+<!--        android:background="@color/white"/>-->
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

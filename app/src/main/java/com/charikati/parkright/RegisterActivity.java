@@ -21,6 +21,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
@@ -132,7 +133,11 @@ public class RegisterActivity extends BaseActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            //Save additional data about user in realtime database
+                            //In order to get the full name with mFirebaseAuth.getCurrentUser.getDisplayName(), we need to set it up when creating the new account with email and password
+                            String displayName = first_name + " " + last_name;
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(displayName).build();
+                            mFirebaseAuth.getCurrentUser().updateProfile(profileUpdates);
+                            //Save additional data about user in fireStore database
                             User user = new User(first_name, last_name, email);
                             mFireDb.collection("Users").add(user);
                             // Add a new document with a user ID as a custom id

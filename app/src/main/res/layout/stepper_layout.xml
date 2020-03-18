@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:orientation="horizontal">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:gravity="center">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -19,19 +21,20 @@
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/one_txt"
             android:layout_alignParentStart="true"
             android:fontFamily="@font/poppins"
-            android:text="Type"
+            android:text="@string/type"
             android:textColor="#222222" />
 
         <View
             android:id="@+id/view_1"
             android:layout_width="62dp"
-            android:layout_height="2dp"
+            android:layout_height="1dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="20dp"
             android:layout_toEndOf="@id/one_txt"
@@ -59,12 +62,12 @@
             android:layout_below="@id/two_txt"
             android:layout_alignParentStart="true"
             android:fontFamily="@font/poppins"
-            android:text="Photos"
+            android:text="@string/photos"
             android:textColor="#222222" />
         <View
             android:id="@+id/view_2"
             android:layout_width="62dp"
-            android:layout_height="2dp"
+            android:layout_height="1dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="20dp"
             android:layout_toEndOf="@id/two_txt"
@@ -91,11 +94,11 @@
             android:layout_below="@id/three_txt"
             android:layout_alignParentStart="true"
             android:fontFamily="@font/poppins"
-            android:text="Location"
+            android:text="@string/location"
             android:textColor="#222222" />
         <View
             android:layout_width="62dp"
-            android:layout_height="2dp"
+            android:layout_height="1dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="20dp"
             android:layout_toEndOf="@id/three_txt"
@@ -123,7 +126,7 @@
             android:layout_below="@id/four_txt"
             android:layout_alignParentStart="true"
             android:fontFamily="@font/poppins"
-            android:text="Report"
+            android:text="@string/report"
             android:textColor="#222222" />
 
     </RelativeLayout>

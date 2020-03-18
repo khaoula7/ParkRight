@@ -82,7 +82,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
         // Remove default title text
         requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         TextView toolbarTitle = toolbar.findViewById(R.id.activity_toolbar_title);
-        toolbarTitle.setText(R.string.step_4_2);
+        toolbarTitle.setText(R.string.report);
 
         /*Initialize Firebase components  */
         mFirebaseAuth = FirebaseAuth.getInstance();

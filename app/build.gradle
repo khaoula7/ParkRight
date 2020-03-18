@@ -64,6 +64,8 @@ dependencies {
     implementation 'com.karumi:dexter:6.0.1'
     //Library for inserting charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    //Compressing images
+    implementation 'id.zelory:compressor:2.1.0'
     //Multidex support
     def multidex_version = "2.0.1"
     implementation "androidx.multidex:multidex:$multidex_version"
