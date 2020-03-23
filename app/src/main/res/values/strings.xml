@@ -40,8 +40,6 @@
     <string name="type" translatable="false"> Type </string>
     <string name="photos" translatable="false"> Photos </string>
     <string name="location" translatable="false"> Location </string>
-    <string name="report" translatable="false"> Report </string>
-
 
 
     <!-- fragment_type Strings -->
@@ -72,7 +70,6 @@
     <string name="down_arrow_desc" translatable="false"> Down Arrow </string>
 
     <!-- activity_photo Strings -->
-
     <string name="activity_photo_phrase_1" translatable="false"> Snap 3 photos of the violating car </string>
     <string name="activity_photo_phrase_2" translatable="false"> How Should I take photos ? </string>
     <string name="show_button" translatable="false"> Show Tips </string>
@@ -97,7 +94,11 @@
     <string name="tip_2_text" translatable="false"> Consectetur adipiscing elit. </string>
     <string name="tip_3_text" translatable="false"> Sed do eiusmod tempor.  </string>
 
-    <!-- activity_map Strings -->
+    <!-- activity_location Strings -->
+    <string name="location_img_desc" translatable="false"> geolocation icon </string>
+    <string name="confirm_button" translatable="false"> Confirm </string>
+    <string name="confirm_text" translatable="false"> Confirm Car Location </string>
+
     <string name="step_3" translatable="false"> Map </string>
     <string name="activity_map_phrase_1" translatable="false"> Tap Map to identify Location </string>
     <string name="map_continue_button" translatable="false"> Almost There! Continue </string>
@@ -110,44 +111,46 @@
     <string name="loading" translatable="false">Loading…</string>
 
     <!-- activity_login Strings -->
+    <string name="login" translatable="false"> Login </string>
+    <string name="login_welcome" translatable="false"> Welcome Back </string>
+    <string name="email_address" translatable="false"> EMAIL ADDRESS </string>
+    <string name="email_password" translatable="false"> PASSWORD </string>
+    <string name="forgot_password" translatable="false"> Forgot your password? </string>
+    <string name="ic_arrow_desc" translatable="false"> Arrow icon for forgot password </string>
+    <string name="not_member" translatable="false"> Not a member yet?</string>
+    <string name="social_media" translatable="false"> or sign in with social media</string>
+    <string name="ic_google_desc" translatable="false"> Google icon </string>
+    <string name="ic_facebook_desc" translatable="false"> Facebook icon </string>
+
+
     <string name="step_4" translatable="false"> Login </string>
-    <string name="activity_login_phrase_1" translatable="false"> Please Login to your Account </string>
-    <string name="facebook" translatable="false"> Login with Facebook </string>
-    <string name="Google" translatable="false"> Google </string>
     <string name="client_id" translatable="false">843254302439-ireeq2d7ecnbrfisbn79o8v2qp6dei5b.apps.googleusercontent.com</string>
-    <string name="or" translatable="false"> OR </string>
     <string name="email" translatable="false"> Email </string>
     <string name="password" translatable="false"> Password </string>
-    <string name="forgot_password" translatable="false"> Forgot your password? </string>
-    <string name="login_button" translatable="false"> Login </string>
-    <string name="activity_login_phrase_2" translatable="false"> Don\'t have an account yet?</string>
-    <string name="register" translatable="false"> Please Register </string>
     <string name="title_activity_login2" translatable="false">Sign in</string>
     <string name="prompt_email" translatable="false">Email</string>
     <string name="prompt_password" translatable="false">Password</string>
     <string name="action_sign_in" translatable="false">Sign in or register</string>
     <string name="action_sign_in_short" translatable="false">Sign in</string>
-    <string name="welcome" translatable="false">"Welcome !"</string>
     <string name="invalid_username" translatable="false">Not a valid username</string>
     <string name="invalid_password" translatable="false">Password must be >5 characters</string>
     <string name="login_failed" translatable="false">"Login failed"</string>
 
     <!--forgot_password_dialog-->
-    <string name="enter_email" translatable="false">EMAIL ADDRESS </string>
     <string name="dialog_title" translatable="false">Reset Password </string>
-    <string name="reset" translatable="false">Send </string>
+    <string name="send" translatable="false">Send </string>
     <string name="cancel" translatable="false">Cancel </string>
     <string name="password_sent" translatable="false">Password sent to your email </string>
 
     <!-- activity_register Strings -->
-    <string name="step_4_1" translatable="false"> Sign Up</string>
-    <string name="activity_register_phrase_1" translatable="false"> Please Register to create an Account </string>
-    <string name="name" translatable="false"> Name </string>
-    <string name="last_name" translatable="false"> Last Name </string>
+    <string name="sign_up" translatable="false"> Sign Up</string>
+    <string name="welcome" translatable="false">"Welcome"</string>
+    <string name="first_name" translatable="false"> FIRST NAME </string>
+    <string name="last_name" translatable="false"> LAST NAME </string>
     <string name="terms_conditions" translatable="false"> I agree to Terms and Conditions </string>
-    <string name="register_button" translatable="false">SIGN UP </string>
-    <string name="activity_register_phrase_2" translatable="false"> Already have an Account?</string>
-    <string name="login" translatable="false"> Please Login </string>
+    <string name="already_member" translatable="false"> Already a member? </string>
+
+    <string name="step_4_1" translatable="false"> Sign Up</string>
     <string name="register_success" translatable="false">  Registration Succeeded </string>
     <string name="register_failure" translatable="false">  Registration Failed </string>
 
@@ -156,9 +159,7 @@
     <string name="verif_phrase_2" translatable="false">Click on the provided link to verify your email address</string>
 
     <!-- activity_summary Strings -->
-
-    <string name="summary_phrase_1" translatable="false"> Violation Report Summary </string>
-
+    <string name="report" translatable="false"> Report </string>
     <string name="spinner_title" translatable="false"> Violation Type </string>
 
 

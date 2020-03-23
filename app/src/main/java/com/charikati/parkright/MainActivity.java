@@ -64,27 +64,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView userName = headerView.findViewById(R.id.name_txt);
         TextView email = headerView.findViewById(R.id.email_txt);
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(mFireBaseAuth.getCurrentUser() != null) {
-                    //Set user name and email and change their visibility
-                    userName.setText(mFireBaseAuth.getCurrentUser().getDisplayName());
-                    userName.setVisibility(View.VISIBLE);
-                    email.setText(mFireBaseAuth.getCurrentUser().getEmail());
-                    email.setVisibility(View.VISIBLE);
+        mAuthListener = firebaseAuth -> {
+            if(mFireBaseAuth.getCurrentUser() != null) {
+                //Set user name and email and change their visibility
+                userName.setText(mFireBaseAuth.getCurrentUser().getDisplayName());
+                userName.setVisibility(View.VISIBLE);
+                email.setText(mFireBaseAuth.getCurrentUser().getEmail());
+                email.setVisibility(View.VISIBLE);
 
-                }else {
-                    //Hide username and email
-                    userName.setVisibility(View.GONE);
-                    email.setVisibility(View.GONE);
-                    // for getting menu from navigationView
-                    Menu menu = navigationView.getMenu();
-                    // finding menuItem that you want to change
-                    MenuItem nav_logout= menu.findItem(R.id.nav_logout);
-                    // Hide logout menu item
-                    nav_logout.setVisible(false);
-                }
+            }else {
+                //Hide username and email
+                userName.setVisibility(View.GONE);
+                email.setVisibility(View.GONE);
+                // for getting menu from navigationView
+                Menu menu = navigationView.getMenu();
+                // finding menuItem that you want to change
+                MenuItem nav_logout= menu.findItem(R.id.nav_logout);
+                // Hide logout menu item
+                nav_logout.setVisible(false);
             }
         };
 
@@ -196,12 +193,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_share:
-                Toast.makeText(this, "Share", Toast.LENGTH_LONG).show();
-                break;
-            default:
-                break;
+        if (item.getItemId() == R.id.menu_share) {
+            Toast.makeText(this, "Share", Toast.LENGTH_LONG).show();
         }
         return false;
     }

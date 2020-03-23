@@ -6,7 +6,6 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
-
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -22,16 +21,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,11 +42,8 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mLastKnownLocation;
     private LocationCallback locationCallback;
-    private View mapView;
-    private final float DEFAULT_ZOOM = 15;
-    private FloatingActionButton mLocationFAB;
+    private final float DEFAULT_ZOOM = 10;
     private SharedPreferences mPreferences;
-    private String sharedPrefFile = "com.charikati.parkright";
     private double mCurrentLatitude;
     private double mCurrentLongitude;
 
@@ -68,30 +62,35 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         // Remove default title text
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         TextView toolbarTitle = toolbar.findViewById(R.id.activity_toolbar_title);
-        toolbarTitle.setText("Location");
+        toolbarTitle.setText(R.string.location);
+        //Implement steppers
+        TextView twoTxt = findViewById(R.id.two_txt);
+        twoTxt.setTextColor(getResources().getColor(R.color.white));
+        twoTxt.setBackgroundResource(R.drawable.active_text_style);
+        TextView threeTxt = findViewById(R.id.three_txt);
+        threeTxt.setTextColor(getResources().getColor(R.color.white));
+        threeTxt.setBackgroundResource(R.drawable.active_text_style);
+
         //SharedPrefs file
+        String sharedPrefFile = "com.charikati.parkright";
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
-        mapView = mapFragment.getView();
         // Initialize Fused Location  object
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(LocationActivity.this);
-        mLocationFAB = findViewById(R.id.location_fab);
-        mLocationFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkGPSEnabled();
-            }
-        });
+        FloatingActionButton mLocationFAB = findViewById(R.id.location_fab);
+        mLocationFAB.setOnClickListener(v -> checkGPSEnabled());
         //Click on Continue Button will open Login Activity
-        Button goToLoginBtn = findViewById(R.id.login_button);
+        Button goToLoginBtn = findViewById(R.id.confirm_button);
         goToLoginBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(LocationActivity.this, LoginActivity.class);
-            startActivity(intent);
+            if(FirebaseAuth.getInstance().getCurrentUser() == null)
+                startActivity(new Intent(LocationActivity.this, LoginActivity.class));
+            else
+                startActivity(new Intent(LocationActivity.this, SummaryActivity.class));
         });
-
     }
 
     @SuppressLint("MissingPermission")
@@ -104,8 +103,10 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
        checkGPSEnabled();
     }
 
+    /**
+     * Check if gps is enabled or not and request user to enable it
+     */
     private void checkGPSEnabled(){
-        //check if gps is enabled or not and request user to enable it
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setInterval(10000);
         locationRequest.setFastestInterval(5000);
@@ -113,26 +114,17 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
         SettingsClient settingsClient = LocationServices.getSettingsClient(LocationActivity.this);
         Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(builder.build());
-        task.addOnSuccessListener(LocationActivity.this, new OnSuccessListener<LocationSettingsResponse>() {
-            @Override
-            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                getDeviceLocation();
-            }
-        });
-        task.addOnFailureListener(LocationActivity.this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                if (e instanceof ResolvableApiException) {
-                    ResolvableApiException resolvable = (ResolvableApiException) e;
-                    try {
-                        resolvable.startResolutionForResult(LocationActivity.this, 51);
-                    } catch (IntentSender.SendIntentException e1) {
-                        e1.printStackTrace();
-                    }
+        task.addOnSuccessListener(LocationActivity.this, locationSettingsResponse -> LocationActivity.this.getDeviceLocation());
+        task.addOnFailureListener(LocationActivity.this, e -> {
+            if (e instanceof ResolvableApiException) {
+                ResolvableApiException resolvable = (ResolvableApiException) e;
+                try {
+                    resolvable.startResolutionForResult(LocationActivity.this, 51);
+                } catch (IntentSender.SendIntentException e1) {
+                    e1.printStackTrace();
                 }
             }
         });
-
     }
 
     /**
@@ -208,8 +200,8 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
      * Convert the double to its 'raw long bits' equivalent and store that long
      * in order to be able to use double with sharedPrefs for latitude and longitude
      */
-    SharedPreferences.Editor putDouble(final SharedPreferences.Editor edit, final String key, final double value) {
-        return edit.putLong(key, Double.doubleToRawLongBits(value));
+    void putDouble(final SharedPreferences.Editor edit, final String key, final double value) {
+        edit.putLong(key, Double.doubleToRawLongBits(value));
     }
 
 

@@ -4,43 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:orientation="vertical">
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".LocationActivity">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" />
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/activity_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:background="#FFFFFF"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="24dp"
+    <include
+        layout="@layout/active_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/activity_toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_bold"
-            android:letterSpacing="0.1"
-            android:text="@string/app_name"
-            android:textAllCaps="true"
-            android:textColor="#222222"
-            android:textSize="18sp"
-            android:layout_gravity="center"
-            app:lineHeight="22sp" />
-    </androidx.appcompat.widget.Toolbar>
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
@@ -55,46 +27,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline1" />
+        app:layout_constraintTop_toTopOf="@id/guideline1" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.21" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/poppins_medium"
-        android:text="Confirm Car Location"
-        android:textColor="#000000"
+        android:text="@string/confirm_text"
+        android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline2" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline31"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline31"
-        tools:context=".LocationActivity"
-        tools:showIn="@layout/activity_location">
+        app:layout_constraintTop_toBottomOf="@id/textView4">
 
         <fragment
             android:id="@+id/map"
@@ -106,6 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:contentDescription="@string/location_img_desc"
             android:translationY="-18dp"
             app:srcCompat="@drawable/ic_location" />
 
@@ -113,37 +80,31 @@
             android:id="@+id/location_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="24dp"
-            android:layout_marginBottom="140dp"
+            android:layout_alignParentEnd="true"
+           android:layout_above="@id/confirm_button"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="32dp"
             app:backgroundTint="#FFFFFF"
             app:srcCompat="@drawable/ic_my_location" />
 
         <Button
-            android:id="@+id/login_button"
+            android:id="@+id/confirm_button"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/button_style"
             android:fadingEdge="vertical"
             android:fontFamily="@font/poppins_bold"
-            android:text="Confirm"
+            android:text="@string/confirm_button"
             android:textAllCaps="false"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="20sp" />
 
     </RelativeLayout>
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="1" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

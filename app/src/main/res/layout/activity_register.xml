@@ -4,60 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/white"
     tools:context=".RegisterActivity">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.0" />
-
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/activity_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:minHeight="?attr/actionBarSize"
-        android:paddingLeft="8dp"
-        android:paddingTop="16dp"
-        android:paddingRight="8dp"
-        android:paddingBottom="24dp"
+    <include
+        layout="@layout/active_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/activity_toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_bold"
-            android:letterSpacing="0.1"
-            android:text="@string/app_name"
-            android:textAllCaps="true"
-            android:textColor="#222222"
-            android:textSize="18sp"
-            app:lineHeight="22sp" />
-    </androidx.appcompat.widget.Toolbar>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp"
-        app:layout_constraintGuide_percent="0.1" />
+        app:layout_constraintGuide_percent="0.10123119" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/poppins_bold"
-        android:text="Welcome"
-        android:textColor="#0E4D92"
+        android:text="@string/welcome"
+        android:textColor="@color/colorPrimary"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline1" />
@@ -67,15 +37,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp"
-        app:layout_constraintGuide_percent="0.18" />
+        app:layout_constraintGuide_percent="0.19" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name_input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="20dp"
         app:hintTextAppearance="@style/MyHintStyle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,9 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
-            android:hint="FIRST NAME"
+            android:hint="@string/first_name"
             android:inputType="text"
-            android:letterSpacing="0.083"
             android:theme="@style/MyEditText" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,7 +66,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         app:hintTextAppearance="@style/MyHintStyle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -110,9 +78,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
-            android:hint="LAST NAME"
+            android:hint="@string/last_name"
             android:inputType="text"
-            android:letterSpacing="0.083"
             android:theme="@style/MyEditText" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,7 +88,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         app:hintTextAppearance="@style/MyHintStyle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -133,9 +100,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
-            android:hint="EMAIL ADDRESS"
+            android:hint="@string/email_address"
             android:inputType="textEmailAddress"
-            android:letterSpacing="0.083"
             android:theme="@style/MyEditText" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -144,11 +110,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        app:hintTextAppearance="@style/MyHintStyle"
         app:endIconMode="password_toggle"
-        app:endIconTint="#808080"
+        app:endIconTint="@color/grey"
+        app:hintTextAppearance="@style/MyHintStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -159,9 +125,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
-            android:hint="PASSWORD"
+            android:hint="@string/email_password"
             android:inputType="textPassword"
-            android:letterSpacing="0.083"
             android:theme="@style/MyEditText" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -173,39 +138,33 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/poppins_light"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:text="@string/terms_conditions"
-        android:textColor="#222222"
+        android:textColor="@color/some_black"
         android:textSize="14sp"
-        app:lineHeight="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/password_input_layout" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.64" />
+        app:layout_constraintTop_toBottomOf="@id/password_input_layout"
+        app:lineHeight="20sp" />
 
     <Button
         android:id="@+id/sign_button"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="35dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="35dp"
         android:background="@drawable/button_style"
         android:fadingEdge="vertical"
         android:fontFamily="@font/poppins_bold"
-        android:text="Sign Up"
+        android:text="@string/sign_up"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+        app:layout_constraintTop_toBottomOf="@+id/terms_check_box" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -219,10 +178,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
+            android:layout_marginEnd="4dp"
             android:fontFamily="@font/poppins_medium"
-            android:text="Already a member?"
-            android:textColor="#2E2727"
+            android:text="@string/already_member"
+            android:textColor="@color/some_black"
             android:textSize="15sp" />
 
         <TextView
@@ -230,11 +189,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_bold"
-            android:text="Login"
-            android:textColor="#FDBE10"
-            android:textSize="15sp" />
+            android:text="@string/login"
+            android:textColor="@color/colorAccent"
+            android:textSize="15sp"
+            android:clickable="true"
+            android:focusable="true"/>
     </LinearLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
