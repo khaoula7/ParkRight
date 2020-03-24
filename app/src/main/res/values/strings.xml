@@ -174,8 +174,8 @@
     <string name="log_out" translatable="false">Log out</string>
     <string name="checkbox_warning" translatable="false">Please check \'I agree to Terms and conditions\'</string>
 
-    <!-- activity_thankyou Strings-->
-    <string name="thank_you" translatable="false"> Thank You </string>
+    <!-- activity_thank you Strings-->
+    <string name="thank_you" translatable="false"> Thank You,  </string>
     <string name="thank_message_p1" translatable="false"> We Really appreciate your help in fighting illegal parking.
         You are making Frankfurt\'s car parks a friendly environment.
     </string>
@@ -186,36 +186,39 @@
     <string name="new_violation" translatable="false"> New Violation </string>
     <string name="my_reports" translatable="false"> My Reports </string>
 
-    <!-- activity_my_reports Strings-->
+    <!-- fragment_my_reports Strings-->
     <string name="reports_name" translatable="false"> My Reports </string>
     <string name="empty" translatable="false"> You don\'t have any reports yet ! </string>
     <string name="pending" translatable="false"> Pending </string>
-    <string name="Approved" translatable="false"> Approved </string>
+    <string name="approved" translatable="false"> Approved </string>
     <string name="declined" translatable="false"> Declined </string>
     <string name="date" translatable="false"> Date</string>
     <string name="time" translatable="false"> Time</string>
+    <string name="ic_status_desc" translatable="false"> Icon illustrating report status</string>
 
     <!-- activity_details Strings-->
     <string name="details_name" translatable="false"> Report Details</string>
+    <string name="info" translatable="false">Information</string>
     <string name="info_desc" translatable="false"> Report Information Icon </string>
-    <string name="info_section" translatable="false"> Report Information </string>
     <string name="status" translatable="false"> Status </string>
+    <string name="reason" translatable="false"> Reason </string>
+    <string name="reason_placeholder" translatable="false"> Not mentioned </string>
     <string name="photos_desc" translatable="false"> Report Photos Icon </string>
-    <string name="photos_section" translatable="false"> Report Photos </string>
+    <string name="photo_1_desc" translatable="false"> Photo of the car\'s front windshield </string>
+    <string name="photo_2_desc" translatable="false"> Photo of the car\'s rear licence plate </string>
+    <string name="photo_3_desc" translatable="false"> Photo of the car in violation context </string>
+    <string name="ic_info_desc" translatable="false"> icon representing information section </string>
+    <string name="ic_photos_desc" translatable="false"> icon representing Photos section </string>
+    <string name="ic_loc_desc" translatable="false"> icon representing Location section </string>
+
+    <string name="adr_placeholder" translatable="false">  Address: 123 Graham Avenue</string>
     <string name="location_desc" translatable="false"> Report Location Icon </string>
-    <string name="location_section" translatable="false"> Report Location </string>
-    <string name="date_format">MMM d, yyyy</string>
-    <string name="time_format">HH:mm:ss</string>
     <string name="title_activity_location" translatable="false">LocationActivity</string>
 
-    <!-- fragment_myaccount-->
+    <!-- fragment_my account-->
     <string-array name="modalities">
         <item>Ask Me</item>
         <item>Always</item>
         <item>Never</item>
     </string-array>
-
-
-
-
 </resources>

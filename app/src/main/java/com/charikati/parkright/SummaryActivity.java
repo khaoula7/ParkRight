@@ -120,13 +120,13 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                 Toast.makeText(SummaryActivity.this, R.string.checkbox_warning, Toast.LENGTH_SHORT).show();
             }else {
                 //Upload images to Firebase Storage and write violation data in database
-                sendReport();
+                //sendReport();
 
-                //startActivity(new Intent(SummaryActivity.this, ThankyouActivity.class));
+                startActivity(new Intent(SummaryActivity.this, ThankyouActivity.class));
                 //Delete all sharedPreferences
-//                SharedPreferences.Editor preferencesEditor = mPreferences.edit();
-//                preferencesEditor.clear();
-//                preferencesEditor.apply();
+                SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+                preferencesEditor.clear();
+                preferencesEditor.apply();
 
             }
         });

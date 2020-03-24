@@ -1,5 +1,6 @@
 package com.charikati.parkright.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import android.content.Intent;
@@ -8,19 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.charikati.parkright.DetailsActivity;
 import com.charikati.parkright.R;
 import com.charikati.parkright.TimeAgo;
-
 import com.charikati.parkright.model.ViolationReport;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -84,6 +79,7 @@ public class ReportAdapterNew extends RecyclerView.Adapter<ReportAdapterNew.View
         /**
          * Bind data from adapter to layout components
          */
+        @SuppressLint("ResourceAsColor")
         void bindTo(ViolationReport currentReport){
             // Populate the textViews with data.
             mReportType.setText(currentReport.getType());

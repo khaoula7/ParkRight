@@ -19,7 +19,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -28,20 +27,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAuth mFireBaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Initialize FireBase Auth
         mFireBaseAuth = FirebaseAuth.getInstance();
-
         //Use drawer_toolbar as the ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Remove default title text
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-
         // A reference to the NavigationView
         NavigationView navigationView = findViewById(R.id.nav_view);
         //To listen to click events on navigation drawer items, Implement NavigationView interface
@@ -53,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         //Change the navigation drawer icon
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,13 +79,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 nav_logout.setVisible(false);
             }
         };
-
         //If we open the app for the first time or we leave it by back button then come back HomeFragment will be displayed.
         //Otherwise, in case of rotating device or other configuration changes,selected fragment will be automatically saved and retrieved.
         if(savedInstanceState == null){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new HomeFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
+        }
+        //Allow Thank you activity to open Type fragment or my reports fragment
+        if (getIntent().hasExtra("OPEN_FRAG_TYPE")){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TypeFragment()).commit();
+        }
+        if (getIntent().hasExtra("OPEN_FRAG_REPORTS")){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MyReportsFragment()).commit();
         }
     }
 
@@ -107,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_new:
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new TypeFragment()).commit();
-                //startActivity( new Intent(MainActivity.this, TypeActivity.class));
                 break;
             case R.id.nav_account:
                 if(mFireBaseAuth.getCurrentUser() != null){

@@ -4,42 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#ffffff"
+    android:background="@color/white"
     tools:context=".ThankyouActivity">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.0" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/activity_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:background="#FFFFFF"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="24dp"
+    <include
+        layout="@layout/active_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/activity_toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_bold"
-            android:letterSpacing="0.1"
-            android:text="@string/app_name"
-            android:textAllCaps="true"
-            android:textColor="#222222"
-            android:textSize="18sp"
-            app:lineHeight="22sp" />
-    </androidx.appcompat.widget.Toolbar>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
@@ -53,28 +26,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="32dp"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/thank_you"
-        android:textColor="#0E4D92"
+        android:textColor="@color/colorPrimary"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.525"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline1" />
+        app:layout_constraintTop_toBottomOf="@id/guideline1" />
 
     <TextView
         android:id="@+id/thank_message_p1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:fontFamily="@font/poppins"
         android:gravity="center"
         android:text="@string/thank_message_p1"
-        android:textColor="#808080"
+        android:textColor="@color/grey"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,13 +60,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
         android:text="@string/thank_message_p2"
-        android:textColor="#808080"
+        android:textColor="@color/grey"
         android:textSize="20sp"
         android:fontFamily="@font/poppins"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/thank_message_p1" />
+        app:layout_constraintTop_toBottomOf="@id/thank_message_p1" />
 
     <Button
         android:id="@+id/new_violation_btn"
@@ -102,15 +74,13 @@
         android:layout_height="60dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="18dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/white_button_style"
         android:elevation="10dp"
-        android:translationZ="10dp"
-        android:fadingEdge="vertical"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/home_button"
         android:textAllCaps="false"
-        android:textColor="#0E4D92"
+        android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/my_reports_btn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -122,15 +92,13 @@
         android:layout_height="60dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="64dp"
         android:background="@drawable/button_style"
-        android:fadingEdge="vertical"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/my_reports"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textSize="20sp"
-        android:textStyle="normal"
         app:layout_constraintBottom_toTopOf="@id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

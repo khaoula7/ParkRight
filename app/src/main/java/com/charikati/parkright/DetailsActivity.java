@@ -2,15 +2,10 @@ package com.charikati.parkright;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.charikati.parkright.model.ViolationReport;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,16 +15,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
-
-import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Objects;
-import java.util.TimeZone;
 
 public class DetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
-    private static final String TAG = "DetailsActivity";
     private double mLatitude;
     private double mLongitude;
-    private final float DEFAULT_ZOOM = 15;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +37,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         TextView toolbarTitle = toolbar.findViewById(R.id.activity_toolbar_title);
         toolbarTitle.setText(R.string.details_name);
-
         String jsonMyObject;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -65,10 +55,10 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
                 reasonText.setVisibility(View.VISIBLE);
             }
             TextView dateText = findViewById(R.id.date_txt);
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy, HH:mm a");
-            sdf.setTimeZone(TimeZone.getTimeZone("GMT+0400"));
-//            String sending_time = sdf.format(violationReport.getSendingTime());
-            String date = new java.text.SimpleDateFormat("dd-MM-yyyy, hh:mm:ss aa").format(new java.util.Date (violationReport.getSendingTime()));
+            //SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy, HH:mm a", Locale.GERMANY);
+            //sdf.setTimeZone(TimeZone.getTimeZone("GMT+0400"));
+            //String sending_time = sdf.format(violationReport.getSendingTime());
+            String date = new java.text.SimpleDateFormat("dd-MM-yyyy, hh:mm aa", Locale.GERMANY).format(new java.util.Date (violationReport.getSendingTime()));
             dateText.setText(date);
             //Load images
             ImageView firstImage = findViewById(R.id.image_1);
@@ -78,7 +68,8 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             ImageView thirdImage = findViewById(R.id.image_3);
             loadImage(thirdImage, violationReport.getThirdImageUrl());
             //Load Map
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_details);
+            assert mapFragment != null;
             mapFragment.getMapAsync(this);
             //Get location latitude and longitude
             mLatitude = violationReport.getLatitude();
@@ -88,13 +79,9 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
     /**
      * Load image from Firebase storage into correspondent ImageView
-     * @param imageView
-     * @param imageUrl
      */
     void loadImage(ImageView imageView, String imageUrl){
-        Glide.with(imageView.getContext())
-                .load(imageUrl)
-                .into(imageView);
+        Glide.with(this).load(imageUrl).centerCrop().into(imageView);
     }
 
     /**
@@ -107,6 +94,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         // Enable the zoom controls for the map
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.addMarker(new MarkerOptions().position(location).title("Marker in violation location"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
     }
 }

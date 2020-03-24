@@ -6,13 +6,12 @@
     android:layout_height="match_parent"
     android:layout_marginBottom="32dp"
     android:background="@color/white"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    tools:context=".SummaryActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        tools:context=".SummaryActivity">
+        android:layout_height="wrap_content">
 
         <!-- Toolbar -->
         <include
@@ -20,7 +19,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline1"

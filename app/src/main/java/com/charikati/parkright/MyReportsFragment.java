@@ -7,27 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.charikati.parkright.adapter.ReportAdapter;
 import com.charikati.parkright.adapter.ReportAdapterNew;
-import com.charikati.parkright.adapter.ViolationAdapter;
 import com.charikati.parkright.model.ViolationReport;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MyReportsFragment extends Fragment {
     private FirebaseFirestore mFirestore;
@@ -44,8 +35,8 @@ public class MyReportsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_myreports, container, false);
-        TextView heading = getActivity().findViewById(R.id.toolbar_title);
-        heading.setText("MY REPORTS");
+        TextView heading = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar_title);
+        heading.setText(R.string.my_reports);
         //Initialize fireBase instances
         FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
@@ -64,24 +55,21 @@ public class MyReportsFragment extends Fragment {
         TextView emptyView = v.findViewById(R.id.empty_view);
 
         //Get all documents in subCollection sent_violations
-        mFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid())
+        mFirestore.collection("Users").document(Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid())
                 .collection("sent_violations")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            if(task.getResult().isEmpty()) {
-                                mProgressBar.setVisibility(View.GONE);
-                                emptyView.setVisibility(View.VISIBLE);
-                            }
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                               // Log.d(TAG, document.getId() + " => " + document.getData());
-                                queryViolations(document.getId());
-                            }
-                        } else {
-                            //Log.d(TAG, "Error getting documents: ", task.getException());
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if(Objects.requireNonNull(task.getResult()).isEmpty()) {
+                            mProgressBar.setVisibility(View.GONE);
+                            emptyView.setVisibility(View.VISIBLE);
                         }
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                           // Log.d(TAG, document.getId() + " => " + document.getData());
+                            queryViolations(document.getId());
+                        }
+                    } else {
+                        Log.d(getTag(), "Error getting documents: ", task.getException());
                     }
                 });
         return v;
@@ -92,17 +80,14 @@ public class MyReportsFragment extends Fragment {
      */
     private void queryViolations(String id) {
         mFirestore.collection("Violations").document(id).get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        //Deserialize the violation from database into a ViolationReport object
-                        ViolationReport violationReport = documentSnapshot.toObject(ViolationReport.class);
-                        //Add ViolationReport object into  Violation list
-                        mReportsData.add(violationReport);
-                        // Notify the adapter of the change.
-                        mAdapter.notifyDataSetChanged();
-                        mProgressBar.setVisibility(View.GONE);
-                    }
+                .addOnSuccessListener(documentSnapshot -> {
+                    //Deserialize the violation from database into a ViolationReport object
+                    ViolationReport violationReport = documentSnapshot.toObject(ViolationReport.class);
+                    //Add ViolationReport object into  Violation list
+                    mReportsData.add(violationReport);
+                    // Notify the adapter of the change.
+                    mAdapter.notifyDataSetChanged();
+                    mProgressBar.setVisibility(View.GONE);
                 });
     }
 }

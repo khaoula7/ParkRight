@@ -1,6 +1,5 @@
 package com.charikati.parkright;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -17,6 +15,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 import com.charikati.parkright.adapter.ViewPagerAdapter;
+
+import java.util.Objects;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class HomeFragment extends Fragment {
@@ -31,7 +32,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         ViewPager viewPager = v.findViewById(R.id.viewPager);
-        TextView heading = getActivity().findViewById(R.id.toolbar_title);
+        TextView heading = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar_title);
         heading.setText(R.string.app_name);
         LinearLayout sliderDotsPanel = v.findViewById(R.id.SliderDots);
         //Populate ViewPager
@@ -67,17 +68,12 @@ public class HomeFragment extends Fragment {
         });
         //Click on Report button opens Type activity
         Button startBtn = v.findViewById(R.id.start_button);
-        startBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TypeFragment typeFragment = new TypeFragment();
-                FragmentManager manager = getFragmentManager();
-                assert manager != null;
-                manager.beginTransaction().replace(R.id.fragment_container,typeFragment,typeFragment.getTag()).commit();
-            }
+        startBtn.setOnClickListener(v1 -> {
+            TypeFragment typeFragment = new TypeFragment();
+            FragmentManager manager = getFragmentManager();
+            assert manager != null;
+            manager.beginTransaction().replace(R.id.fragment_container,typeFragment,typeFragment.getTag()).commit();
         });
-
-
         return v;
     }
 }
