@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.charikati.parkright.adapter.ReportAdapterNew;
+import com.charikati.parkright.adapter.ReportAdapter;
 import com.charikati.parkright.model.ViolationReport;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,7 +24,7 @@ public class MyReportsFragment extends Fragment {
     private FirebaseFirestore mFirestore;
     private ProgressBar mProgressBar;
     private ArrayList<ViolationReport> mReportsData;
-    private ReportAdapterNew mAdapter;
+    private ReportAdapter mAdapter;
 
     public MyReportsFragment() {
         // Required empty public constructor
@@ -49,7 +49,7 @@ public class MyReportsFragment extends Fragment {
         // Initialize the ArrayList that will contain the data.
         mReportsData = new ArrayList<>();
         // Initialize the adapter and set it to the RecyclerView.
-        mAdapter = new ReportAdapterNew(getContext(), mReportsData);
+        mAdapter = new ReportAdapter(getContext(), mReportsData);
         mRecyclerView.setAdapter(mAdapter);
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         TextView emptyView = v.findViewById(R.id.empty_view);

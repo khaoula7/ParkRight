@@ -10,9 +10,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.TaskStackBuilder;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import android.os.Bundle;
@@ -328,6 +331,10 @@ public class PhotoActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.show_btn) {
             showTipsDialog();
         }
+        if (item.getItemId() == android.R.id.home){
+            onBackPressed();
+            return true;
+        }
         return false;
     }
 
@@ -349,5 +356,6 @@ public class PhotoActivity extends AppCompatActivity {
             preferencesEditor.putString("FILE_NAME_3",mFilePath3);
         preferencesEditor.apply();
     }
+
 
 }

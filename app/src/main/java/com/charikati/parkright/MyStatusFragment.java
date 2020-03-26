@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
@@ -16,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import com.charikati.parkright.model.MonthReportsData;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -32,13 +30,10 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MyStatusFragment extends Fragment {
-    private BarChart barChart;
-    private ArrayList<BarEntry> barEntryArrayList;
-    private ArrayList<String> labelsNames;
     private ArrayList<MonthReportsData> monthReportsDataArrayList = new ArrayList<>();
-
     private PieChart pieChart;
 
     public MyStatusFragment() {
@@ -51,12 +46,12 @@ public class MyStatusFragment extends Fragment {
         //Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_mystatus, container, false);
         //Change the Toolbar title
-        TextView heading = getActivity().findViewById(R.id.toolbar_title);
-        heading.setText("MY STATUS");
+        TextView heading = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar_title);
+        heading.setText(R.string.my_status);
         //Find barChart and initialize barEntry and labels
-        barChart = v.findViewById(R.id.barChart);
-        barEntryArrayList = new ArrayList<>();
-        labelsNames = new ArrayList<>();
+        BarChart barChart = v.findViewById(R.id.barChart);
+        ArrayList<BarEntry> barEntryArrayList = new ArrayList<>();
+        ArrayList<String> labelsNames = new ArrayList<>();
         fillMonthReports();
         //Fill barEntry and labels arrayList
         for(int i=0; i<monthReportsDataArrayList.size(); i++){
@@ -110,7 +105,7 @@ public class MyStatusFragment extends Fragment {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 //label of each entry
-                String label = "";
+                String label;
                 //index of each entry (0..2)
                 int index = (int) h.getX();
                 if(index == 0)
@@ -119,16 +114,11 @@ public class MyStatusFragment extends Fragment {
                     label = "Declined";
                 else
                     label = "Pending";
-
                 Toast.makeText(getContext(),(int)h.getY() + "  " + label + " Reports", Toast.LENGTH_LONG).show();
             }
-
             @Override
-            public void onNothingSelected() {
-
-            }
+            public void onNothingSelected() {}
         });
-
         return v;
     }
 
@@ -161,7 +151,6 @@ public class MyStatusFragment extends Fragment {
         entries.add(new PieEntry(4, "Pending"));
         //create the data set
         PieDataSet set = new PieDataSet(entries, "");
-
         //Hide values on the PieChart
         set.setDrawValues(false);
         //Hide labels on the PieChart
@@ -175,7 +164,7 @@ public class MyStatusFragment extends Fragment {
         legend.setForm(Legend.LegendForm.CIRCLE);
         legend.setTextSize(15f);
         legend.setTextColor(Color.BLACK);
-        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.poppins);
+        Typeface typeface = ResourcesCompat.getFont(Objects.requireNonNull(getContext()), R.font.poppins);
         legend.setTypeface(typeface);
         // Set the legend position to Top Center
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
@@ -187,8 +176,5 @@ public class MyStatusFragment extends Fragment {
         pieChart.setData(data);
         pieChart.animateY(2000);
         pieChart.invalidate(); // refresh
-
     }
-
-
 }

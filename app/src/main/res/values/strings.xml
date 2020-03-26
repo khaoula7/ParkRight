@@ -215,10 +215,38 @@
     <string name="location_desc" translatable="false"> Report Location Icon </string>
     <string name="title_activity_location" translatable="false">LocationActivity</string>
 
-    <!-- fragment_my account-->
+    <!-- fragment my account-->
+    <string name="my_account" translatable="false"> My Account </string>
+    <string name="ic_user_desc" translatable="false"> icon representing user account </string>
+    <string name="ic_mail_desc" translatable="false"> icon representing e-mail address </string>
+    <string name="name_placeholder" translatable="false"> Louis Turner </string>
+    <string name="email_placeholder" translatable="false"> louisturner@gmail.com </string>
+    <string name="rem_method" translatable="false"> Remuneration Method </string>
+    <string name="paid" translatable="false"> Getting Paid </string>
+    <string name="charity" translatable="false"> Donating to Charity </string>
+    <string name="account_number" translatable="false"> Account Number </string>
+    <string name="edit_account" translatable="false"> Edit </string>
     <string-array name="modalities">
         <item>Ask Me</item>
         <item>Always</item>
         <item>Never</item>
     </string-array>
+
+    <!-- fragment my status-->
+    <string name="my_status" translatable="false"> My Status </string>
+    <string name="level_initial" translatable="false"> L1</string>
+    <string name="level_name" translatable="false"> Beginner </string>
+    <string name="total_reports_nb" translatable="false"> 10 </string>
+    <string name="total" translatable="false"> Total </string>
+    <string name="reports" translatable="false"> Reports </string>
+    <string name="approved_reports_nb" translatable="false"> 3 </string>
+    <string name="declined_reports_nb" translatable="false"> 3 </string>
+    <string name="pending_reports_nb" translatable="false"> 4 </string>
+    <string name="ic_status_arrow" translatable="false"> arrow icon to navigate between months  </string>
+    <string name="total_app_reports" translatable="false"> 12 Approved Reports </string>
+    <string name="month_year" translatable="false"> February 2020 </string>
+
+
+
+
 </resources>

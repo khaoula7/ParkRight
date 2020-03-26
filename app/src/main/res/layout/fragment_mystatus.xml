@@ -4,20 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFFFFF"
+        android:layout_height="wrap_content"
         tools:context=".MyAccountFragment">
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.0" />
 
         <TextView
             android:id="@+id/initial_txt"
@@ -29,8 +22,8 @@
             android:background="@drawable/level_style"
             android:fontFamily="@font/poppins_bold"
             android:gravity="center"
-            android:text="L1"
-            android:textColor="#FFFFFF"
+            android:text="@string/level_initial"
+            android:textColor="@color/white"
             android:textSize="25sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,8 +37,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/poppins_semibold"
-            android:text="Beginner"
-            android:textColor="#000000"
+            android:text="@string/level_name"
+            android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,6 +52,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="20dp"
             android:orientation="horizontal"
+            android:baselineAligned="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/level_txt">
@@ -75,24 +69,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="10"
-                    android:textColor="#222222"
+                    android:text="@string/total_reports_nb"
+                    android:textColor="@color/some_black"
                     android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_light"
-                    android:text="Total"
-                    android:textColor="#222222"
+                    android:text="@string/total"
+                    android:textColor="@color/some_black"
                     android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_light"
-                    android:text="Reports"
-                    android:textColor="#222222"
+                    android:text="@string/reports"
+                    android:textColor="@color/some_black"
                     android:textSize="15sp" />
             </LinearLayout>
 
@@ -108,24 +102,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="3"
-                    android:textColor="#222222"
+                    android:text="@string/approved_reports_nb"
+                    android:textColor="@color/some_black"
                     android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_light"
-                    android:text="Approved"
-                    android:textColor="#222222"
+                    android:text="@string/approved"
+                    android:textColor="@color/some_black"
                     android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_light"
-                    android:text="Reports"
-                    android:textColor="#222222"
+                    android:text="@string/reports"
+                    android:textColor="@color/some_black"
                     android:textSize="15sp" />
 
             </LinearLayout>
@@ -142,24 +136,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="3"
-                    android:textColor="#222222"
+                    android:text="@string/declined_reports_nb"
+                    android:textColor="@color/some_black"
                     android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_light"
-                    android:text="Declined"
-                    android:textColor="#222222"
+                    android:text="@string/declined"
+                    android:textColor="@color/some_black"
                     android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_light"
-                    android:text="Reports"
-                    android:textColor="#222222"
+                    android:text="@string/reports"
+                    android:textColor="@color/some_black"
                     android:textSize="15sp" />
             </LinearLayout>
 
@@ -175,24 +169,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="4"
-                    android:textColor="#222222"
+                    android:text="@string/pending_reports_nb"
+                    android:textColor="@color/some_black"
                     android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_light"
-                    android:text="Pending"
-                    android:textColor="#222222"
+                    android:text="@string/pending"
+                    android:textColor="@color/some_black"
                     android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_light"
-                    android:text="Reports"
-                    android:textColor="#222222"
+                    android:text="@string/reports"
+                    android:textColor="@color/some_black"
                     android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
@@ -214,7 +208,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/ic_left_arrow" />
+                app:srcCompat="@drawable/ic_left_arrow"
+                android:contentDescription="@string/ic_arrow_desc"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -227,16 +222,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="12 Approved Reports"
-                    android:textColor="#000000"
+                    android:text="@string/total_app_reports"
+                    android:textColor="@color/black"
                     android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
-                    android:text="February 2020"
-                    android:textColor="#808080"
+                    android:text="@string/month_year"
+                    android:textColor="@color/grey"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -245,7 +240,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/ic_right_arrow" />
+                app:srcCompat="@drawable/ic_right_arrow"
+                android:contentDescription="@string/ic_arrow_desc"/>
         </LinearLayout>
 
         <com.github.mikephil.charting.charts.BarChart
@@ -270,8 +266,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/barChart"/>
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

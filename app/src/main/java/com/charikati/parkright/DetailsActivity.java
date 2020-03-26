@@ -3,6 +3,7 @@ package com.charikati.parkright;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -95,5 +96,15 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.addMarker(new MarkerOptions().position(location).title("Marker in violation location"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home){
+            //override the up button to be the same as the back button
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -107,12 +107,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_new:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new TypeFragment()).commit();
+                        .replace(R.id.fragment_container, new TypeFragment()).addToBackStack(null).commit();
                 break;
             case R.id.nav_account:
                 if(mFireBaseAuth.getCurrentUser() != null){
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, new MyAccountFragment()).commit();
+                            .replace(R.id.fragment_container, new MyAccountFragment()).addToBackStack(null).commit();
                 }else {
                     Toast.makeText(this, "You are not logged In", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_reports:
                 if(mFireBaseAuth.getCurrentUser() != null){
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, new MyReportsFragment()).commit();
+                            .replace(R.id.fragment_container, new MyReportsFragment()).addToBackStack(null).commit();
                 }else {
                     Toast.makeText(this, "You are not logged In", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_status:
                 if(mFireBaseAuth.getCurrentUser() != null){
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, new MyStatusFragment()).commit();
+                            .replace(R.id.fragment_container, new MyStatusFragment()).addToBackStack(null).commit();
                 }else {
                     Toast.makeText(this, "Login to your account first!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));

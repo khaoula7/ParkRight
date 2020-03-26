@@ -122,7 +122,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                 //Upload images to Firebase Storage and write violation data in database
                 //sendReport();
 
-                startActivity(new Intent(SummaryActivity.this, ThankyouActivity.class));
+                startActivity(new Intent(SummaryActivity.this, ThankYouActivity.class));
                 //Delete all sharedPreferences
                 SharedPreferences.Editor preferencesEditor = mPreferences.edit();
                 preferencesEditor.clear();
@@ -221,7 +221,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                                 preferencesEditor.clear();
                                 preferencesEditor.apply();
                                 //Go to ThankYou screen
-                                startActivity(new Intent(SummaryActivity.this, ThankyouActivity.class));
+                                startActivity(new Intent(SummaryActivity.this, ThankYouActivity.class));
                             })
                             .addOnFailureListener(e -> {
                                 Log.e(TAG, "Error writing user", e);

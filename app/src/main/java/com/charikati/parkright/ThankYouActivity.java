@@ -15,7 +15,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Objects;
 
-public class ThankyouActivity extends AppCompatActivity {
+public class ThankYouActivity extends AppCompatActivity {
     public static final String TAG = "ThankyouActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +49,14 @@ public class ThankyouActivity extends AppCompatActivity {
         //Click on New Violation Button
         findViewById(R.id.new_violation_btn).setOnClickListener(v -> {
             //Send an intent for main activity to open type fragment
-            Intent openFragTypeIntent = new Intent(ThankyouActivity.this, MainActivity.class);
+            Intent openFragTypeIntent = new Intent(ThankYouActivity.this, MainActivity.class);
             openFragTypeIntent.putExtra("OPEN_FRAG_TYPE", 1000);
             startActivity(openFragTypeIntent);
         });
         //Click on My Reports Button
         findViewById(R.id.my_reports_btn).setOnClickListener(v -> {
             //Send an intent for main activity to open my reports fragment
-            Intent openFragReportsIntent = new Intent(ThankyouActivity.this, MainActivity.class);
+            Intent openFragReportsIntent = new Intent(ThankYouActivity.this, MainActivity.class);
             openFragReportsIntent.putExtra("OPEN_FRAG_REPORTS", 2000);
             startActivity(openFragReportsIntent);
         });

@@ -1,13 +1,12 @@
-package com.charikati.parkright;
+package com.charikati.parkright.model;
 
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class TimeAgo {
 
-    public static final Map<String, Long> times = new LinkedHashMap<>();
+    private static final Map<String, Long> times = new LinkedHashMap<>();
 
     static {
         times.put("year", TimeUnit.DAYS.toMillis(365));
@@ -46,17 +45,17 @@ public class TimeAgo {
         }
     }
 
-    public static String toRelative(long duration) {
-        return toRelative(duration, times.size());
-    }
+//    private static String toRelative(long duration) {
+//        return toRelative(duration, times.size());
+//    }
 
-    public static String toRelative(Date start, Date end){
-        assert start.after(end);
-        return toRelative(end.getTime() - start.getTime());
-    }
-
-    public static String toRelative(Date start, Date end, int level){
-        assert start.after(end);
-        return toRelative(end.getTime() - start.getTime(), level);
-    }
+//    private static String toRelative(Date start, Date end){
+//        assert start.after(end);
+//        return toRelative(end.getTime() - start.getTime());
+//    }
+//
+//    private static String toRelative(Date start, Date end, int level){
+//        assert start.after(end);
+//        return toRelative(end.getTime() - start.getTime(), level);
+//    }
 }

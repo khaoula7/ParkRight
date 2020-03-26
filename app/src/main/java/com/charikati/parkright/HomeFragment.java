@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment {
             TypeFragment typeFragment = new TypeFragment();
             FragmentManager manager = getFragmentManager();
             assert manager != null;
-            manager.beginTransaction().replace(R.id.fragment_container,typeFragment,typeFragment.getTag()).commit();
+            manager.beginTransaction().replace(R.id.fragment_container,typeFragment,typeFragment.getTag()).addToBackStack(null).commit();
         });
         return v;
     }
