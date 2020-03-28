@@ -28,8 +28,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".PhotoActivity"
-            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".PhotoActivity" />
 
         <activity
             android:name=".LocationActivity"

@@ -216,7 +216,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/change_btn_style"
+                android:background="@drawable/edit_btn_style"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/edit_account"
                 android:textAllCaps="false"

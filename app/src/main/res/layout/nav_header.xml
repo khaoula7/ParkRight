@@ -3,7 +3,7 @@
     android:id="@+id/navigation_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
+    android:background="@color/white"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -11,7 +11,7 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/nav_header_desc"
+        android:contentDescription="@string/header_desc"
         android:paddingTop="20dp"
         android:src="@mipmap/ic_launcher_round" />
 
@@ -22,9 +22,9 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/poppins_medium"
         android:lineSpacingExtra="4sp"
-        android:text="Louis Turner"
+        android:text="@string/name_placeholder"
         android:visibility="gone"
-        android:textColor="#222222"
+        android:textColor="@color/some_black"
         android:textSize="18sp" />
 
     <TextView
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
         android:lineSpacingExtra="6sp"
-        android:text="louisturner@gmail.com"
-        android:textColor="#808080"
+        android:text="@string/email_placeholder"
+        android:textColor="@color/grey"
         android:visibility="gone"/>
 </LinearLayout>

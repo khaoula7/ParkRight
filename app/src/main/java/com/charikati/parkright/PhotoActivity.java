@@ -10,12 +10,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.TaskStackBuilder;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import android.os.Bundle;
@@ -269,14 +266,13 @@ public class PhotoActivity extends AppCompatActivity {
         violationImage.setImageResource(mViolationResource);
         TextView violationTxt = inflater.findViewById(R.id.message_txt);
         violationTxt.setText(mViolationType);
-
-        //Close tip dialog
-        ImageView closeImg = inflater.findViewById(R.id.close_img);
-        closeImg.setOnClickListener(v -> tipDialog.dismiss());
         //Set transparent background to the window
         Objects.requireNonNull(tipDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         //Show the tip dialog
         tipDialog.show();
+        //Close tip dialog
+        ImageView closeImg = inflater.findViewById(R.id.close_img);
+        closeImg.setOnClickListener(v -> tipDialog.dismiss());
     }
 
     private void checkLocationPermission(){
