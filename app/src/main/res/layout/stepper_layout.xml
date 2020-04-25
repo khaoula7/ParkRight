@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/one_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/active_text_style"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="@string/one"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/one_txt"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/poppins"
+            android:text="@string/type"
+            android:textColor="#222222" />
+
+        <View
+            android:id="@+id/view_1"
+            android:layout_width="62dp"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@id/one_txt"
+            android:background="#0E4D92" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/two_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/inactive_text_style"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="@string/two"
+            android:textColor="#0E4D92"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/two_txt"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/poppins"
+            android:text="@string/photos"
+            android:textColor="#222222" />
+        <View
+            android:id="@+id/view_2"
+            android:layout_width="62dp"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@id/two_txt"
+            android:background="#0E4D92" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/three_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/inactive_text_style"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="@string/three"
+            android:textColor="#0E4D92"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/three_txt"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/poppins"
+            android:text="@string/location"
+            android:textColor="#222222" />
+        <View
+            android:layout_width="62dp"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@id/three_txt"
+            android:background="#0E4D92" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/four_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/inactive_text_style"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="@string/four"
+            android:textColor="#0E4D92"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/four_txt"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/poppins"
+            android:text="@string/report"
+            android:textColor="#222222" />
+
+    </RelativeLayout>
+</LinearLayout>

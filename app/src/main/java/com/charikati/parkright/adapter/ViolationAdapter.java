@@ -109,6 +109,7 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.View
             Bundle extras = new Bundle();
             extras.putInt("VIOLATION_INDEX", getAdapterPosition());
             extras.putString("VIOLATION_TYPE", currentViolation.getViolationType());
+            extras.putInt("VIOLATION_RESOURCE", currentViolation.getImageResourceId());
             photoIntent.putExtras(extras);
             mContext.startActivity(photoIntent);
         }

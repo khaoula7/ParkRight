@@ -5,51 +5,68 @@
     <group
         android:id="@+id/group_1"
         android:checkableBehavior="single">
+        <item android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="@string/nav_home">
+        </item>
         <item android:id="@+id/nav_new"
-            android:icon="@drawable/ic_photo_camera"
-            android:title="New Violation">
+            android:icon="@drawable/ic_new"
+            android:title="@string/nav_new">
         </item>
-        <item android:id="@+id/nav_help"
-            android:icon="@drawable/ic_help"
-            android:title="How to Report Violation">
-        </item>
+
     </group>
 
     <group
-        android:id="@+id/group_2" android:checkableBehavior="single">
-        <item android:id="@+id/nav_login"
-            android:icon="@drawable/ic_login"
-            android:title="Login">
-        </item>
-        <item android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_logout"
-            android:title="Logout">
-        </item>
-        <item android:id="@+id/nav_account"
-            android:icon="@drawable/ic_account"
-            android:title="My Account">
-        </item>
+        android:id="@+id/group_2"
+        android:checkableBehavior="single">
+
         <item android:id="@+id/nav_reports"
             android:icon="@drawable/ic_reports"
-            android:title="My Reports">
+            android:title="@string/nav_reports">
         </item>
         <item android:id="@+id/nav_status"
             android:icon="@drawable/ic_status"
-            android:title="My Status">
+            android:title="@string/nav_status">
+        </item>
+        <item android:id="@+id/nav_account"
+            android:icon="@drawable/ic_account"
+            android:title="@string/nav_account">
+        </item>
+        <item android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/nav_logout">
         </item>
     </group>
 
     <group
         android:id="@+id/group_3"
         android:checkableBehavior="single">
-        <item android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_settings"
-            android:title="Settings">
-        </item>
         <item android:id="@+id/nav_share"
             android:icon="@drawable/ic_share"
-            android:title="Share">
+            android:title="@string/nav_share">
         </item>
+        <item android:id="@+id/nav_contact"
+            android:icon="@drawable/ic_contact"
+            android:title="@string/nav_contact">
+        </item>
+        <item android:id="@+id/nav_rate"
+            android:icon="@drawable/ic_rate"
+            android:title="@string/nav_rate">
+        </item>
+    </group>
+
+    <group
+        android:id="@+id/group_4"
+        android:checkableBehavior="single">
+        <item android:id="@+id/nav_terms"
+            android:icon="@drawable/ic_terms"
+            android:title="@string/nav_terms">
+        </item>
+        <item android:id="@+id/nav_privacy"
+            android:icon="@drawable/ic_privacy"
+            android:title="@string/nav_privacy">
+        </item>
+
     </group>
 
 </menu>

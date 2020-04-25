@@ -1,50 +1,49 @@
 package com.charikati.parkright;
 
 import android.content.Intent;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
-
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     public static final String TAG = "MainActivity";
     private DrawerLayout drawer;
-    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth mFireBaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Use toolbar as the ActionBar
+        //Initialize FireBase Auth
+        mFireBaseAuth = FirebaseAuth.getInstance();
+        //Use drawer_toolbar as the ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Remove default title text
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        /*Initialize Firebase components  */
-        mFirebaseAuth = FirebaseAuth.getInstance();
-
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         // A reference to the NavigationView
         NavigationView navigationView = findViewById(R.id.nav_view);
         //To listen to click events on navigation drawer items, Implement NavigationView interface
         navigationView.setNavigationItemSelectedListener(this);
-
         // A reference to the DrawerLayout
         drawer = findViewById(R.id.drawer);
         //Button to show/hide navigation drawer placed in toolbar
@@ -52,66 +51,144 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        //Change the navigation drawer icon
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        //Click on Report Violation button
-        Button reportBtn = findViewById(R.id.login_button);
-        reportBtn.setOnClickListener(new View.OnClickListener() {
+        //Display user name amd email
+        View headerView = navigationView.getHeaderView(0);
+        TextView userName = headerView.findViewById(R.id.name_txt);
+        TextView email = headerView.findViewById(R.id.email_txt);
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onClick(View v) {
-                howIntent();
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (mFireBaseAuth.getCurrentUser() != null) {
+                    //Set user name and email and change their visibility
+                    userName.setText(mFireBaseAuth.getCurrentUser().getDisplayName());
+                    userName.setVisibility(View.VISIBLE);
+                    email.setText(mFireBaseAuth.getCurrentUser().getEmail());
+                    email.setVisibility(View.VISIBLE);
+
+                } else {
+                    //Hide username and email
+                    userName.setVisibility(View.GONE);
+                    email.setVisibility(View.GONE);
+                    // for getting menu from navigationView
+                    Menu menu = navigationView.getMenu();
+                    // finding menuItem that you want to change
+                    MenuItem nav_logout = menu.findItem(R.id.nav_logout);
+                    // Hide logout menu item
+                    nav_logout.setVisible(false);
+                }
             }
-        });
+        };
+        //If we open the app for the first time or we leave it by back button then come back HomeFragment will be displayed.
+        //Otherwise, in case of rotating device or other configuration changes,selected fragment will be automatically saved and retrieved.
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new HomeFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_home);
+        }
+        //Allow Thank you activity to open Type fragment or my reports fragment
+        if (getIntent().hasExtra("OPEN_FRAG_TYPE")) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TypeFragment()).commit();
+        }
+        if (getIntent().hasExtra("OPEN_FRAG_REPORTS")) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MyReportsFragment()).commit();
+        }
+        if (getIntent().hasExtra("OPEN_FRAG_STATUS")) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MyStatusFragment()).commit();
+        }
+        if (getIntent().hasExtra("OPEN_FRAG_ACCOUNT")) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MyAccountFragment()).commit();
+        }
     }
 
     /**
      * Implement NavigationView method to specify the behaviour of each item in Navigation drawer
-     * @param item
-     * @return
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Intent loginIntent;
         switch(item.getItemId()){
+            case R.id.nav_home:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new HomeFragment()).commit();
+                break;
             case R.id.nav_new:
-                Toast.makeText(this, "New Violation", Toast.LENGTH_SHORT).show();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new TypeFragment()).addToBackStack(null).commit();
                 break;
-            case R.id.nav_help:
-                howIntent();
-                break;
-            case R.id.nav_login:
-                if(mFirebaseAuth == null){
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+
+            case R.id.nav_reports:
+                if(mFireBaseAuth.getCurrentUser() != null){
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new MyReportsFragment()).addToBackStack(null).commit();
                 }else {
-                    Toast.makeText(this, "Already Logged In", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sign in to your account first", Toast.LENGTH_SHORT).show();
+                    loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    loginIntent.putExtra("GO_BACK_REPORTS", 20);
+                    startActivity(loginIntent);
                 }
                 break;
-            case R.id.nav_logout:
-                if(mFirebaseAuth != null) {
-                    mFirebaseAuth.signOut();
-                    Toast.makeText(this, "Logout "+ mFirebaseAuth, Toast.LENGTH_LONG).show();
-                    mFirebaseAuth = null;
-                } else {
-                    Toast.makeText(this, "Already Logged out "+mFirebaseAuth, Toast.LENGTH_SHORT).show();
+
+            case R.id.nav_status:
+                if(mFireBaseAuth.getCurrentUser() != null){
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new MyStatusFragment()).addToBackStack(null).commit();
+                }else {
+                    Toast.makeText(this, "Sign in to your account first!", Toast.LENGTH_SHORT).show();
+                    loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    loginIntent.putExtra("GO_BACK_STATUS", 30);
+                    startActivity(loginIntent);
                 }
                 break;
             case R.id.nav_account:
-                Toast.makeText(this, "Account", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.nav_reports:
-                if(mFirebaseAuth != null){
-                    startActivity(new Intent(MainActivity.this, MyReportsActivity.class));
+                if(mFireBaseAuth.getCurrentUser() != null){
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new MyAccountFragment()).addToBackStack(null).commit();
                 }else {
-                    Toast.makeText(this, "You are not logged In", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    Toast.makeText(this, "Sign in to your account first!", Toast.LENGTH_SHORT).show();
+                    loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    loginIntent.putExtra("GO_BACK_ACCOUNT", 40);
+                    startActivity(loginIntent);
                 }
                 break;
-            case R.id.nav_status:
-                Toast.makeText(this, "Status", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.nav_settings:
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+            case R.id.nav_logout:
+                if(mFireBaseAuth.getCurrentUser() != null) {
+                    //Firebase sign out
+                    mFireBaseAuth.signOut();
+                    // Google sign out
+                    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(getString(R.string.default_web_client_id))
+                            .requestEmail()
+                            .build();
+                    GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
+                    googleSignInClient.signOut().addOnCompleteListener(this,
+                            task -> {
+                                getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.fragment_container, new HomeFragment()).commit();
+                                Toast.makeText(MainActivity.this, "You are signed out", Toast.LENGTH_SHORT).show();
+                            });
+                    //Facebook sign out
+                    LoginManager.getInstance().logOut();
+                    //Toast.makeText(this, "Logout "+ mFireBaseAuth, Toast.LENGTH_LONG).show();
+                } else
+                     Toast.makeText(this, "Already Logged out " + mFireBaseAuth, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_share:
                 Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_contact:
+                Toast.makeText(this, "Contact US", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_terms:
+                Toast.makeText(this, "Terms and Conditions", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_privacy:
+                Toast.makeText(this, "Privacy Policy", Toast.LENGTH_SHORT).show();
                 break;
         }
         //Close drawer once item is selected
@@ -124,11 +201,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void onBackPressed() {
-        //Always close the Drawer navigation before closing the activity
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else {
+        }else {
             super.onBackPressed();
         }
     }
@@ -141,23 +216,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_share:
-                Toast.makeText(this, "Share", Toast.LENGTH_LONG).show();
-                break;
-            default:
-                break;
+        if (item.getItemId() == R.id.menu_share) {
+            Toast.makeText(this, "Share", Toast.LENGTH_LONG).show();
         }
-        return true;
+        return false;
     }
 
     /**
-     * //Open HowActivity screen (Tips and instructions on how to use the app)
+     * Attach the Auth state listener
      */
-    public void howIntent(){
-        startActivity(new Intent(MainActivity.this, HowActivity.class));
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mFireBaseAuth.addAuthStateListener(mAuthListener);
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mFireBaseAuth.removeAuthStateListener(mAuthListener);
+    }
 }
 

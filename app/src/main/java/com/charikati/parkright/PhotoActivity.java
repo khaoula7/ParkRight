@@ -1,30 +1,23 @@
 package com.charikati.parkright;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -33,78 +26,65 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
+import id.zelory.compressor.Compressor;
 
 public class PhotoActivity extends AppCompatActivity {
-    private static final String TAG = "PhotoActivity";
+    //private static final String TAG = "PhotoActivity";
     // Constants for camera intent
     static final int REQUEST_IMAGE_CAPTURE_1 = 1;
     static final int REQUEST_IMAGE_CAPTURE_2 = 2;
     static final int REQUEST_IMAGE_CAPTURE_3 = 3;
-
     private ImageButton mFirstCameraButton;
     private ImageButton mSecondCameraButton;
     private ImageButton mThirdCameraButton;
-
     private boolean mFirstPhotoCaptured = false;
     private boolean mSecondPhotoCaptured = false;
     private boolean mThirdPhotoCaptured = false;
-
-    //The only Exras I will keep
-    private Bundle mExtras;
+    //Extras
     private String mViolationType;
     private int mViolationIndex;
-
+    private int mViolationResource;
     private String mFilePath1;
     private String mFilePath2;
     private String mFilePath3;
-    private String mCurrentPhotoPath;
-
+    private File mPhotoFile;
     private SharedPreferences mPreferences;
-    private String sharedPrefFile = "com.charikati.parkright";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
         //Use toolbar as the ActionBar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
+        // Remove default title text
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        TextView toolbarTitle = toolbar.findViewById(R.id.activity_toolbar_title);
+        toolbarTitle.setText(R.string.photos);
         // Display Up button
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            //getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        // Remove default title text
-        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
-        toolbarTitle.setText(R.string.step_2);
-
+        //Implement steppers
+        TextView twoTxt = findViewById(R.id.two_txt);
+        twoTxt.setTextColor(getResources().getColor(R.color.white));
+        twoTxt.setBackgroundResource(R.drawable.active_text_style);
         //Open sharedPrefs file at the given filename (sharedPrefFile) with the mode MODE_PRIVATE.
+        String sharedPrefFile = "com.charikati.parkright";
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         //ImageButtons
         mFirstCameraButton = findViewById(R.id.camera_1_btn);
@@ -115,25 +95,24 @@ public class PhotoActivity extends AppCompatActivity {
         final CheckBox contextCheckBox = findViewById(R.id.context_check_box);
         //Get information sent by TypeActivity from intent
         //This is the first time PhotoActivity is accessed
-        mExtras = getIntent().getExtras();
+        Bundle mExtras = getIntent().getExtras();
         if (mExtras != null) {
             mViolationType = mExtras.getString("VIOLATION_TYPE");
             mViolationIndex = mExtras.getInt("VIOLATION_INDEX");
+            mViolationResource = mExtras.getInt("VIOLATION_RESOURCE");
+
         }else {
             //Display already taken photos from sharedPrefs file
             //coming from Up or back button
             String file_1 = mPreferences.getString("FILE_NAME_1", null);
-            if (file_1 != null) {
+            if (file_1 != null)
                 displayImages(mFirstCameraButton, file_1);
-            }
             String file_2 = mPreferences.getString("FILE_NAME_2", null);
-            if(file_2 != null) {
+            if(file_2 != null)
                 displayImages(mSecondCameraButton, file_2);
-            }
             String file_3 = mPreferences.getString("FILE_NAME_3", null);
-            if(file_3 != null) {
+            if(file_3 != null)
                 displayImages(mThirdCameraButton, file_3);
-            }
             //Restore show Tips dialog
             mViolationType = mPreferences.getString("VIOLATION_TYPE", null);
             //I need it to link tips to violation type
@@ -145,65 +124,33 @@ public class PhotoActivity extends AppCompatActivity {
             mThirdPhotoCaptured = true;
         }
         //Click on show button will open tips dialog
-        Button showBtn = (Button)findViewById(R.id.show_btn);
-        showBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTipsDialog();
-            }
-        });
+        Button showBtn = findViewById(R.id.show_btn);
+        showBtn.setOnClickListener(v -> showTipsDialog());
         //Click on first camera button will send a camera intent
-        mFirstCameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_1);
-            }
-        });
+        mFirstCameraButton.setOnClickListener(v -> dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_1));
         //Click on second camera button will send a camera intent
-       mSecondCameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_2);
-            }
-       });
+       mSecondCameraButton.setOnClickListener(v -> dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_2));
         //Click on third camera button will send a camera intent
-        mThirdCameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_3);
-            }
-        });
+        mThirdCameraButton.setOnClickListener(v -> dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE_3));
 
         //Click on map_continue_btn button will open MapActivity
         Button photoContinueBtn = findViewById(R.id.photo_continue_btn);
-        photoContinueBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                if(!mFirstPhotoCaptured|| !mSecondPhotoCaptured|| !mThirdPhotoCaptured) {
-//                    Toast.makeText(PhotoActivity.this, R.string.photos_warning, Toast.LENGTH_LONG).show();
-//                }
-//                else if (!plateCheckBox.isChecked() || !contextCheckBox.isChecked()) {
-//                    Toast.makeText(PhotoActivity.this, R.string.checkboxes_warning, Toast.LENGTH_LONG).show();
-//                }
-//                else{
-                    //Open MapsActivity screen (Locate the violating Car)
-                    //startActivity(new Intent(PhotoActivity.this, LocationActivity.class));
-                    checkLoactionPermission();
-
-//                }
-            }
+        photoContinueBtn.setOnClickListener(v -> {
+                if(!mFirstPhotoCaptured|| !mSecondPhotoCaptured|| !mThirdPhotoCaptured)
+                    Toast.makeText(PhotoActivity.this, R.string.photos_warning, Toast.LENGTH_LONG).show();
+                else if (!plateCheckBox.isChecked() || !contextCheckBox.isChecked())
+                    Toast.makeText(PhotoActivity.this, R.string.checkboxes_warning, Toast.LENGTH_LONG).show();
+                else
+                    checkLocationPermission();
         });
     }
 
     /**
      * Create a File to store the taken image in app private folder
-     * @return imageFile
-     * @throws IOException
      */
-
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.GERMANY).format(new Date());
         String imageFileName = timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File imageFile = File.createTempFile(
@@ -212,13 +159,13 @@ public class PhotoActivity extends AppCompatActivity {
                 storageDir      /* directory */
         );
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = imageFile.getAbsolutePath();
+       //mCurrentPhotoPath = imageFile.getAbsolutePath();
+        mPhotoFile = imageFile;
         return imageFile;
     }
 
     /**
      *Take a picture and provide file for saving it
-     * @param requestCode
      */
     private void dispatchTakePictureIntent(int requestCode) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -245,31 +192,43 @@ public class PhotoActivity extends AppCompatActivity {
 
     /**
      * Gets the result of the photo Intent.
-     * Display image in its appropriate ImageView
+     * Compress image and display it in its appropriate ImageView
      * Add the path to intent bundle
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String compressedImagePath;
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == REQUEST_IMAGE_CAPTURE_1 && resultCode == RESULT_OK) {
             //User has captured the first photo
             mFirstPhotoCaptured = true;
-            //Display image in its appropriate ImageView
-            displayImages(mFirstCameraButton, mCurrentPhotoPath);
-            mFilePath1 = mCurrentPhotoPath;
+            //Compress image file and display it
+            compressedImagePath = compressImages(mPhotoFile);
+            mFilePath1 = compressedImagePath;
+            displayImages(mFirstCameraButton, compressedImagePath);
+            //Display real image in its appropriate ImageView
+            /*mFilePath1 = mPhotoFile.getAbsolutePath();
+            displayImages(mFirstCameraButton, mFilePath1);*/
         } else if (requestCode == REQUEST_IMAGE_CAPTURE_2 && resultCode == RESULT_OK) {
             //User has captured the first photo
             mSecondPhotoCaptured = true;
-            //Display image in its appropriate ImageView
-            displayImages(mSecondCameraButton, mCurrentPhotoPath);
-            mFilePath2 = mCurrentPhotoPath;
+            //Compress image file and display it
+            compressedImagePath = compressImages(mPhotoFile);
+            mFilePath2 = compressedImagePath;
+            displayImages(mSecondCameraButton, compressedImagePath);
+            //Display real image in its appropriate ImageView
+            /*mFilePath2 = mPhotoFile.getAbsolutePath();
+            displayImages(mSecondCameraButton, mFilePath2);*/
         } else if (requestCode == REQUEST_IMAGE_CAPTURE_3 && resultCode == RESULT_OK) {
             //User has captured the first photo
             mThirdPhotoCaptured = true;
-            //Display image in its appropriate ImageView
-            displayImages(mThirdCameraButton, mCurrentPhotoPath);
-            mFilePath3 = mCurrentPhotoPath;
+            //Compress image file and display it
+            compressedImagePath = compressImages(mPhotoFile);
+            mFilePath3 = compressedImagePath;
+            displayImages(mThirdCameraButton, compressedImagePath);
+            //Display real image in its appropriate ImageView
+            /*mFilePath3 = mPhotoFile.getAbsolutePath();
+            displayImages(mThirdCameraButton, mFilePath3);*/
         }
     }
 
@@ -281,7 +240,21 @@ public class PhotoActivity extends AppCompatActivity {
     private void displayImages(ImageView imageView, String fileName) {
         Glide.with(this)
                     .load(fileName).centerCrop().into(imageView);
+    }
 
+    /**
+     * compress images using Compressor library
+     */
+    private String compressImages(File photoFile){
+        File compressedImageFile = new Compressor.Builder(this)
+                .setMaxWidth(2016)
+                .setMaxHeight(2688)
+                .setQuality(100)
+                .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                .setDestinationDirectoryPath(Objects.requireNonNull(getExternalFilesDir(Environment.DIRECTORY_PICTURES)).getAbsolutePath())
+                .build()
+                .compressToFile(photoFile);
+        return compressedImageFile.getAbsolutePath();
     }
 
     /**
@@ -296,24 +269,21 @@ public class PhotoActivity extends AppCompatActivity {
         builder.setView(inflater);
         //Create the Tip Dialog
         final AlertDialog tipDialog = builder.create();
-        //Get the violation type from the incoming Intent and set it to the TextView
+        //Get the violation image and type from the incoming Intent and set it to ImageView and TextView
+        ImageView violationImage = inflater.findViewById(R.id.image);
+        violationImage.setImageResource(mViolationResource);
         TextView violationTxt = inflater.findViewById(R.id.message_txt);
         violationTxt.setText(mViolationType);
-        //Close tip dialog
-        ImageView closeImg = inflater.findViewById(R.id.close_img);
-        closeImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tipDialog.dismiss();
-            }
-        });
         //Set transparent background to the window
-        tipDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(tipDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         //Show the tip dialog
         tipDialog.show();
+        //Close tip dialog
+        ImageView closeImg = inflater.findViewById(R.id.close_img);
+        closeImg.setOnClickListener(v -> tipDialog.dismiss());
     }
 
-    private void checkLoactionPermission(){
+    private void checkLocationPermission(){
         if(ContextCompat.checkSelfPermission(PhotoActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             //Toast.makeText(PhotoActivity.this, "Permission Already Granted", Toast.LENGTH_SHORT).show();
@@ -335,13 +305,10 @@ public class PhotoActivity extends AppCompatActivity {
                                 builder.setTitle("Permission Denied")
                                         .setMessage("Permission to access device location is permanently denied. you need to go to Settings to allow the permission.")
                                         .setNegativeButton("Cancel", null)
-                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent = new Intent();
-                                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                                intent.setData(Uri.fromParts("package", getPackageName(), null));
-                                            }
+                                        .setPositiveButton("OK", (dialog, which) -> {
+                                            Intent intent = new Intent();
+                                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                            intent.setData(Uri.fromParts("package", getPackageName(), null));
                                         })
                                         .show();
                             } else {
@@ -355,6 +322,24 @@ public class PhotoActivity extends AppCompatActivity {
                     })
                     .check();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.show_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.show_btn) {
+            showTipsDialog();
+        }
+        if (item.getItemId() == android.R.id.home){
+            onBackPressed();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -375,5 +360,6 @@ public class PhotoActivity extends AppCompatActivity {
             preferencesEditor.putString("FILE_NAME_3",mFilePath3);
         preferencesEditor.apply();
     }
+
 
 }

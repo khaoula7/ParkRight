@@ -6,39 +6,48 @@
 
 
     <!-- activity_main Strings -->
-    <string name="home_phrase_1" translatable="false"> Got Sick of Bad Parking?</string>
-    <string name="home_phrase_2" translatable="false"> Help your community solve parking issues by reporting violations</string>
+    <string name="title_1" translatable="false"> Sick of Bad Parking?</string>
+    <string name="title_2" translatable="false"> Want to Make an Impact?</string>
+    <string name="title_3" translatable="false"> Need Extra Money?</string>
+    <string name="subtitle_1" translatable="false"> Let your frustration out by reporting parking violations to relevant authorities in 4 simple steps.</string>
+    <string name="subtitle_2" translatable="false"> Help your community solving parking issues and making your city more accessible. </string>
+    <string name="subtitle_3" translatable="false">Become one of our reporters and get rewarded for your efforts and impact. </string>
     <string name="home_button" translatable="false">Report Violation</string>
     <string name="home_menu_desc" translatable="false">Hamburger Menu vector icon</string>
     <string name="home_share_desc" translatable="false">Share vector icon</string>
     <string name="home_image_desc" translatable="false">Home image</string>
 
-    <!-- draw_menu strings -->
+    <!-- Navigation drawer strings -->
+    <string name="nav_home" translatable="false">Home</string>
     <string name="nav_new" translatable="false">New Violation</string>
-    <string name="nav_report" translatable="false">How to Report Violation</string>
-    <string name="nav_login" translatable="false">Login</string>
+    <string name="nav_logout" translatable="false">Logout</string>
     <string name="nav_account" translatable="false">My Account</string>
     <string name="nav_reports" translatable="false">My Reports</string>
     <string name="nav_status" translatable="false">My Status</string>
-    <string name="nav_settings" translatable="false">Settings</string>
-    <string name="nav_share" translatable="false">Share</string>
+    <string name="nav_share" translatable="false">Share with Friends</string>
+    <string name="nav_contact" translatable="false">Contact Us</string>
+    <string name="nav_rate" translatable="false">Rate Us</string>
+    <string name="nav_terms" translatable="false">Terms and Conditions</string>
+    <string name="nav_privacy" translatable="false">Privacy Policy</string>
+    <string name="header_desc" translatable="false">App logo</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
-
-    <!-- activity_how Strings -->
-    <string name="how_back_arrow_desc" translatable="false"> Back arrow image </string>
-    <string name="how_phrase_1" translatable="false"> First Time User? </string>
-    <string name="how_phrase_2" translatable="false"> We highly recommend you watch this short video </string>
-    <string name="how_button" translatable="false"> SKIP VIDEO </string>
-
-    <!-- activity_type Strings -->
+    <!-- Stepper_layout strings-->
     <string name="step_1" translatable="false"> Violation Type</string>
     <string name="one" translatable="false"> 1 </string>
     <string name="two" translatable="false"> 2 </string>
     <string name="three" translatable="false"> 3 </string>
     <string name="four" translatable="false"> 4 </string>
     <string name="five" translatable="false"> 5 </string>
-    <string name="violation_type_Phrase_1" translatable="false"> Select Parking Violation  </string>
+    <string name="type" translatable="false"> Type </string>
+    <string name="photos" translatable="false"> Photos </string>
+    <string name="location" translatable="false"> Location </string>
 
+
+    <!-- fragment_type Strings -->
+    <string name="type_label" translatable="false"> VIOLATION TYPE </string>
+    <string name="violation_type_Phrase_1" translatable="false"> Select Parking Violation Type  </string>
     <string-array name="violation_types">
         <item>Parking in front of Fire Hydrant!</item>
         <item>Parking in Disabled Spot!</item>
@@ -50,153 +59,152 @@
     </string-array>
 
     <array name="violation_images">
-        <item>@drawable/img_badminton</item>
-        <item>@drawable/img_baseball</item>
-        <item>@drawable/img_basketball</item>
-        <item>@drawable/img_bowling</item>
-        <item>@drawable/img_cycling</item>
-        <item>@drawable/img_golf</item>
-        <item>@drawable/img_running</item>
+        <item>@drawable/fire_hydrant</item>
+        <item>@drawable/disabled_spot</item>
+        <item>@drawable/double_parking</item>
+        <item>@drawable/over_two_spaces</item>
+        <item>@drawable/against_traffic</item>
+        <item>@drawable/sidewalk</item>
+        <item>@drawable/bus_stop</item>
     </array>
 
     <!-- violation_item Strings -->
     <string name="card_image_desc" translatable="false"> Parking Violation image </string>
-    <string name="violation_type" translatable="false"> Violation Type </string>
-    <string name="choose_button" translatable="false"> choose </string>
+    <string name="down_arrow_desc" translatable="false"> Down Arrow </string>
 
     <!-- activity_photo Strings -->
-    <string name="step_2" translatable="false"> Photos </string>
     <string name="activity_photo_phrase_1" translatable="false"> Snap 3 photos of the violating car </string>
     <string name="activity_photo_phrase_2" translatable="false"> How Should I take photos ? </string>
     <string name="show_button" translatable="false"> Show Tips </string>
-    <string name="camera_button_1" translatable="false"> Front </string>
-    <string name="camera_button_2" translatable="false"> Rear </string>
-    <string name="camera_button_3" translatable="false"> Evidence </string>
+    <string name="front" translatable="false"> Front </string>
+    <string name="windshield" translatable="false"> windshield </string>
+    <string name="rear" translatable="false"> Rear </string>
+    <string name="licence" translatable="false"> Licence Plate </string>
+    <string name="evidence" translatable="false"> Evidence </string>
     <string name="camera_button_desc" translatable="false"> Click on this button to take photo of violating car </string>
     <string name="plate_check_box" translatable="false"> I clearly snapped Licence Plate </string>
-    <string name="context_check_box" translatable="false"> I clearly snapped Car in Violation Context </string>
-    <string name="photo_continue_button" translatable="false"> Great Job! Continue </string>
+    <string name="context_check_box" translatable="false"> I clearly snapped Car in Violation Context</string>
+    <string name="photo_continue_button" translatable="false"> Continue </string>
     <string name="photos_warning" translatable="false"> All Photos must be taken</string>
     <string name="checkboxes_warning" translatable="false"> All Boxes must be checked</string>
 
     <!-- tips_dialog Strings -->
-    <string name="close" translatable="false"> X </string>
+    <string name="close_desc" translatable="false"> icon for closing the dialog </string>
+    <string name="thumb_desc" translatable="false"> thumbnail image illustrating the violation </string>
     <string name="tip_1" translatable="false"> Tip 1 </string>
     <string name="tip_2" translatable="false"> Tip 2 </string>
     <string name="tip_3" translatable="false"> Tip 3 </string>
-    <string name="tip_1_text" translatable="false"> Lorem ipsum dolor sit amet. </string>
-    <string name="tip_2_text" translatable="false"> Consectetur adipiscing elit. </string>
-    <string name="tip_3_text" translatable="false"> Sed do eiusmod tempor incididut.  </string>
+    <string name="tip_1_text" translatable="false"> Lorem ipsum dolor sit amet.</string>
+    <string name="tip_2_text" translatable="false"> Consectetur adipiscing elit.</string>
+    <string name="tip_3_text" translatable="false"> Sed do eiusmod tempor. </string>
 
-    <!-- activity_map Strings -->
-    <string name="step_3" translatable="false"> Map </string>
-    <string name="activity_map_phrase_1" translatable="false"> Tap Map to identify Location </string>
-    <string name="map_continue_button" translatable="false"> Almost There! Continue </string>
-    <string name="action_geolocate" translatable="false">Pick Place</string>
-    <string name="default_info_title" translatable="false">Default Location</string>
-    <string name="default_info_snippet" translatable="false">No places found, because location permission is disabled.</string>
-
+    <!-- activity_location Strings -->
+    <string name="location_img_desc" translatable="false"> geolocation icon </string>
+    <string name="confirm_button" translatable="false"> Confirm </string>
+    <string name="confirm_text" translatable="false"> Confirm Car Location </string>
 
     <!-- BaseActivity Strings -->
     <string name="loading" translatable="false">Loading…</string>
 
     <!-- activity_login Strings -->
-    <string name="step_4" translatable="false"> Login </string>
-    <string name="activity_login_phrase_1" translatable="false"> Please Login to your Account </string>
-    <string name="facebook" translatable="false"> Login with Facebook </string>
-    <string name="Google" translatable="false"> Google </string>
-    <string name="client_id" translatable="false">843254302439-ireeq2d7ecnbrfisbn79o8v2qp6dei5b.apps.googleusercontent.com</string>
-    <string name="or" translatable="false"> OR </string>
-    <string name="email" translatable="false"> Email </string>
-    <string name="password" translatable="false"> Password </string>
-    <string name="forgot_password" translatable="false"> Forgot Password? </string>
-    <string name="login_button" translatable="false"> Login </string>
-    <string name="activity_login_phrase_2" translatable="false"> Don\'t have an account yet?</string>
-    <string name="register" translatable="false"> Please Register </string>
-    <string name="title_activity_login2" translatable="false">Sign in</string>
-    <string name="prompt_email" translatable="false">Email</string>
-    <string name="prompt_password" translatable="false">Password</string>
-    <string name="action_sign_in" translatable="false">Sign in or register</string>
-    <string name="action_sign_in_short" translatable="false">Sign in</string>
-    <string name="welcome" translatable="false">"Welcome !"</string>
-    <string name="invalid_username" translatable="false">Not a valid username</string>
-    <string name="invalid_password" translatable="false">Password must be >5 characters</string>
-    <string name="login_failed" translatable="false">"Login failed"</string>
+    <string name="login" translatable="false"> Login </string>
+    <string name="login_welcome" translatable="false"> Welcome Back </string>
+    <string name="email_address" translatable="false"> EMAIL ADDRESS </string>
+    <string name="email_password" translatable="false"> PASSWORD </string>
+    <string name="forgot_password" translatable="false"> Forgot your password? </string>
+    <string name="ic_arrow_desc" translatable="false"> Arrow icon for forgot password </string>
+    <string name="not_member" translatable="false"> Not a member yet?</string>
+    <string name="social_media" translatable="false"> or sign in with social media</string>
+    <string name="ic_google_desc" translatable="false"> Google icon </string>
+    <string name="ic_facebook_desc" translatable="false"> Facebook icon </string>
 
     <!--forgot_password_dialog-->
-    <string name="enter_email" translatable="false">Enter your email here </string>
     <string name="dialog_title" translatable="false">Reset Password </string>
-    <string name="reset" translatable="false">Reset </string>
+    <string name="send" translatable="false">Send </string>
     <string name="cancel" translatable="false">Cancel </string>
     <string name="password_sent" translatable="false">Password sent to your email </string>
 
     <!-- activity_register Strings -->
-    <string name="step_4_1" translatable="false"> Register </string>
-    <string name="activity_register_phrase_1" translatable="false"> Please Register to create an Account </string>
-    <string name="name" translatable="false"> Name </string>
-    <string name="last_name" translatable="false"> Last Name </string>
+    <string name="sign_up" translatable="false"> Sign Up</string>
+    <string name="welcome" translatable="false">"Welcome"</string>
+    <string name="first_name" translatable="false"> FIRST NAME </string>
+    <string name="last_name" translatable="false"> LAST NAME </string>
     <string name="terms_conditions" translatable="false"> I agree to Terms and Conditions </string>
-    <string name="register_button" translatable="false"> Register </string>
-    <string name="activity_register_phrase_2" translatable="false"> Already have an Account?</string>
-    <string name="login" translatable="false"> Please Login </string>
-    <string name="register_success" translatable="false">  Registration Succeeded </string>
-    <string name="register_failure" translatable="false">  Registration Failed </string>
-
-    <!--email_verif_dialog strings-->
-    <string name="verif_phrase_1" translatable="false">An Email has been sent to your address:  </string>
-    <string name="verif_phrase_2" translatable="false">Click on the provided link to verify your email address</string>
+    <string name="already_member" translatable="false"> Already a member? </string>
 
     <!-- activity_summary Strings -->
-    <string name="step_4_2" translatable="false"> Summary </string>
-    <string name="summary_phrase_1" translatable="false"> Violation Report Summary </string>
-    <string name="type" translatable="false"> Type </string>
+    <string name="report" translatable="false"> Report </string>
     <string name="spinner_title" translatable="false"> Violation Type </string>
-    <string name="photos" translatable="false"> Photos </string>
-    <string name="location" translatable="false"> Location </string>
     <string name="send_button" translatable="false"> Send Report </string>
-    <string name="title_activity_drawer" translatable="false">DrawerActivity</string>
-    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
-    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-    <string name="nav_header_title" translatable="false">Android Studio</string>
-    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
-    <string name="nav_header_desc" translatable="false">Navigation header</string>
-    <string name="action_settings" translatable="false">Settings</string>
-    <string name="log_out" translatable="false">Log out</string>
     <string name="checkbox_warning" translatable="false">Please check \'I agree to Terms and conditions\'</string>
 
-    <!-- activity_thankyou Strings-->
-    <string name="thank_you" translatable="false"> Thank You </string>
+    <!-- activity_thank you Strings-->
+    <string name="thank_you" translatable="false"> Thank You,  </string>
     <string name="thank_message_p1" translatable="false"> We Really appreciate your help in fighting illegal parking.
-        You are making Frankfurt\'s car parks a friendly environment.
-    </string>
+        You are making Frankfurt\'s car parks a friendly environment.</string>
     <string name="thank_message_p2" translatable="false">
     Your report will be carefully processed within 24 h.
-    An email will be sent to your adress to inform you about your report\'s status.
-    </string>
+    An email will be sent to your address to inform you about your report\'s status.</string>
     <string name="new_violation" translatable="false"> New Violation </string>
     <string name="my_reports" translatable="false"> My Reports </string>
 
-    <!-- activity_my_reports Strings-->
+    <!-- fragment_my_reports Strings-->
     <string name="reports_name" translatable="false"> My Reports </string>
     <string name="empty" translatable="false"> You don\'t have any reports yet ! </string>
     <string name="pending" translatable="false"> Pending </string>
-    <string name="Approved" translatable="false"> Approved </string>
+    <string name="approved" translatable="false"> Approved </string>
     <string name="declined" translatable="false"> Declined </string>
     <string name="date" translatable="false"> Date</string>
     <string name="time" translatable="false"> Time</string>
+    <string name="ic_status_desc" translatable="false"> Icon illustrating report status</string>
 
     <!-- activity_details Strings-->
     <string name="details_name" translatable="false"> Report Details</string>
-    <string name="info_desc" translatable="false"> Report Information Icon </string>
-    <string name="info_section" translatable="false"> Report Information </string>
+    <string name="info" translatable="false">Information</string>
     <string name="status" translatable="false"> Status </string>
-    <string name="photos_desc" translatable="false"> Report Photos Icon </string>
-    <string name="photos_section" translatable="false"> Report Photos </string>
-    <string name="location_desc" translatable="false"> Report Location Icon </string>
-    <string name="location_section" translatable="false"> Report Location </string>
+    <string name="reason" translatable="false"> Reason </string>
+    <string name="reason_placeholder" translatable="false"> Not mentioned </string>
+    <string name="photo_1_desc" translatable="false"> Photo of the car\'s front windshield </string>
+    <string name="photo_2_desc" translatable="false"> Photo of the car\'s rear licence plate </string>
+    <string name="photo_3_desc" translatable="false"> Photo of the car in violation context </string>
+    <string name="ic_info_desc" translatable="false"> icon representing information section </string>
+    <string name="ic_photos_desc" translatable="false"> icon representing Photos section </string>
+    <string name="ic_loc_desc" translatable="false"> icon representing Location section </string>
+    <string name="adr_placeholder" translatable="false">  Address: 123 Graham Avenue</string>
 
-    <string name="date_format">MMM d, yyyy</string>
-    <string name="time_format">HH:mm:ss</string>
-    <string name="title_activity_location">LocationActivity</string>
+    <!-- fragment my account-->
+    <string name="my_account" translatable="false"> My Account </string>
+    <string name="ic_user_desc" translatable="false"> icon representing user account </string>
+    <string name="ic_mail_desc" translatable="false"> icon representing e-mail address </string>
+    <string name="name_placeholder" translatable="false"> Louis Turner </string>
+    <string name="email_placeholder" translatable="false"> louisturner@gmail.com </string>
+    <string name="rem_method" translatable="false"> Remuneration Method </string>
+    <string name="paid" translatable="false"> Getting Paid </string>
+    <string name="charity" translatable="false"> Donating to Charity </string>
+    <string name="account_number" translatable="false"> Account Number </string>
+    <string name="edit_account" translatable="false"> Edit </string>
+    <string-array name="modalities">
+        <item>Ask Me</item>
+        <item>Always</item>
+        <item>Never</item>
+    </string-array>
+
+    <!-- fragment my status-->
+    <string name="my_status" translatable="false"> My Status </string>
+    <string name="level_initial" translatable="false"> L1</string>
+    <string name="level_name" translatable="false"> Beginner </string>
+    <string name="total_reports_nb" translatable="false"> 10 </string>
+    <string name="total" translatable="false"> Total </string>
+    <string name="reports" translatable="false"> Reports </string>
+    <string name="approved_reports_nb" translatable="false"> 3 </string>
+    <string name="declined_reports_nb" translatable="false"> 3 </string>
+    <string name="pending_reports_nb" translatable="false"> 4 </string>
+    <string name="ic_status_arrow" translatable="false"> arrow icon to navigate between months  </string>
+    <string name="total_app_reports" translatable="false"> 12 Approved Reports </string>
+    <string name="month_year" translatable="false"> February 2020 </string>
+
+    <!--email_verif_dialog strings
+    <string name="verif_phrase_1" translatable="false">An Email has been sent to your address:  </string>
+    <string name="verif_phrase_2" translatable="false">Click on the provided link to verify your email address</string>-->
 
 </resources>
