@@ -63,11 +63,6 @@ public class LoginActivity extends BaseActivity {
         //Use active toolbar as the ActionBar
         Toolbar toolbar = findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
-        // Display Up button
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
         // Remove default title text
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         TextView toolbarTitle = toolbar.findViewById(R.id.activity_toolbar_title);
@@ -296,8 +291,22 @@ public class LoginActivity extends BaseActivity {
      * If user is signed in, go to summary activity
      */
     private void updateUI() {
-        Intent summaryIntent = new Intent(LoginActivity.this, SummaryActivity.class);
-        startActivity(summaryIntent);
+        Intent fragIntent;
+        if (getIntent().hasExtra("GO_BACK_REPORTS")) {
+            fragIntent = new Intent(LoginActivity.this, MainActivity.class);
+            fragIntent.putExtra("OPEN_FRAG_REPORTS", 2000);
+            startActivity(fragIntent);
+        } else if(getIntent().hasExtra("GO_BACK_STATUS")) {
+            fragIntent = new Intent(LoginActivity.this, MainActivity.class);
+            fragIntent.putExtra("OPEN_FRAG_STATUS", 3000);
+            startActivity(fragIntent);
+        }else if(getIntent().hasExtra("GO_BACK_ACCOUNT")){
+            fragIntent = new Intent(LoginActivity.this, MainActivity.class);
+            fragIntent.putExtra("OPEN_FRAG_ACCOUNT", 4000);
+            startActivity(fragIntent);
+        }else {
+            startActivity(new Intent(LoginActivity.this, SummaryActivity.class));
+        }
     }
 
     /**

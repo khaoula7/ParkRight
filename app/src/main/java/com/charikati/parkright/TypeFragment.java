@@ -87,7 +87,7 @@ public class TypeFragment extends Fragment {
      * Initialize the parking violation data from resources.
      */
     private void initializeData() {
-        // Get the resources from the XML file.
+        // Get the resources from Strings XML file.
         String[] violationList = getResources()
                 .getStringArray(R.array.violation_types);
         TypedArray violationImageResources =

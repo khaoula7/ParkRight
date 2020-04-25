@@ -17,6 +17,8 @@ import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import java.util.Objects;
@@ -55,43 +57,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
 
         //Display user name amd email
-        View headerView =  navigationView.getHeaderView(0);
+        View headerView = navigationView.getHeaderView(0);
         TextView userName = headerView.findViewById(R.id.name_txt);
         TextView email = headerView.findViewById(R.id.email_txt);
 
-        mAuthListener = firebaseAuth -> {
-            if(mFireBaseAuth.getCurrentUser() != null) {
-                //Set user name and email and change their visibility
-                userName.setText(mFireBaseAuth.getCurrentUser().getDisplayName());
-                userName.setVisibility(View.VISIBLE);
-                email.setText(mFireBaseAuth.getCurrentUser().getEmail());
-                email.setVisibility(View.VISIBLE);
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (mFireBaseAuth.getCurrentUser() != null) {
+                    //Set user name and email and change their visibility
+                    userName.setText(mFireBaseAuth.getCurrentUser().getDisplayName());
+                    userName.setVisibility(View.VISIBLE);
+                    email.setText(mFireBaseAuth.getCurrentUser().getEmail());
+                    email.setVisibility(View.VISIBLE);
 
-            }else {
-                //Hide username and email
-                userName.setVisibility(View.GONE);
-                email.setVisibility(View.GONE);
-                // for getting menu from navigationView
-                Menu menu = navigationView.getMenu();
-                // finding menuItem that you want to change
-                MenuItem nav_logout= menu.findItem(R.id.nav_logout);
-                // Hide logout menu item
-                nav_logout.setVisible(false);
+                } else {
+                    //Hide username and email
+                    userName.setVisibility(View.GONE);
+                    email.setVisibility(View.GONE);
+                    // for getting menu from navigationView
+                    Menu menu = navigationView.getMenu();
+                    // finding menuItem that you want to change
+                    MenuItem nav_logout = menu.findItem(R.id.nav_logout);
+                    // Hide logout menu item
+                    nav_logout.setVisible(false);
+                }
             }
         };
         //If we open the app for the first time or we leave it by back button then come back HomeFragment will be displayed.
         //Otherwise, in case of rotating device or other configuration changes,selected fragment will be automatically saved and retrieved.
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new HomeFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
         //Allow Thank you activity to open Type fragment or my reports fragment
-        if (getIntent().hasExtra("OPEN_FRAG_TYPE")){
+        if (getIntent().hasExtra("OPEN_FRAG_TYPE")) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TypeFragment()).commit();
         }
-        if (getIntent().hasExtra("OPEN_FRAG_REPORTS")){
+        if (getIntent().hasExtra("OPEN_FRAG_REPORTS")) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MyReportsFragment()).commit();
+        }
+        if (getIntent().hasExtra("OPEN_FRAG_STATUS")) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MyStatusFragment()).commit();
+        }
+        if (getIntent().hasExtra("OPEN_FRAG_ACCOUNT")) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MyAccountFragment()).commit();
         }
     }
 
@@ -100,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Intent loginIntent;
         switch(item.getItemId()){
             case R.id.nav_home:
                 getSupportFragmentManager().beginTransaction()
@@ -109,23 +121,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new TypeFragment()).addToBackStack(null).commit();
                 break;
-            case R.id.nav_account:
-                if(mFireBaseAuth.getCurrentUser() != null){
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, new MyAccountFragment()).addToBackStack(null).commit();
-                }else {
-                    Toast.makeText(this, "You are not logged In", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                }
-                break;
 
             case R.id.nav_reports:
                 if(mFireBaseAuth.getCurrentUser() != null){
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, new MyReportsFragment()).addToBackStack(null).commit();
                 }else {
-                    Toast.makeText(this, "You are not logged In", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    Toast.makeText(this, "Sign in to your account first", Toast.LENGTH_SHORT).show();
+                    loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    loginIntent.putExtra("GO_BACK_REPORTS", 20);
+                    startActivity(loginIntent);
                 }
                 break;
 
@@ -134,12 +139,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, new MyStatusFragment()).addToBackStack(null).commit();
                 }else {
-                    Toast.makeText(this, "Login to your account first!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    Toast.makeText(this, "Sign in to your account first!", Toast.LENGTH_SHORT).show();
+                    loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    loginIntent.putExtra("GO_BACK_STATUS", 30);
+                    startActivity(loginIntent);
+                }
+                break;
+            case R.id.nav_account:
+                if(mFireBaseAuth.getCurrentUser() != null){
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new MyAccountFragment()).addToBackStack(null).commit();
+                }else {
+                    Toast.makeText(this, "Sign in to your account first!", Toast.LENGTH_SHORT).show();
+                    loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    loginIntent.putExtra("GO_BACK_ACCOUNT", 40);
+                    startActivity(loginIntent);
                 }
                 break;
             case R.id.nav_logout:
                 if(mFireBaseAuth.getCurrentUser() != null) {
+                    //Firebase sign out
                     mFireBaseAuth.signOut();
                     // Google sign out
                     GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -148,8 +167,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             .build();
                     GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
                     googleSignInClient.signOut().addOnCompleteListener(this,
-                            task -> startActivity(new Intent(MainActivity.this, LoginActivity.class)));
-
+                            task -> {
+                                getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.fragment_container, new HomeFragment()).commit();
+                                Toast.makeText(MainActivity.this, "You are signed out", Toast.LENGTH_SHORT).show();
+                            });
+                    //Facebook sign out
                     LoginManager.getInstance().logOut();
                     //Toast.makeText(this, "Logout "+ mFireBaseAuth, Toast.LENGTH_LONG).show();
                 } else
@@ -199,10 +222,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
+    /**
+     * Attach the Auth state listener
+     */
     @Override
     protected void onStart() {
         super.onStart();
         mFireBaseAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mFireBaseAuth.removeAuthStateListener(mAuthListener);
     }
 }
 

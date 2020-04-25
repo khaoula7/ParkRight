@@ -120,13 +120,13 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                 Toast.makeText(SummaryActivity.this, R.string.checkbox_warning, Toast.LENGTH_SHORT).show();
             }else {
                 //Upload images to Firebase Storage and write violation data in database
-                //sendReport();
+                sendReport();
 
-                startActivity(new Intent(SummaryActivity.this, ThankYouActivity.class));
-                //Delete all sharedPreferences
-                SharedPreferences.Editor preferencesEditor = mPreferences.edit();
-                preferencesEditor.clear();
-                preferencesEditor.apply();
+//                startActivity(new Intent(SummaryActivity.this, ThankYouActivity.class));
+//                //Delete all sharedPreferences
+//                SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+//                preferencesEditor.clear();
+//                preferencesEditor.apply();
 
             }
         });
@@ -159,7 +159,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
      */
     private void sendReport(){
         Uri fileUri;
-        showProgressDialog("Please wait while we send your report");
+        showProgressDialog("Please wait while we send your report.");
         for(int i = 0; i<3; i++) {
             fileUri = Uri.fromFile(new File(fileNameArray[i]));
             StorageReference photoRef = mPhotosStorageReference.child(requireNonNull(fileUri.getLastPathSegment()));
@@ -181,7 +181,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                     downloadUrlArray[finalI] = requireNonNull(task.getResult()).toString();
                     //if all images has been successfully uploaded
                     if(finalI == 2){
-                        hideProgressDialog();
+//                        hideProgressDialog();
                         storeViolation();
                     }
                 } else {
@@ -215,7 +215,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                             .collection("sent_violations").document(documentReference.getId()).set(violationId)
                             .addOnSuccessListener(aVoid -> {
                                 Log.d(TAG, "Writing in database Succeeded");
-                                //hideProgressDialog();
+                                hideProgressDialog();
                                 //Delete all sharedPreferences
                                 SharedPreferences.Editor preferencesEditor = mPreferences.edit();
                                 preferencesEditor.clear();
@@ -230,7 +230,7 @@ public class SummaryActivity extends BaseActivity implements OnMapReadyCallback 
                 })
                 .addOnFailureListener(e -> {
                     Log.w(TAG, "Error adding document", e);
-                    //hideProgressDialog();
+                    hideProgressDialog();
                 });
     }
 

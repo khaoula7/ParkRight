@@ -202,27 +202,33 @@ public class PhotoActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE_1 && resultCode == RESULT_OK) {
             //User has captured the first photo
             mFirstPhotoCaptured = true;
-            //Compress image file
+            //Compress image file and display it
             compressedImagePath = compressImages(mPhotoFile);
             mFilePath1 = compressedImagePath;
-            //Display image in its appropriate ImageView
             displayImages(mFirstCameraButton, compressedImagePath);
+            //Display real image in its appropriate ImageView
+            /*mFilePath1 = mPhotoFile.getAbsolutePath();
+            displayImages(mFirstCameraButton, mFilePath1);*/
         } else if (requestCode == REQUEST_IMAGE_CAPTURE_2 && resultCode == RESULT_OK) {
             //User has captured the first photo
             mSecondPhotoCaptured = true;
-            //Compress image file
+            //Compress image file and display it
             compressedImagePath = compressImages(mPhotoFile);
             mFilePath2 = compressedImagePath;
-            //Display image in its appropriate ImageView
             displayImages(mSecondCameraButton, compressedImagePath);
+            //Display real image in its appropriate ImageView
+            /*mFilePath2 = mPhotoFile.getAbsolutePath();
+            displayImages(mSecondCameraButton, mFilePath2);*/
         } else if (requestCode == REQUEST_IMAGE_CAPTURE_3 && resultCode == RESULT_OK) {
             //User has captured the first photo
             mThirdPhotoCaptured = true;
-            //Compress image file
+            //Compress image file and display it
             compressedImagePath = compressImages(mPhotoFile);
             mFilePath3 = compressedImagePath;
-            //Display image in its appropriate ImageView
             displayImages(mThirdCameraButton, compressedImagePath);
+            //Display real image in its appropriate ImageView
+            /*mFilePath3 = mPhotoFile.getAbsolutePath();
+            displayImages(mThirdCameraButton, mFilePath3);*/
         }
     }
 
@@ -241,6 +247,8 @@ public class PhotoActivity extends AppCompatActivity {
      */
     private String compressImages(File photoFile){
         File compressedImageFile = new Compressor.Builder(this)
+                .setMaxWidth(2016)
+                .setMaxHeight(2688)
                 .setQuality(100)
                 .setCompressFormat(Bitmap.CompressFormat.JPEG)
                 .setDestinationDirectoryPath(Objects.requireNonNull(getExternalFilesDir(Environment.DIRECTORY_PICTURES)).getAbsolutePath())
